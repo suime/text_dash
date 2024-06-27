@@ -1,15 +1,23 @@
-from PySide6.QtCore import *
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
 from PySide6.QtWebEngineWidgets import QWebEngineView
 import plotly.graph_objects as go
 import pandas as pd
 import plotly.offline as plt
 
+from PySide6.QtCore import *
+from PySide6.QtGui import *
+from PySide6.QtWidgets import *
 
 class FileInput(QWidget):
     def __init__(self):
         QWidget.__init__(self)
+        self.init_ui()
+
+    def init_ui(self):
+        layout = QVBoxLayout(self)
+        view = QWebEngineView()
+        view.setHtml(self.get_html())
+        layout.addWidget(view)
+        layout.addWidget(QLineEdit('텍스트'))
 
     def get_html(self):
         df = pd.DataFrame({'x': [1, 2, 3, 4], 'y': [10, 11, 12, 13]})

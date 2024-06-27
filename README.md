@@ -6,11 +6,12 @@
 
 ## 실행 방법 
 
-### 파이썬 가상환경 설치하기 
+### 1. 파이썬 가상환경 설치하기 
 
 ```sh
 python -m venv
 ```
+### 2. 가상환경 활성화 하기 
 
 - Window의 경우 
 `Scripts\activate.ps1`
@@ -18,13 +19,20 @@ python -m venv
 - Mac의 경우 
 `source Scripts/bin/activate`
 
-### 구성 
+
+## 구성 
+
 - 페이지 
     - [메인](#메인)
     - [탐색적 분석](#탐색적-분석)
     - [텍스트 마이닝](#텍스트-마이닝)
     - 사전 
     - AI
+- 변수 
+    - df : dataframe  
+    - df.cols : [일자, 분류, 내용]
+- 컴포넌트 
+    - read_df : xlsx, xls, csv, parquet 등 다양한 형식의 파일 읽어 드
 
 ### 메인 
 
@@ -33,6 +41,7 @@ python -m venv
 ### 탐색적 분석
 
 - 분포 
+- 시계열 차트 
 
 ### 텍스트 마이닝
 
