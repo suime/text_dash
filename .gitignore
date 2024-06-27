@@ -4,16 +4,20 @@
 /node_modules
 /.pnp
 .pnp.js
-/Modern_GUI_PyDracula_PySide6_or_PyQt6
+/Lib
+/libs
+/data
+
 # pycache
 __pycache__/
+
 # testing
 /coverage
 
 # production
 /build
+/Include
 /dist
-/Lib
 /etc
 
 # misc
@@ -22,8 +26,9 @@ __pycache__/
 .env.development.local
 .env.test.local
 .env.production.local
-.pyc
-
+*.pyc
+*.xlsx
+*.csv
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

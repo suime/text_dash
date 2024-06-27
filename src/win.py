@@ -10,6 +10,7 @@ import polars as pl
 
 #^ ---
 import page
+import components.Menu
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -26,7 +27,7 @@ class MainWindow(QMainWindow):
 
     #^ 탭 1: 파일 입력
         tab1 = page.main.FileInput()
-        self.tab_widget.addTab(tab1, "\uf0c7  파일 입력")
+        self.tab_widget.addTab(tab1, "\udb82\ude23  파일 입력")
 
     #^ 탭 2: 차트 생성
         tab2 = page.EDA.LineChart()
@@ -48,21 +49,27 @@ class MainWindow(QMainWindow):
 
     #^ 탭 4: AI
         tab4 = QWidget()
-        self.tab_widget.addTab(tab4, "파일 입출력")
+        self.tab_widget.addTab(tab4, "\udb85\udea3  AI 분석")
         layout4 = QVBoxLayout(tab4)
-
         self.status_label = QLabel('CSV 파일을 불러와주세요.', self)
         layout4.addWidget(self.status_label)
 
+    #^ 탭 5: 설명서
+        tab5 = QWidget()
+        self.tab_widget.addTab(tab5, "\udb81\udc77  사용설명서")
+        layout5 = QVBoxLayout(tab5)
+        self.status_label = QLabel('CSV 파일을 불러와주세요.', self)
+        layout5.addWidget(self.status_label)
+
+    #! init
     def init_ui(self):
         self.setWindowTitle("Text분석")
         self.setMaximumSize(1920, 1280)
         self.setGeometry(100, 100, 800, 600)
         self.create_actions()       # menu bar 생성. 앞서 생성된 action들을 활용.
         menubar = self.menuBar()
-        menu = QMenu('File', self)
-        menu.addAction(QAction("open file", self))
-        menubar.addMenu(menu)
+        menubar.addMenu(components.Menu.MenuBar().get_menu())
+
         self.setStatusBar(QStatusBar())
         self.show()
 
