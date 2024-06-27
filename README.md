@@ -12,9 +12,11 @@
 python -m venv
 ```
 
-```python
+- Window의 경우 
+`Scripts\activate.ps1`
 
-```
+- Mac의 경우 
+
 ### 구성 
 - 페이지 
     - [메인](#메인)
