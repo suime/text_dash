@@ -16,6 +16,7 @@ python -m venv
 `Scripts\activate.ps1`
 
 - Mac의 경우 
+`source Scripts/bin/activate`
 
 ### 구성 
 - 페이지 
