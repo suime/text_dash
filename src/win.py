@@ -60,23 +60,25 @@ class MainWindow(QMainWindow):
         layout5 = QVBoxLayout(tab5)
         self.status_label = QLabel('CSV 파일을 불러와주세요.', self)
         layout5.addWidget(self.status_label)
+        layout5.addWidget(QPushButton("Push Me", self))
+    
+    #^ 탭 6: Test 
+        tab6 = QTabWidget()
+        tab6.setTabPosition(QTabWidget.West)
+        tab6.setMovable(True)
+        self.tab_widget.addTab(tab6, "TEST")
+        for _, color in enumerate(["red", "green", "blue", "yellow"]):
+            tab6.addTab(QWidget(), color)
 
-    #! init
+    #@ init UI
     def init_ui(self):
         self.setWindowTitle("Text분석")
         self.setMaximumSize(1920, 1280)
         self.setGeometry(100, 100, 800, 600)
-        self.create_actions()       # menu bar 생성. 앞서 생성된 action들을 활용.
-        menubar = self.menuBar()
-        menubar.addMenu(components.Menu.MenuBar().get_menu())
-
+        self.setMenuBar(components.Menu.MenuBar())
         self.setStatusBar(QStatusBar())
         self.show()
 
-    def create_actions(self):
-        self.quit_act = QAction("Quit")
-        self.quit_act.setShortcut("Ctrl+X")
-        self.quit_act.triggered.connect(self.close)
 
     def slot_button_load(self, state, widget, label):
         filename = QFileDialog.getOpenFileName(self, 'Open file', './')

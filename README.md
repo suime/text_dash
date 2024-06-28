@@ -22,6 +22,8 @@ python -m venv
 ### 3. 파이썬 요구 패키지 설치하기 
 `pip install pyinstaller pyside6 plotly pandas polars`
 
+### 4. 실행 파일 만들기 
+`pyinstaller src/win.py -n "test_app" --noconsole --onefile`
 
 ## 구성 
 
