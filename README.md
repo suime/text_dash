@@ -17,7 +17,10 @@ python -m venv
 `Scripts\activate.ps1`
 
 - Mac의 경우 
-`source Scripts/bin/activate`
+`source bin/activate`
+
+### 3. 파이썬 요구 패키지 설치하기 
+`pip install pyinstaller pyside6 plotly pandas polars`
 
 
 ## 구성 
