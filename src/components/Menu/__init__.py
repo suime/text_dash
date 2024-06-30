@@ -35,19 +35,19 @@ class MenuBar(QMenuBar):
         #* 종료하기
         self.addMenu(menu)
         
-    ## 파일 메뉴  
+    ## 파일 메뉴
     def init_file(self):
-        mFile = QMenu('파일', self)
+        menu = QMenu('파일', self)
         
         #^ 파일 열기 
         c_open_file = QAction("파일 열기", self)
         c_open_file.setShortcut("Ctrl+O")
         c_open_file.triggered.connect(self.close)
         
-        mFile.addAction(c_open_file)
-        mFile.addSeparator()
+        menu.addAction(c_open_file)
+        menu.addSeparator()
 
         #* 파일 열기 
         #* 파일 초기화
-        self.addMenu(mFile)
+        self.addMenu(menu)
 

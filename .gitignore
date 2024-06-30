@@ -6,7 +6,11 @@
 .pnp.js
 /Lib
 /libs
+/lib
 /data
+/Scripts
+/share
+/bin
 
 # pycache
 __pycache__/
@@ -29,6 +33,8 @@ __pycache__/
 *.pyc
 *.xlsx
 *.csv
+*.cfg
+test*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
