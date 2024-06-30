@@ -1,16 +1,18 @@
 import sys
 from PySide6.QtWidgets import (QApplication, QFileDialog, QLabel, QLineEdit, QMainWindow, QMenu,
                                QPushButton, QTabWidget, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QStatusBar,
-                               QMessageBox)
+                               QMessageBox, QTableView)
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtGui import QAction
+from PySide6.QtCore import QAbstractTableModel, Qt, QModelIndex
+import sys
+
 import pandas as pd
 import polars as pl
 
-
-
 #^ ---
 import page
+import components.session as data
 import components.Menu
 import components.read_df
 
@@ -29,7 +31,7 @@ class MainWindow(QMainWindow):
         self.setStatusBar(QStatusBar())
 
     #^ 변수 생성 
-        self.data = session(self)
+        self.data = data.session(self)
 
     #^ 탭 구조 생성
         self.main = QTabWidget()
@@ -67,9 +69,7 @@ class MainWindow(QMainWindow):
         tab5 = QWidget()
         self.main.addTab(tab5, "\udb81\udc77  사용설명서")
         layout5 = QVBoxLayout(tab5)
-        self.status_label = QLabel('CSV 파일을 불러와주세요.', self)
-        layout5.addWidget(self.status_label)
-        layout5.addWidget(QPushButton("Push Me", self))
+        layout5.addWidget(QLabel("메뉴얼을 만드는 곳 "))
     
     #^ 탭 6: Test 
         tab6 = QTabWidget()
@@ -132,45 +132,102 @@ class file_input(QWidget):
         
     def init_ui(self):
         layout = QVBoxLayout(self)
-        table_widget = QTableWidget()
-        table_widget.setAcceptDrops(True)
-        table_widget.setDragEnabled(True)
+        self.table_widget = QTableView()
+        self.table_widget.horizontalHeader().setStretchLastSection(True)
+        self.table_widget.setAlternatingRowColors(True)
+        self.table_widget.setAcceptDrops(True)
+        self.table_widget.setDragEnabled(True)
         select_file_button = QPushButton("텍스트 파일 선택")
         select_file_button.setFixedSize(150, 50)
         select_file_button.clicked.connect(self.selectFile)
         layout.addWidget(QLabel("민원 파일을 입력하세요."))
         layout.addWidget(select_file_button)
-        layout.addWidget(table_widget)    
+        layout.addWidget(self.table_widget)    
         self.setLayout(layout)
         self.show()
 
 
     def selectFile(self):
-        file, _ = QFileDialog.getOpenFileName(self, "Open Text", "",
-            "엑셀 파일 (*.xlsx *.xls );;텍스트 파일 (*.csv *.txt);;데이터프레임(*.parquet);")
+        file, _ = QFileDialog.getOpenFileName(self, "Open Text", "data/",
+            "엑셀 파일 (*.xlsx *.xls *.csv);;텍스트 파일 (*.csv *.txt);;데이터프레임(*.parquet);")
         if file:
             df = components.read_df.read_df(file)
             self.session.fileName = str(file)
-            self.main_window.set_status(self.session.fileName)
+            self.main_window.set_status(f"현재 열린 파일 : {self.session.fileName}")
             print(file)
             if df is not None:
                 self.session.set_df(df)
+                model = PandasModel(df)
+                self.table_widget.setModel(model)
                 QMessageBox.information(self, "파일 열기", "파일이 성공적으로 열렸습니다.")
             else:
                 QMessageBox.warning(self, "파일 열기", "파일을 읽을 수 없습니다.")
 
-class session():
-    def __init__(self, main_window) -> None:
-        self.df = pl.DataFrame()
-        self.fileName = ''
-    def set_df(self, df):
-        self.df = df
-    
+class PandasModel(QAbstractTableModel):
+    """A model to interface a Qt view with pandas dataframe """
+    def __init__(self, dataframe: pd.DataFrame, parent=None):
+        QAbstractTableModel.__init__(self, parent)
+        self._dataframe = dataframe
+    def rowCount(self, parent=QModelIndex()) -> int:
+        """ Override method from QAbstractTableModel
+
+        Return row count of the pandas DataFrame
+        """
+        if parent == QModelIndex():
+            return len(self._dataframe)
+
+        return 0
+
+    def columnCount(self, parent=QModelIndex()) -> int:
+        """Override method from QAbstractTableModel
+
+        Return column count of the pandas DataFrame
+        """
+        if parent == QModelIndex():
+            return len(self._dataframe.columns)
+        return 0
+
+    def data(self, index: QModelIndex, role=Qt.ItemDataRole):
+        """Override method from QAbstractTableModel
+
+        Return data cell from the pandas DataFrame
+        """
+        if not index.isValid():
+            return None
+
+        if role == Qt.DisplayRole:
+            return str(self._dataframe.iloc[index.row(), index.column()])
+
+        return None
+
+    def headerData(
+        self, section: int, orientation: Qt.Orientation, role: Qt.ItemDataRole
+    ):
+        """Override method from QAbstractTableModel
+
+        Return dataframe index as vertical header data and columns as horizontal header data.
+        """
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
+                return str(self._dataframe.columns[section])
+
+            if orientation == Qt.Vertical:
+                return str(self._dataframe.index[section])
+
+        return None
         
-        
+
+style_sheet = """
+    QFrame#ContainerFrame{ /* Style border for TaskContainer class */
+        background-color: #A0A0A0;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px
+    }
+"""
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     main_window = MainWindow()
     main_window.setWindowTitle("텍스트 분석 보드")
     main_window.show()
+    app.setStyleSheet(style_sheet)
     sys.exit(app.exec())
