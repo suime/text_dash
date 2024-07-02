@@ -6,11 +6,6 @@ class style_sheet():
         self.default()
     def default(self, *args: Any, **kwds: Any) -> Any:
         style ="""
-            QFrame#ContainerFrame{ /* Style border for TaskContainer class */
-                background-color: white;
-                border-bottom-left-radius: 4px;
-                border-bottom-right-radius: 4px;
-            }
             QWidget{
                 border: 1px solid grey;
             }

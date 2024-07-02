@@ -37,6 +37,7 @@ class MainWindow(QMainWindow):
 
     #^ 탭 구조 생성
         self.main = QTabWidget()
+        self.main.setDocumentMode(True)
         self.setCentralWidget(self.main)
 
     #^ 탭 1: 파일 입력
@@ -235,7 +236,6 @@ class dataFilter(QWidget):
         self.show()
 
 ## ui 파일 불러오기 
-
 class myui(QWidget):
     def __init__(self) -> None:
         super().__init__()
