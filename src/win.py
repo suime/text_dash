@@ -1,11 +1,10 @@
 import sys
+from typing import Optional
 from PySide6.QtWidgets import (QApplication, QFileDialog, QLabel, QLineEdit, QMainWindow, QMenu,
                                QPushButton, QTabWidget, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QStatusBar, QGroupBox, QRadioButton,
                                QMessageBox, QTableView, QHBoxLayout, QTextEdit)
-from qtrangeslider import QRangeSlider
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtGui import QAction
-
 import sys
 
 import pandas as pd
@@ -17,11 +16,12 @@ import components.session as data
 import components.Menu
 import components.read_df
 import components.style
-
+from ui.chart import Ui_Form 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
         self.init_ui()
         
     #@ init UI
@@ -118,8 +118,9 @@ class MainWindow(QMainWindow):
         #     tab6.addTab(QWidget(), color)
         layout6.addWidget(file_input_widget)
     
-    #^ tab 7
-        
+    #% tab 7
+        tab7 = myui()
+        self.main.addTab(tab7, "Chart")
 
         self.show()
 
@@ -212,7 +213,6 @@ class dataFilter(QWidget):
         super().__init__()
         layout = QVBoxLayout()
         #^ 기간 필터 
-        time_slider = QRangeSlider()
 
         #^ 텍스트 필터 
         text_in = QTextEdit()
@@ -229,13 +229,22 @@ class dataFilter(QWidget):
             # pass
             text_in.setDisabled(True)
             text_ex.setDisabled(True)
-        layout.addWidget(time_slider)
         layout.addWidget(text_in)
         layout.addWidget(text_ex)
         self.setLayout(layout)
         self.show()
-            
-        
+
+## ui 파일 불러오기 
+
+class myui(QWidget):
+    def __init__(self) -> None:
+        super().__init__()
+        self.ui = Ui_Form()
+        self.ui.setupUi(self)
+
+
+
+
 
 #@ Main
 if __name__ == '__main__':
