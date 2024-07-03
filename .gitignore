@@ -10,13 +10,15 @@
 /data
 /Scripts
 /share
-/bin
+bin/
+ect/
 
 # pycache
 __pycache__/
 
 # testing
 /coverage
+/win_env
 
 # production
 /build
@@ -35,6 +37,8 @@ __pycache__/
 *.csv
 *.cfg
 .cfg
+pyvenv.cfg
+*.spec
 test*
 npm-debug.log*
 yarn-debug.log*
