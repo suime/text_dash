@@ -17,24 +17,33 @@ python -m venv
 ### 2. 가상환경 활성화 하기
 
 - Window의 경우
-`Scripts\activate.ps1`
-
+```sh
+Scripts\activate.ps1
+```
 - Mac의 경우
-`source bin/activate`
+```sh
+source bin/activate
+```
 
 ### 3. 파이썬 요구 패키지 설치하기
-`pip install pyinstaller pyside6 plotly pandas polars`
+```sh
+pip install pyside6 plotly pandas polars
+```
 
 ### 4. main.py 실행하기
-`python \src\main.py`
+```sh
+python \src\main.py
+```
 
 ### 5. 실행 파일 만들기
-`pyinstaller src/win.py -n "test_app" --noconsole --onefile`
+```sh
+pyinstaller src/win.py -n "test_app" --noconsole --onefile --exclude PyQt5
+```
 
 ### 6. ui 파일 빌드하기 
 ```sh
 pyside6-uic src/ui/FileInput.ui -o src/ui/FileInput.py `
-pyside6-uic src/ui/TextMining.ui -o src/ui/TextMining.py `
+pyside6-uic src/ui/TextMining.ui -o src/ui/TextMining.py ` 
 pyside6-uic src/ui/Chart.ui -o src/ui/Chart.py `
 pyside6-uic src/ui/Dictionary.ui -o src/ui/Dictionary.py
 ```

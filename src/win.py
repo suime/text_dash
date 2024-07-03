@@ -76,6 +76,7 @@ class MainWindow(QMainWindow):
     # ^ 탭 6: 
         tab6 = QTabWidget()
         self.main.addTab(tab6, "TEST")
+
         self.show()
 
     def set_status(self, text):
