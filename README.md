@@ -36,6 +36,8 @@ python \src\main.py
 ```
 
 ### 5. 실행 파일 만들기
+
+- pyinstaller 
 ```sh
 pyinstaller src/win.py -n "test_app" --noconsole --onefile --exclude PyQt5
 ```
