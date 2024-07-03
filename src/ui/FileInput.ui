@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>886</width>
-    <height>459</height>
+    <width>847</width>
+    <height>460</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,16 +26,6 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="1" column="1">
-    <widget class="QTableWidget" name="tableWidget">
-     <property name="minimumSize">
-      <size>
-       <width>300</width>
-       <height>300</height>
-      </size>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
@@ -50,13 +40,19 @@
        <height>300</height>
       </size>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>300</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="title">
-      <string>파일 입력</string>
+      <string/>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0">
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0">
       <property name="leftMargin">
        <number>10</number>
       </property>
@@ -83,7 +79,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="fileBtn">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -91,7 +87,7 @@
          </size>
         </property>
         <property name="text">
-         <string>텍스트 파일 불러오기</string>
+         <string>텍스트 파일 불러오기 (ctrl + o)</string>
         </property>
         <property name="icon">
          <iconset theme="QIcon::ThemeIcon::FolderVisiting"/>
@@ -128,18 +124,25 @@
        </widget>
       </item>
       <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="0">
+        <item row="1" column="0">
          <widget class="QLabel" name="dataLabel">
           <property name="midLineWidth">
            <number>0</number>
           </property>
           <property name="text">
-           <string>일자 필드 :</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;일자 필드 :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="1" column="1">
          <widget class="QComboBox" name="DateCol">
           <property name="minimumSize">
            <size>
@@ -149,14 +152,17 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
+        <item row="2" column="0">
          <widget class="QLabel" name="textLabel">
           <property name="text">
-           <string>문자 필드 :</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;문자 필드 :&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::TextFormat::RichText</enum>
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="2" column="1">
          <widget class="QComboBox" name="TextCol">
           <property name="minimumSize">
            <size>
@@ -166,24 +172,77 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
+        <item row="3" column="0">
          <widget class="QLabel" name="Label">
           <property name="text">
-           <string>분류 필드 :</string>
+           <string>대분류 :</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QQuickWidget" name="QuickWidget">
-          <property name="minimumSize">
-           <size>
-            <width>150</width>
-            <height>0</height>
-           </size>
+        <item row="3" column="1">
+         <widget class="QComboBox" name="category1ComboBox"/>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="Label_2">
+          <property name="text">
+           <string>중분류 :</string>
           </property>
          </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QComboBox" name="category2ComboBox"/>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="Label_3">
+          <property name="text">
+           <string>소분류</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QComboBox" name="category3ComboBox"/>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="Label_4">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;데이터에서 중복된 행을 제거하고 분석할 것인지 여부&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>중복 제거</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QCheckBox" name="removeDupCheckBox"/>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;분석 기본 설정&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::TextFormat::RichText</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="Label_5">
+          <property name="text">
+           <string>결측치 제거</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <widget class="QCheckBox" name="removeNanCheckBox"/>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="colSetBtn">
@@ -207,32 +266,27 @@
      </layout>
     </widget>
    </item>
+   <item row="1" column="1">
+    <widget class="QTableView" name="tableView">
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="gridStyle">
+      <enum>Qt::PenStyle::DotLine</enum>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QQuickWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">QtQuickWidgets/QQuickWidget</header>
-  </customwidget>
- </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>colSetBtn</sender>
-   <signal>clicked()</signal>
-   <receiver>tableWidget</receiver>
-   <slot>repaint()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>149</x>
-     <y>429</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>600</x>
-     <y>236</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

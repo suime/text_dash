@@ -41,7 +41,6 @@ class MenuBar(QMenuBar):
         
         #^ 파일 열기 
         c_open_file = QAction("파일 열기", self)
-        c_open_file.setShortcut("Ctrl+O")
         c_open_file.triggered.connect(self.close)
         
         menu.addAction(c_open_file)

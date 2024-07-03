@@ -32,7 +32,12 @@ python -m venv
 `pyinstaller src/win.py -n "test_app" --noconsole --onefile`
 
 ### 6. ui 파일 빌드하기 
-`pyside6-uic src/ui/TextMining.ui -o src/ui/textmining.py`
+```sh
+pyside6-uic src/ui/FileInput.ui -o src/ui/FileInput.py `
+pyside6-uic src/ui/TextMining.ui -o src/ui/TextMining.py `
+pyside6-uic src/ui/Chart.ui -o src/ui/Chart.py `
+pyside6-uic src/ui/Dictionary.ui -o src/ui/Dictionary.py
+```
 
 ## 구성
 
@@ -40,10 +45,10 @@ python -m venv
     - [메인](#메인)
     - [탐색적 분석](#탐색적-분석)
     - [텍스트 마이닝](#텍스트-마이닝)
-    - AI
-    - 사전
-    - 설정
-- 변수
+    - [AI]
+    - [사전]
+    - [메뉴얼]
+- 변수 main.data
     - df : dataframe
     - df.cols : [일자, 분류, 내용]
 - 컴포넌트

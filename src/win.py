@@ -11,7 +11,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QGridLayout,
                                QGroupBox, QHeaderView, QLabel, QPushButton,
                                QSizePolicy, QTableWidget, QTableWidgetItem, QVBoxLayout,
-                               QWidget)
+                               QWidget, QMainWindow, QStatusBar, QTabWidget, QHBoxLayout,
+                                QTableView, QFileDialog, QMessageBox)
 
 from PySide6.QtWebEngineWidgets import QWebEngineView
 
@@ -20,15 +21,16 @@ import polars as pl
 
 # ^ ---
 import page
-import components.session as data
+import components.data as data
 import components.Menu
 import components.read_df
 import components.style
 
 # ^ UI components
-from ui.chart import Ui_Chart
-from ui.textmining import Ui_TextMining
+from ui.Chart import Ui_Chart
+from ui.TextMining import Ui_TextMining
 from ui.FileInput import Ui_FileInput
+from ui.Dictionary import Ui_Dictionary
 
 # Main window
 
@@ -43,12 +45,12 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Text분석")
         self.setMinimumSize(1000, 600)
         self.setMaximumSize(1920, 1280)
-        self.setGeometry(100, 100, 1000, 600)
+        self.setGeometry(100, 100, 1000, 700)
         self.setMenuBar(components.Menu.MenuBar())
         self.setStatusBar(QStatusBar())
 
     # ^ 변수 생성
-        self.data = data.session(self)
+        self.data = data.data(self)
 
     # ^ 탭 구조 생성
         self.main = QTabWidget()
@@ -56,7 +58,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main)
 
     # ^ 탭 1: 파일 입력
-        tab1 = FileInputTab()
+        tab1 = FileInputTab(main=self)
         self.main.addTab(tab1, "파일 입력")
 
     # ^ 탭 2: 탐색적 분석
@@ -67,108 +69,18 @@ class MainWindow(QMainWindow):
         tab3 = TextMiningTab()
         self.main.addTab(tab3, "텍스트 마이닝")
 
-    # ^
-    # ^ 탭 6: Test
+    # ^ 탭 4: 사전 
+        tab4 = DictionaryTab()
+        self.main.addTab(tab4, "사전")
+
+    # ^ 탭 6: 
         tab6 = QTabWidget()
         self.main.addTab(tab6, "TEST")
-        layout6 = QHBoxLayout(tab6)
-        file_input_widget = file_input(self.data, main_window=self)
-        # tab6.setMovable(True)
-        # for _, color in enumerate(["red", "green", "blue", "yellow"]):
-        #     tab6.addTab(QWidget(), color)
-        layout6.addWidget(file_input_widget)
-
-    # % tab 7
-        # tab7 = myui()
-        # self.main.addTab(tab7, "Chart")
-
         self.show()
 
     def set_status(self, text):
         self.statusBar().showMessage(text)
 
-    def slot_button_load(self, state, widget, label):
-        filename = QFileDialog.getOpenFileName(self, 'Open file', './')
-
-        if filename[0]:
-            try:
-                self.df = pl.read_csv(filename[0])
-                self.create_table_widget(widget, self.df)
-                label.setText(filename[0])
-            except Exception as e:
-                print(f"An error occurred: {e}")
-            finally:
-                label.setText(filename[0])
-
-    def create_table_widget(self, widget, df):
-        widget.setRowCount(df.shape[0])
-        widget.setColumnCount(df.shape[1])
-        widget.setHorizontalHeaderLabels(df.columns)
-        # widget.setVerticalHeaderLabels(df.row_index)
-
-        # ^ polars
-        for row_index, row in enumerate(df.iter_rows()):
-            for col_index, column in enumerate(row):
-                value = column
-                item = QTableWidgetItem(str(value))
-                widget.setItem(row_index, col_index, item)
-
-
-class MW (QWidget):
-    def __init__(self):
-        super().__init__()
-        self.init_ui()
-
-    def init_ui(self):
-        self.setup_main_wnd()
-        self.show()
-
-    def setup_main_wnd(self):
-        lm = QVBoxLayout()
-        self.label0 = QLabel('Enter text!')
-
-# 파일 인풋
-
-
-class file_input(QWidget):
-    def __init__(self, session: data.session, main_window: QMainWindow):
-        super().__init__()
-        self.session = session
-        self.main_window = main_window
-        self.init_ui()
-
-    def init_ui(self):
-        layout = QVBoxLayout(self)
-        self.table_widget = QTableView()
-        self.table_widget.horizontalHeader().setStretchLastSection(True)
-        self.table_widget.setAlternatingRowColors(True)
-        self.table_widget.setAcceptDrops(True)
-        self.table_widget.setDragEnabled(True)
-        select_file_button = QPushButton("텍스트 파일 선택")
-        select_file_button.setFixedSize(150, 50)
-        select_file_button.clicked.connect(self.selectFile)
-        layout.addWidget(QLabel("민원 파일을 입력하세요."))
-        layout.addWidget(select_file_button)
-        layout.addWidget(self.table_widget)
-        self.setLayout(layout)
-        self.show()
-
-    def selectFile(self):
-        file, _ = QFileDialog.getOpenFileName(self, "Open Text", "data/",
-                                              "엑셀 파일 (*.xlsx *.xls *.csv);;텍스트 파일 (*.csv *.txt);;데이터프레임(*.parquet);")
-        if file:
-            df = components.read_df.read_df(file)
-            self.session.fileName = str(file)
-            self.main_window.set_status(
-                f"현재 열린 파일 : {self.session.fileName}\t\t 일자열 : {self.session.cols['date']}")
-            print(file)
-            if df is not None:
-                self.session.set_df(df)
-                model = data.PandasModel(df)
-                self.table_widget.setModel(model)
-                QMessageBox.information(self, "파일 열기", "파일이 성공적으로 열렸습니다.")
-            else:
-                QMessageBox.warning(self, "파일 열기", "파일을 읽을 수 없습니다.")
 
 # 공통 필터
 
@@ -199,16 +111,49 @@ class dataFilter(QWidget):
         self.setLayout(layout)
         self.show()
 
-# ui 불러오기
+## ui 불러오기
 
 # & tab1 파일 입력 탭
 
 
 class FileInputTab(QWidget):
-    def __init__(self) -> None:
+    def __init__(self, main: QMainWindow) -> None:
         super().__init__()
         self.ui = Ui_FileInput()
         self.ui.setupUi(self)
+        self.ui.fileBtn.clicked.connect(lambda: self.selectFile(main))
+
+    def selectFile(self, main):
+        file, _ = QFileDialog.getOpenFileName(self, "텍스트 파일 열기",
+                                              "data/", "엑셀 파일 (*.xlsx *.xls *.csv);;텍스트 파일 (*.csv *.txt);;데이터프레임(*.parquet);")
+        if file:
+            df = components.read_df.read_df(file)
+            main.data.fileName = str(file)
+            
+            if df is not None:
+                main.data.set_df(df)
+                main.set_status(f"현재 열린 파일 : {main.data.fileName} \t \
+                                일자열 : {main.data.cols['date']}")
+                self.ui.tableView.setModel(data.PandasModel(df))
+                QMessageBox.information(self, "파일 열기", "파일이 성공적으로 열렸습니다.")
+
+                self.set_cols(main)
+            else:
+                QMessageBox.warning(self, "파일 열기", "파일을 읽을 수 없습니다.")
+    
+    def set_cols(self, main):
+        col_list = main.data.get_col()
+
+        self.ui.DateCol.clear()
+        self.ui.DateCol.addItems(col_list)
+        self.ui.DateCol.setCurrentText(main.data.cols['date'])
+        
+        self.ui.TextCol.clear()
+        self.ui.TextCol.addItems(col_list)
+        self.ui.TextCol.setCurrentText(main.data.cols['text'])
+
+
+
 
 # & tab2 통계 차트 탭
 
@@ -226,6 +171,13 @@ class TextMiningTab(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.ui = Ui_TextMining()
+        self.ui.setupUi(self)
+
+#& tab4 딕셔너리 
+class DictionaryTab(QWidget):
+    def __init__(self) -> None:
+        super().__init__()
+        self.ui = Ui_Dictionary()
         self.ui.setupUi(self)
 
 

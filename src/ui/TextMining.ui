@@ -29,39 +29,57 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QToolBox" name="toolBox">
-       <widget class="QWidget" name="toolBoxPage1" native="true">
-        <attribute name="label">
-         <string/>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>300</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tabWidgetPage1" native="true">
+        <attribute name="title">
+         <string>데이터 필터</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QGroupBox" name="groupBox_2">
+          <widget class="QGroupBox" name="groupBox_4">
            <property name="title">
             <string>기간 필터</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <property name="topMargin">
+             <number>3</number>
+            </property>
             <item>
-             <layout class="QFormLayout" name="formLayout">
+             <layout class="QFormLayout" name="formLayout_4">
               <item row="0" column="0">
-               <widget class="QLabel" name="Label">
+               <widget class="QLabel" name="Label_7">
                 <property name="text">
                  <string>기간 조정</string>
                 </property>
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QLineEdit" name="LineEdit"/>
+               <widget class="QLineEdit" name="LineEdit_5"/>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="Label_2">
+               <widget class="QLabel" name="Label_8">
                 <property name="text">
                  <string>날짜 조정</string>
                 </property>
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QDateEdit" name="DateEdit"/>
+               <widget class="QDateEdit" name="DateEdit_2"/>
               </item>
              </layout>
             </item>
@@ -69,32 +87,47 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_3">
+          <widget class="QGroupBox" name="groupBox_6">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>300</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="title">
             <string>텍스트 필터</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_4">
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <property name="topMargin">
+             <number>3</number>
+            </property>
             <item>
-             <layout class="QFormLayout" name="formLayout_2">
+             <layout class="QFormLayout" name="formLayout_5">
               <item row="0" column="0">
-               <widget class="QLabel" name="Label_3">
+               <widget class="QLabel" name="Label_9">
                 <property name="text">
                  <string>포함할 단어</string>
                 </property>
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QLineEdit" name="LineEdit_2"/>
+               <widget class="QLineEdit" name="LineEdit_6"/>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="Label_6">
+               <widget class="QLabel" name="Label_10">
                 <property name="text">
                  <string>제외할 단어</string>
                 </property>
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QLineEdit" name="LineEdit_4"/>
+               <widget class="QLineEdit" name="LineEdit_7"/>
               </item>
              </layout>
             </item>
@@ -103,41 +136,56 @@
          </item>
          <item>
           <widget class="QGroupBox" name="groupBox_5">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>300</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="title">
             <string>분류 필터</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_6">
+            <property name="topMargin">
+             <number>3</number>
+            </property>
             <item>
-             <layout class="QFormLayout" name="formLayout_3">
+             <layout class="QFormLayout" name="formLayout_6">
               <item row="0" column="0">
-               <widget class="QLabel" name="Label_4">
+               <widget class="QLabel" name="Label_6">
                 <property name="text">
-                 <string>카테고리 선택</string>
+                 <string>대분류 :</string>
                 </property>
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QLineEdit" name="LineEdit_3"/>
+               <widget class="QComboBox" name="ComboBox_4"/>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="sub">
+               <widget class="QLabel" name="Label_12">
                 <property name="text">
-                 <string>중카테고리 선택</string>
+                 <string>중분류 :</string>
                 </property>
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QComboBox" name="ComboBox"/>
+               <widget class="QComboBox" name="ComboBox_5"/>
               </item>
               <item row="2" column="0">
-               <widget class="QLabel" name="Label_5">
+               <widget class="QLabel" name="Label_13">
                 <property name="text">
-                 <string>소분류 선택</string>
+                 <string>소분류 :</string>
                 </property>
                </widget>
               </item>
               <item row="2" column="1">
-               <widget class="QComboBox" name="ComboBox_2"/>
+               <widget class="QComboBox" name="ComboBox_6"/>
               </item>
              </layout>
             </item>
@@ -145,9 +193,22 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="pushButton_4">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 14, 14);</string>
+           </property>
            <property name="text">
-            <string>적용하기</string>
+            <string>필터 초기화</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_5">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(0, 111, 255);</string>
+           </property>
+           <property name="text">
+            <string>필터 적용하기</string>
            </property>
            <property name="autoDefault">
             <bool>false</bool>
@@ -162,18 +223,11 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="toolBoxPage2" native="true">
-        <attribute name="label">
-         <string/>
+       <widget class="QWidget" name="tabWidgetPage2" native="true">
+        <attribute name="title">
+         <string>차트 옵션</string>
         </attribute>
        </widget>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>차트 생성하기</string>
-       </property>
       </widget>
      </item>
     </layout>
@@ -183,11 +237,11 @@
      <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
-         <string>단어 빈도표</string>
+         <string>▦ 단어 빈도표</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_7">
          <item>
@@ -197,7 +251,7 @@
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
-         <string>워드클라우드</string>
+         <string>☁ 워드클라우드</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_8">
          <item>
@@ -207,7 +261,7 @@
        </widget>
        <widget class="QWidget" name="tab_3">
         <attribute name="title">
-         <string>네트워크</string>
+         <string>♨ 네트워크</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_9">
          <item>
