@@ -1,11 +1,10 @@
 import sys
 from typing import Optional
-from PySide6.QtWidgets import (QApplication, QFileDialog, QLabel, QLineEdit, QMainWindow, QMenu,
-                               QPushButton, QTabWidget, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QStatusBar, QGroupBox, QRadioButton,
-                               QMessageBox, QTableView, QHBoxLayout, QTextEdit)
+
+from PySide6.QtCore import *
+from PySide6.QtWidgets import *
+from PySide6.QtGui import *
 from PySide6.QtWebEngineWidgets import QWebEngineView
-from PySide6.QtGui import QAction
-import sys
 
 import pandas as pd
 import polars as pl
@@ -16,8 +15,13 @@ import components.session as data
 import components.Menu
 import components.read_df
 import components.style
-from ui.chart import Ui_Form 
 
+#^ UI components
+from ui.chart import Ui_Chart
+from ui.textmining import Ui_TextMining
+from ui.FileInput import Ui_FileInput
+
+## Main window
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -32,6 +36,7 @@ class MainWindow(QMainWindow):
         self.setGeometry(100, 100, 1000, 800)
         self.setMenuBar(components.Menu.MenuBar())
         self.setStatusBar(QStatusBar())
+
     #^ 변수 생성 
         self.data = data.session(self)
 
@@ -41,74 +46,18 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main)
 
     #^ 탭 1: 파일 입력
-        tab1 = page.main.FileInput()
-        self.main.addTab(tab1, "\udb82\ude23  파일 입력")
+        tab1 = FileInputTab()
+        self.main.addTab(tab1, "파일 입력")
 
-    #^ 탭 2: 차트 생성
-        tab2 = page.EDA.LineChart()
-        self.main.addTab(tab2, "\udb85\udd4d  차트 생성")
-
-        # table_widget = QTableWidget()
-        # layout2.addWidget(table_widget)
-        # button_load = QPushButton("Load")
-        # file_label = QLabel(self.filename)
-        # button_load.clicked.connect(
-        #     lambda state, widget=table_widget: self.slot_button_load(state, widget, label = file_label))
-        # layout2.addWidget(file_label)
-        # layout2.addWidget(button_load)
+    #^ 탭 2: 탐색적 분석 
+        tab2 = ChartTab()
+        self.main.addTab(tab2, "통계 차트 생성")
 
     #^ 탭 3: 텍스트 마이닝 
-        tab3 = MW()
-        self.main.addTab(tab3, "\uf15c  텍스트 마이닝")
-
-    #^ 탭 4: AI
-        tab4 = QWidget()
-        self.main.addTab(tab4, "\udb85\udea3  AI 분석")
-        layout4 = QVBoxLayout(tab4)
-        self.status_label = QLabel('CSV 파일을 불러와주세요.', self)
-        layout4.addWidget(self.status_label)
-        filter = dataFilter(self.data.cols)
-        layout4.addWidget(filter)
-
-    #^ 탭 5: 설명서 and 설정 
-        tab5 = QWidget()
-        self.main.addTab(tab5, "\udb81\udc77  사용설명서")
-
-        layout5 = QHBoxLayout(tab5)
-
-        # 사이드바 설정
-        sidebar5 = QVBoxLayout()
-        sidebar_widget = QWidget()
-        sidebar_widget.setLayout(sidebar5)
-        sidebar_widget.setFixedWidth(300)
-
-        # 메인 레이아웃 설정
-        main_layout = QVBoxLayout()
-        main_widget = QWidget()
-        main_widget.setLayout(main_layout)
-        # 사이드바와 메인 레이아웃을 추가
-        layout5.addWidget(sidebar_widget)
-        layout5.addWidget(main_widget)
-        groupbox = QGroupBox('Filter')
-
-        radio1 = QRadioButton('Radio1')
-        radio2 = QRadioButton('Radio2')
-        radio3 = QRadioButton('Radio3')
-        radio1.setChecked(True)
-
-        vbox = QVBoxLayout()
-        vbox.addWidget(radio1)
-        vbox.addWidget(radio2)
-        vbox.addWidget(radio3)
-        groupbox.setLayout(vbox)
-        sidebar5.addWidget(groupbox)
-        sidebar5.addStretch(1)
-
-        # 사이드바에 위젯 추가
-        sidebar5.addWidget(QLabel("메뉴얼을 만드는 곳 1"))
-        sidebar5.addWidget(QLabel("메뉴얼을 만드는 곳 2"))
-        
+        tab3 = TextMiningTab()
+        self.main.addTab(tab3, "텍스트 마이닝")
     
+    #^ 
     #^ 탭 6: Test 
         tab6 = QTabWidget()
         self.main.addTab(tab6, "TEST")
@@ -120,8 +69,8 @@ class MainWindow(QMainWindow):
         layout6.addWidget(file_input_widget)
     
     #% tab 7
-        tab7 = myui()
-        self.main.addTab(tab7, "Chart")
+        # tab7 = myui()
+        # self.main.addTab(tab7, "Chart")
 
         self.show()
 
@@ -235,12 +184,30 @@ class dataFilter(QWidget):
         self.setLayout(layout)
         self.show()
 
-## ui 파일 불러오기 
-class myui(QWidget):
+## ui 불러오기 
+
+#& tab1 파일 입력 탭 
+class FileInputTab(QWidget):
     def __init__(self) -> None:
         super().__init__()
-        self.ui = Ui_Form()
+        self.ui = Ui_FileInput()
         self.ui.setupUi(self)
+
+#& tab2 통계 차트 탭 
+class ChartTab(QWidget):
+    def __init__(self) -> None:
+        super().__init__()
+        self.ui = Ui_Chart()
+        self.ui.setupUi(self)
+
+#& tab3 텍스트 마이닝 탭 
+class TextMiningTab(QWidget):
+    def __init__(self) -> None:
+        super().__init__()
+        self.ui = Ui_TextMining()
+        self.ui.setupUi(self)
+
+
 
 
 
@@ -252,5 +219,5 @@ if __name__ == '__main__':
     main_window = MainWindow()
     main_window.setWindowTitle("텍스트 분석 대시 보드")
     main_window.show()
-    app.setStyleSheet(components.style.style_sheet().default())
+    # app.setStyleSheet(components.style.style_sheet().default())
     sys.exit(app.exec())

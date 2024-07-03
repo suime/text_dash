@@ -21,18 +21,18 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QDateEdit, QFormLayout,
     QLayout, QLineEdit, QPushButton, QSizePolicy,
     QTabWidget, QToolBox, QVBoxLayout, QWidget)
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        if not Form.objectName():
-            Form.setObjectName(u"Form")
-        Form.resize(904, 520)
-        self.horizontalLayout = QHBoxLayout(Form)
+class Ui_Chart(object):
+    def setupUi(self, Chart):
+        if not Chart.objectName():
+            Chart.setObjectName(u"Chart")
+        Chart.resize(904, 520)
+        self.horizontalLayout = QHBoxLayout(Chart)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.option = QVBoxLayout()
         self.option.setObjectName(u"option")
         self.option.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
-        self.toolBox = QToolBox(Form)
+        self.toolBox = QToolBox(Chart)
         self.toolBox.setObjectName(u"toolBox")
         self.page = QWidget()
         self.page.setObjectName(u"page")
@@ -185,7 +185,7 @@ class Ui_Form(object):
 
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.tabWidget = QTabWidget(Form)
+        self.tabWidget = QTabWidget(Chart)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tabWidget.setTabPosition(QTabWidget.TabPosition.North)
         self.tabWidget.setUsesScrollButtons(False)
@@ -219,7 +219,7 @@ class Ui_Form(object):
         self.horizontalLayout.addLayout(self.verticalLayout)
 
 
-        self.retranslateUi(Form)
+        self.retranslateUi(Chart)
         self.RefreshChart.clicked.connect(self.Linechart.repaint)
 
         self.toolBox.setCurrentIndex(0)
@@ -227,30 +227,30 @@ class Ui_Form(object):
         self.tabWidget.setCurrentIndex(0)
 
 
-        QMetaObject.connectSlotsByName(Form)
+        QMetaObject.connectSlotsByName(Chart)
     # setupUi
 
-    def retranslateUi(self, Form):
-        Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.groupBox_2.setTitle(QCoreApplication.translate("Form", u"\uae30\uac04 \ud544\ud130", None))
-        self.Label.setText(QCoreApplication.translate("Form", u"\uae30\uac04 \uc870\uc815", None))
-        self.Label_2.setText(QCoreApplication.translate("Form", u"\ub0a0\uc9dc \uc870\uc815", None))
-        self.groupBox_3.setTitle(QCoreApplication.translate("Form", u"\ud14d\uc2a4\ud2b8 \ud544\ud130", None))
-        self.Label_3.setText(QCoreApplication.translate("Form", u"\ud3ec\ud568\ud560 \ub2e8\uc5b4", None))
-        self.Label_6.setText(QCoreApplication.translate("Form", u"\uc81c\uc678\ud560 \ub2e8\uc5b4", None))
-        self.groupBox_5.setTitle(QCoreApplication.translate("Form", u"\ubd84\ub958 \ud544\ud130", None))
-        self.Label_4.setText(QCoreApplication.translate("Form", u"\uce74\ud14c\uace0\ub9ac \uc120\ud0dd", None))
-        self.sub.setText(QCoreApplication.translate("Form", u"\uc911\uce74\ud14c\uace0\ub9ac \uc120\ud0dd", None))
-        self.Label_5.setText(QCoreApplication.translate("Form", u"\uc18c\ubd84\ub958 \uc120\ud0dd", None))
-        self.pushButton.setText(QCoreApplication.translate("Form", u"\uc801\uc6a9\ud558\uae30", None))
-        self.toolBox.setItemText(self.toolBox.indexOf(self.page), QCoreApplication.translate("Form", u"\ud544\ud130", None))
-        self.groupBox.setTitle(QCoreApplication.translate("Form", u"GroupBox", None))
-        self.groupBox_4.setTitle(QCoreApplication.translate("Form", u"GroupBox", None))
-        self.RefreshChart.setText(QCoreApplication.translate("Form", u"\ucc28\ud2b8 \uc0c8\ub85c\uace0\uce68", None))
-        self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), QCoreApplication.translate("Form", u"\ucc28\ud2b8 \uc635\uc158", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_time), QCoreApplication.translate("Form", u"\uc2dc\uacc4\uc5f4", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("Form", u"\ubd84\ud3ec", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Form", u"\ubc14", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("Form", u"\ub124\ud2b8\uc6cc\ud06c", None))
+    def retranslateUi(self, Chart):
+        Chart.setWindowTitle(QCoreApplication.translate("Chart", u"Form", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("Chart", u"\uae30\uac04 \ud544\ud130", None))
+        self.Label.setText(QCoreApplication.translate("Chart", u"\uae30\uac04 \uc870\uc815", None))
+        self.Label_2.setText(QCoreApplication.translate("Chart", u"\ub0a0\uc9dc \uc870\uc815", None))
+        self.groupBox_3.setTitle(QCoreApplication.translate("Chart", u"\ud14d\uc2a4\ud2b8 \ud544\ud130", None))
+        self.Label_3.setText(QCoreApplication.translate("Chart", u"\ud3ec\ud568\ud560 \ub2e8\uc5b4", None))
+        self.Label_6.setText(QCoreApplication.translate("Chart", u"\uc81c\uc678\ud560 \ub2e8\uc5b4", None))
+        self.groupBox_5.setTitle(QCoreApplication.translate("Chart", u"\ubd84\ub958 \ud544\ud130", None))
+        self.Label_4.setText(QCoreApplication.translate("Chart", u"\uce74\ud14c\uace0\ub9ac \uc120\ud0dd", None))
+        self.sub.setText(QCoreApplication.translate("Chart", u"\uc911\uce74\ud14c\uace0\ub9ac \uc120\ud0dd", None))
+        self.Label_5.setText(QCoreApplication.translate("Chart", u"\uc18c\ubd84\ub958 \uc120\ud0dd", None))
+        self.pushButton.setText(QCoreApplication.translate("Chart", u"\uc801\uc6a9\ud558\uae30", None))
+        self.toolBox.setItemText(self.toolBox.indexOf(self.page), QCoreApplication.translate("Chart", u"\ud544\ud130", None))
+        self.groupBox.setTitle(QCoreApplication.translate("Chart", u"GroupBox", None))
+        self.groupBox_4.setTitle(QCoreApplication.translate("Chart", u"GroupBox", None))
+        self.RefreshChart.setText(QCoreApplication.translate("Chart", u"\ucc28\ud2b8 \uc0c8\ub85c\uace0\uce68", None))
+        self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), QCoreApplication.translate("Chart", u"\ucc28\ud2b8 \uc635\uc158", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_time), QCoreApplication.translate("Chart", u"\uc2dc\uacc4\uc5f4", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("Chart", u"\ubd84\ud3ec", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Chart", u"\ubc14", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("Chart", u"\ub124\ud2b8\uc6cc\ud06c", None))
     # retranslateUi
 
