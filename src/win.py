@@ -1,6 +1,3 @@
-from email import message
-from logging import config
-from msvcrt import LK_LOCK
 import sys
 from typing import Optional
 
