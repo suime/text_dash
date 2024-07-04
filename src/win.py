@@ -187,23 +187,23 @@ class filterComponent():
         ui.resetFilter.clicked.connect(lambda: self.init_ui(ui, data))
 
         # ^ 필터 적용하기
-        ui.applyFilter.clicked.connect(lambda: self.init_ui(ui, data))
+        ui.applyFilter.clicked.connect(lambda: self.get_filter(ui))
 
     # ^ 최초 필터의 기본값을 초기화 하는 과정
     # ^ 데이터프레임 변경 또는 필터 초기화 버튼을 눌렀을때 실행
     def init_ui(self, ui, data):
-        # self.date_col = self.ui.
-
         # * 일자열 설정
         # * 일자열이 없으면 비활성화
         print(f"필터 초기화 되었습니다. {data.cols['date']}")
         if data.cols['date'] != '':
             ui.startDate.setDisabled(False)
             ui.endDate.setDisabled(False)
-            min_date = data.df[data.cols['date']].dt.min()
-            max_date = data.df[data.cols['date']].dt.max()
-            ui.startDate.setDate(QDate.currentDate())
-            ui.endDate.setDate(QDate.currentDate())
+            min_date = data.df[data.cols['date']].min()
+            max_date = data.df[data.cols['date']].max()
+            ui.startDate.setDate(
+                QDate(min_date.year, min_date.month, min_date.day))
+            ui.endDate.setDate(
+                QDate(max_date.year, max_date.month, max_date.day))
         else:
             ui.startDate.setDisabled(True)
             ui.endDate.setDisabled(True)
@@ -221,6 +221,12 @@ class filterComponent():
             ui.exText.setDisabled(True)
             ui.exText.setPlaceholderText("입력 탭에서 문자열을 설정하세요.")
 
+    #* 현재 필터 옵션 가져오기 
+    def get_filter(self, ui):
+        startDate = ui.startDate.dateTime().toString()
+        endDate = ui.endDate.dateTime().toString(Qt.ISODate)
+        print(startDate)
+        return [startDate, endDate]
 
 # @ Main
 if __name__ == '__main__':

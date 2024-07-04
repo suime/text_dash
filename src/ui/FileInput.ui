@@ -207,37 +207,37 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+        <item row="4" column="0">
          <widget class="QLabel" name="Label">
           <property name="text">
            <string>대분류 :</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="4" column="1">
          <widget class="QComboBox" name="category1ComboBox"/>
         </item>
-        <item row="4" column="0">
+        <item row="5" column="0">
          <widget class="QLabel" name="Label_2">
           <property name="text">
            <string>중분류 :</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="1">
+        <item row="5" column="1">
          <widget class="QComboBox" name="category2ComboBox"/>
         </item>
-        <item row="5" column="0">
+        <item row="6" column="0">
          <widget class="QLabel" name="Label_3">
           <property name="text">
            <string>소분류</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="1">
+        <item row="6" column="1">
          <widget class="QComboBox" name="category3ComboBox"/>
         </item>
-        <item row="6" column="0">
+        <item row="8" column="0">
          <widget class="QLabel" name="Label_4">
           <property name="toolTip">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;데이터에서 중복된 행을 제거하고 분석할 것인지 여부&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -247,18 +247,32 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="1">
+        <item row="8" column="1">
          <widget class="QCheckBox" name="removeDupCheckBox"/>
         </item>
-        <item row="7" column="0">
+        <item row="9" column="0">
          <widget class="QLabel" name="Label_5">
           <property name="text">
            <string>결측치 제거</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="1">
+        <item row="9" column="1">
          <widget class="QCheckBox" name="removeNanCheckBox"/>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="Line" name="line_3">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0" colspan="2">
+         <widget class="Line" name="line_4">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -290,6 +304,18 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>fileBtn</tabstop>
+  <tabstop>DateCol</tabstop>
+  <tabstop>TextCol</tabstop>
+  <tabstop>category1ComboBox</tabstop>
+  <tabstop>category2ComboBox</tabstop>
+  <tabstop>category3ComboBox</tabstop>
+  <tabstop>removeDupCheckBox</tabstop>
+  <tabstop>removeNanCheckBox</tabstop>
+  <tabstop>setCols</tabstop>
+  <tabstop>tableView</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

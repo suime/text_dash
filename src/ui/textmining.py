@@ -40,6 +40,8 @@ class Ui_TextMining(object):
         self.tabWidget.setSizePolicy(sizePolicy)
         self.tabWidget.setMinimumSize(QSize(300, 0))
         self.tabWidget.setMaximumSize(QSize(310, 16777215))
+        self.tabWidget.setTabShape(QTabWidget.TabShape.Rounded)
+        self.tabWidget.setDocumentMode(False)
         self.tabWidgetPage1 = QWidget()
         self.tabWidgetPage1.setObjectName(u"tabWidgetPage1")
         self.verticalLayout_3 = QVBoxLayout(self.tabWidgetPage1)
@@ -67,9 +69,10 @@ class Ui_TextMining(object):
 
         self.startDate = QDateEdit(self.groupBox_4)
         self.startDate.setObjectName(u"startDate")
-        self.startDate.setDateTime(QDateTime(QDate(2001, 1, 1), QTime(0, 0, 0)))
-        self.startDate.setMaximumDate(QDate(9993, 12, 31))
+        self.startDate.setDateTime(QDateTime(QDate(2001, 1, 1), QTime(9, 0, 0)))
+        self.startDate.setMaximumDate(QDate(9994, 1, 1))
         self.startDate.setCalendarPopup(True)
+        self.startDate.setTimeSpec(Qt.TimeSpec.LocalTime)
 
         self.formLayout_4.setWidget(1, QFormLayout.FieldRole, self.startDate)
 
@@ -81,6 +84,7 @@ class Ui_TextMining(object):
         self.endDate = QDateEdit(self.groupBox_4)
         self.endDate.setObjectName(u"endDate")
         self.endDate.setCalendarPopup(True)
+        self.endDate.setTimeSpec(Qt.TimeSpec.LocalTime)
 
         self.formLayout_4.setWidget(2, QFormLayout.FieldRole, self.endDate)
 
@@ -180,13 +184,15 @@ class Ui_TextMining(object):
 
         self.resetFilter = QPushButton(self.tabWidgetPage1)
         self.resetFilter.setObjectName(u"resetFilter")
-        self.resetFilter.setStyleSheet(u"background-color: rgb(255, 14, 14);")
+        self.resetFilter.setStyleSheet(u"background-color: #A4193D;\n"
+"color: #FFDFB9;")
 
         self.verticalLayout_3.addWidget(self.resetFilter)
 
         self.applyFilter = QPushButton(self.tabWidgetPage1)
         self.applyFilter.setObjectName(u"applyFilter")
-        self.applyFilter.setStyleSheet(u"background-color: rgb(0, 111, 255);")
+        self.applyFilter.setStyleSheet(u"background-color: #00539C;\n"
+"color: #EEA47F;")
         self.applyFilter.setAutoDefault(False)
         self.applyFilter.setFlat(False)
 
@@ -395,7 +401,9 @@ class Ui_TextMining(object):
         self.Label_6.setText(QCoreApplication.translate("TextMining", u"\ub300\ubd84\ub958 :", None))
         self.category1.setPlaceholderText(QCoreApplication.translate("TextMining", u"\ubbf8\uc124\uc815", None))
         self.Label_12.setText(QCoreApplication.translate("TextMining", u"\uc911\ubd84\ub958 :", None))
+        self.category2.setPlaceholderText(QCoreApplication.translate("TextMining", u"\ubbf8\uc124\uc815", None))
         self.Label_13.setText(QCoreApplication.translate("TextMining", u"\uc18c\ubd84\ub958 :", None))
+        self.category3.setPlaceholderText(QCoreApplication.translate("TextMining", u"\ubbf8\uc124\uc815", None))
         self.resetFilter.setText(QCoreApplication.translate("TextMining", u"\ud544\ud130 \ucd08\uae30\ud654", None))
         self.applyFilter.setText(QCoreApplication.translate("TextMining", u"\ud544\ud130 \uc801\uc6a9\ud558\uae30", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabWidgetPage1), QCoreApplication.translate("TextMining", u"\ub370\uc774\ud130 \ud544\ud130", None))
