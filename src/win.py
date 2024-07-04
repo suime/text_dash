@@ -1,3 +1,6 @@
+from email import message
+from logging import config
+from msvcrt import LK_LOCK
 import sys
 from typing import Optional
 
@@ -12,7 +15,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QGridLayout
                                QGroupBox, QHeaderView, QLabel, QPushButton,
                                QSizePolicy, QTableWidget, QTableWidgetItem, QVBoxLayout,
                                QWidget, QMainWindow, QStatusBar, QTabWidget, QHBoxLayout,
-                                QTableView, QFileDialog, QMessageBox)
+                               QTableView, QFileDialog, QMessageBox, QDateEdit)
 
 from PySide6.QtWebEngineWidgets import QWebEngineView
 
@@ -66,53 +69,26 @@ class MainWindow(QMainWindow):
         self.main.addTab(tab2, "통계 차트 생성")
 
     # ^ 탭 3: 텍스트 마이닝
-        tab3 = TextMiningTab()
+        tab3 = TextMiningTab(self.data)
         self.main.addTab(tab3, "텍스트 마이닝")
 
-    # ^ 탭 4: 사전 
+    # ^ 탭 4: 사전
         tab4 = DictionaryTab()
         self.main.addTab(tab4, "사전")
 
-    # ^ 탭 6: 
+    # ^ 탭 6:
         tab6 = QTabWidget()
         self.main.addTab(tab6, "TEST")
 
         self.show()
 
-    def set_status(self, text):
-        self.statusBar().showMessage(text)
+    def set_status(self):
+        self.statusBar().showMessage(
+            f"파일명 : {self.data.fileName}  일자열 : {self.data.cols['date']}  텍스트열 : {self.data.cols['text']}  카테고리 : {self.data.cols['category1']}")
+    # 공통 필터
 
 
-# 공통 필터
-
-
-class dataFilter(QWidget):
-    def __init__(self, config: dict = dict(date='', text='')):
-        super().__init__()
-        layout = QVBoxLayout()
-        # ^ 기간 필터
-
-        # ^ 텍스트 필터
-        text_in = QTextEdit()
-        text_ex = QTextEdit()
-        if config['date'] != '':
-            radio1 = QRadioButton('Radio1')
-        if config['text'] != '':
-            text_in.setDisabled(False)
-            text_ex.setDisabled(False)
-
-            text_in.setPlaceholderText("포함될 단어를 쉼표로 구분해서 넣으세요.")
-            text_ex.setPlaceholderText("제외될 단어를 쉼표로 구분해서 넣으세요.")
-        else:
-            # pass
-            text_in.setDisabled(True)
-            text_ex.setDisabled(True)
-        layout.addWidget(text_in)
-        layout.addWidget(text_ex)
-        self.setLayout(layout)
-        self.show()
-
-## ui 불러오기
+# ui 불러오기
 
 # & tab1 파일 입력 탭
 
@@ -122,39 +98,53 @@ class FileInputTab(QWidget):
         super().__init__()
         self.ui = Ui_FileInput()
         self.ui.setupUi(self)
+
+        # ^ 파일 입력 버튼
         self.ui.fileBtn.clicked.connect(lambda: self.selectFile(main))
+
+        # ^ 설정하기 버튼
+        # * 누르면 데이터프레임 열에 맞게 타입 캐스트 하고, 중복 등 간단한 처리 하기
+
+        self.ui.setCols.clicked.connect(
+            lambda: main.data.set_col_manual(self.get_options()))
+        self.ui.setCols.clicked.connect(main.set_status)
+        self.ui.setCols.clicked.connect(lambda: self.show_df(main.data.fdf))
 
     def selectFile(self, main):
         file, _ = QFileDialog.getOpenFileName(self, "텍스트 파일 열기",
                                               "data/", "엑셀 파일 (*.xlsx *.xls *.csv);;텍스트 파일 (*.csv *.txt);;데이터프레임(*.parquet);")
         if file:
             df = components.read_df.read_df(file)
-            main.data.fileName = str(file)
-            
-            if df is not None:
-                main.data.set_df(df)
-                main.set_status(f"현재 열린 파일 : {main.data.fileName} \t \
-                                일자열 : {main.data.cols['date']}")
-                self.ui.tableView.setModel(data.PandasModel(df))
-                QMessageBox.information(self, "파일 열기", "파일이 성공적으로 열렸습니다.")
 
+            if df is not None:
+                main.data.set_df(df, file)
+                main.set_status()
                 self.set_cols(main)
+                self.show_df(main.data.df)
+                QMessageBox.information(self, "파일 열기", "파일이 성공적으로 열렸습니다.")
             else:
                 QMessageBox.warning(self, "파일 열기", "파일을 읽을 수 없습니다.")
-    
+
+    def get_options(self):
+        column = {'date': self.ui.DateCol.currentText(),
+                  'text': self.ui.TextCol.currentText(),
+                  'category1': self.ui.category1ComboBox.currentText(),
+                  'category2': self.ui.category2ComboBox.currentText(),
+                  'category3': self.ui.category3ComboBox.currentText()}
+        na = self.ui.removeNanCheckBox.isChecked()
+        duplicate = self.ui.removeDupCheckBox.isChecked()
+        print(column)
+        return {"column_config": column, "rm_na": na, "rm_duplicate": duplicate}
+
     def set_cols(self, main):
         col_list = main.data.get_col()
+        for combo_box, col in zip([self.ui.DateCol, self.ui.TextCol, self.ui.category1ComboBox, self.ui.category2ComboBox, self.ui.category3ComboBox], ['date', 'text', 'category1', 'category2', 'category3']):
+            combo_box.clear()
+            combo_box.addItems(col_list)
+            combo_box.setCurrentText(main.data.cols[col])
 
-        self.ui.DateCol.clear()
-        self.ui.DateCol.addItems(col_list)
-        self.ui.DateCol.setCurrentText(main.data.cols['date'])
-        
-        self.ui.TextCol.clear()
-        self.ui.TextCol.addItems(col_list)
-        self.ui.TextCol.setCurrentText(main.data.cols['text'])
-
-
-
+    def show_df(self, df):
+        self.ui.tableView.setModel(data.PandasModel(df))
 
 # & tab2 통계 차트 탭
 
@@ -169,17 +159,67 @@ class ChartTab(QWidget):
 
 
 class TextMiningTab(QWidget):
-    def __init__(self) -> None:
+    def __init__(self, data) -> None:
+        # * data = main.data
         super().__init__()
         self.ui = Ui_TextMining()
         self.ui.setupUi(self)
+        self.init_filter(data)
 
-#& tab4 딕셔너리 
+    def init_filter(self, data):
+        data_filter = filterComponent(self.ui, data)
+
+
+# & tab4 딕셔너리
 class DictionaryTab(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.ui = Ui_Dictionary()
         self.ui.setupUi(self)
+
+
+# & filter component
+class filterComponent():
+    def __init__(self, ui, data) -> None:
+        self.init_ui(ui, data)
+
+        # ^ 필터 초기화
+        ui.resetFilter.clicked.connect(lambda: self.init_ui(ui, data))
+
+        # ^ 필터 적용하기
+        ui.applyFilter.clicked.connect(lambda: self.init_ui(ui, data))
+
+    # ^ 최초 필터의 기본값을 초기화 하는 과정
+    # ^ 데이터프레임 변경 또는 필터 초기화 버튼을 눌렀을때 실행
+    def init_ui(self, ui, data):
+        # self.date_col = self.ui.
+
+        # * 일자열 설정
+        # * 일자열이 없으면 비활성화
+        print(f"필터 초기화 되었습니다. {data.cols['date']}")
+        if data.cols['date'] != '':
+            ui.startDate.setDisabled(False)
+            ui.endDate.setDisabled(False)
+            min_date = data.df[data.cols['date']].dt.min()
+            max_date = data.df[data.cols['date']].dt.max()
+            ui.startDate.setDate(QDate.currentDate())
+            ui.endDate.setDate(QDate.currentDate())
+        else:
+            ui.startDate.setDisabled(True)
+            ui.endDate.setDisabled(True)
+
+        # * 문자열 설정
+        # * 문자열 없으면 비활성화
+        if data.cols['text'] != '':
+            ui.inText.setDisabled(False)
+            ui.inText.setPlaceholderText("ex) 한국, 도로, 공사")
+            ui.exText.setDisabled(False)
+            ui.exText.setPlaceholderText("ex) 한국, 도로, 공사")
+        else:
+            ui.inText.setDisabled(True)
+            ui.inText.setPlaceholderText("입력 탭에서 문자열을 설정하세요.")
+            ui.exText.setDisabled(True)
+            ui.exText.setPlaceholderText("입력 탭에서 문자열을 설정하세요.")
 
 
 # @ Main
@@ -188,5 +228,4 @@ if __name__ == '__main__':
     main_window = MainWindow()
     main_window.setWindowTitle("텍스트 분석 대시 보드")
     main_window.show()
-    # app.setStyleSheet(components.style.style_sheet().default())
     sys.exit(app.exec())

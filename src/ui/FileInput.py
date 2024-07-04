@@ -28,6 +28,15 @@ class Ui_FileInput(object):
         self.gridLayout = QGridLayout(FileInput)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.tableView = QTableView(FileInput)
+        self.tableView.setObjectName(u"tableView")
+        self.tableView.setMinimumSize(QSize(300, 300))
+        self.tableView.setAlternatingRowColors(True)
+        self.tableView.setGridStyle(Qt.PenStyle.DotLine)
+        self.tableView.setSortingEnabled(True)
+
+        self.gridLayout.addWidget(self.tableView, 1, 1, 1, 1)
+
         self.groupBox = QGroupBox(FileInput)
         self.groupBox.setObjectName(u"groupBox")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
@@ -85,6 +94,12 @@ class Ui_FileInput(object):
 
         self.formLayout = QFormLayout()
         self.formLayout.setObjectName(u"formLayout")
+        self.label_4 = QLabel(self.groupBox)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setTextFormat(Qt.TextFormat.RichText)
+
+        self.formLayout.setWidget(0, QFormLayout.SpanningRole, self.label_4)
+
         self.dataLabel = QLabel(self.groupBox)
         self.dataLabel.setObjectName(u"dataLabel")
         self.dataLabel.setMidLineWidth(0)
@@ -149,12 +164,6 @@ class Ui_FileInput(object):
 
         self.formLayout.setWidget(6, QFormLayout.FieldRole, self.removeDupCheckBox)
 
-        self.label_4 = QLabel(self.groupBox)
-        self.label_4.setObjectName(u"label_4")
-        self.label_4.setTextFormat(Qt.TextFormat.RichText)
-
-        self.formLayout.setWidget(0, QFormLayout.SpanningRole, self.label_4)
-
         self.Label_5 = QLabel(self.groupBox)
         self.Label_5.setObjectName(u"Label_5")
 
@@ -175,25 +184,14 @@ class Ui_FileInput(object):
 
         self.verticalLayout.addWidget(self.line_2)
 
-        self.colSetBtn = QPushButton(self.groupBox)
-        self.colSetBtn.setObjectName(u"colSetBtn")
-        self.colSetBtn.setMinimumSize(QSize(0, 50))
-        icon1 = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.AddressBookNew))
-        self.colSetBtn.setIcon(icon1)
+        self.setCols = QPushButton(self.groupBox)
+        self.setCols.setObjectName(u"setCols")
+        self.setCols.setMinimumSize(QSize(0, 50))
 
-        self.verticalLayout.addWidget(self.colSetBtn)
+        self.verticalLayout.addWidget(self.setCols)
 
 
         self.gridLayout.addWidget(self.groupBox, 1, 0, 1, 1)
-
-        self.tableView = QTableView(FileInput)
-        self.tableView.setObjectName(u"tableView")
-        self.tableView.setMinimumSize(QSize(300, 300))
-        self.tableView.setAlternatingRowColors(True)
-        self.tableView.setGridStyle(Qt.PenStyle.DotLine)
-        self.tableView.setSortingEnabled(True)
-
-        self.gridLayout.addWidget(self.tableView, 1, 1, 1, 1)
 
 
         self.retranslateUi(FileInput)
@@ -211,6 +209,7 @@ class Ui_FileInput(object):
 #endif // QT_CONFIG(shortcut)
         self.label_2.setText(QCoreApplication.translate("FileInput", u"\ud30c\uc77c\uba85 : ", None))
         self.label_3.setText(QCoreApplication.translate("FileInput", u"\ud589 \uac1c\uc218 : ", None))
+        self.label_4.setText(QCoreApplication.translate("FileInput", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; font-weight:700;\">\ubd84\uc11d \uae30\ubcf8 \uc124\uc815</span></p></body></html>", None))
         self.dataLabel.setText(QCoreApplication.translate("FileInput", u"<html><head/><body><p><span style=\" font-weight:700;\">\uc77c\uc790 \ud544\ub4dc :</span></p></body></html>", None))
         self.textLabel.setText(QCoreApplication.translate("FileInput", u"<html><head/><body><p><span style=\" font-weight:700;\">\ubb38\uc790 \ud544\ub4dc :</span></p></body></html>", None))
         self.Label.setText(QCoreApplication.translate("FileInput", u"\ub300\ubd84\ub958 :", None))
@@ -220,11 +219,10 @@ class Ui_FileInput(object):
         self.Label_4.setToolTip(QCoreApplication.translate("FileInput", u"<html><head/><body><p>\ub370\uc774\ud130\uc5d0\uc11c \uc911\ubcf5\ub41c \ud589\uc744 \uc81c\uac70\ud558\uace0 \ubd84\uc11d\ud560 \uac83\uc778\uc9c0 \uc5ec\ubd80</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.Label_4.setText(QCoreApplication.translate("FileInput", u"\uc911\ubcf5 \uc81c\uac70", None))
-        self.label_4.setText(QCoreApplication.translate("FileInput", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; font-weight:700;\">\ubd84\uc11d \uae30\ubcf8 \uc124\uc815</span></p></body></html>", None))
         self.Label_5.setText(QCoreApplication.translate("FileInput", u"\uacb0\uce21\uce58 \uc81c\uac70", None))
-        self.colSetBtn.setText(QCoreApplication.translate("FileInput", u"\uc5f4 \uc124\uc815\ud558\uae30", None))
+        self.setCols.setText(QCoreApplication.translate("FileInput", u"\uc124\uc815\ud558\uae30", None))
 #if QT_CONFIG(shortcut)
-        self.colSetBtn.setShortcut(QCoreApplication.translate("FileInput", u"Ctrl+Return", None))
+        self.setCols.setShortcut(QCoreApplication.translate("FileInput", u"Ctrl+Return", None))
 #endif // QT_CONFIG(shortcut)
     # retranslateUi
 

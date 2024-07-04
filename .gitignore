@@ -12,6 +12,7 @@
 /share
 bin/
 ect/
+src/deployment/
 
 # pycache
 __pycache__/

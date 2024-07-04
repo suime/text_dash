@@ -26,6 +26,25 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
+   <item row="1" column="1">
+    <widget class="QTableView" name="tableView">
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="gridStyle">
+      <enum>Qt::PenStyle::DotLine</enum>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
@@ -83,8 +102,14 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>50</height>
+          <height>60</height>
          </size>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
         </property>
         <property name="text">
          <string>텍스트 파일 불러오기 (ctrl + o)</string>
@@ -132,6 +157,16 @@
       </item>
       <item>
        <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0" colspan="2">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;분석 기본 설정&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="textFormat">
+           <enum>Qt::TextFormat::RichText</enum>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="dataLabel">
           <property name="midLineWidth">
@@ -215,16 +250,6 @@
         <item row="6" column="1">
          <widget class="QCheckBox" name="removeDupCheckBox"/>
         </item>
-        <item row="0" column="0" colspan="2">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:700;&quot;&gt;분석 기본 설정&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="textFormat">
-           <enum>Qt::TextFormat::RichText</enum>
-          </property>
-         </widget>
-        </item>
         <item row="7" column="0">
          <widget class="QLabel" name="Label_5">
           <property name="text">
@@ -245,7 +270,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="colSetBtn">
+       <widget class="QPushButton" name="setCols">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -253,10 +278,7 @@
          </size>
         </property>
         <property name="text">
-         <string>열 설정하기</string>
-        </property>
-        <property name="icon">
-         <iconset theme="QIcon::ThemeIcon::AddressBookNew"/>
+         <string>설정하기</string>
         </property>
         <property name="shortcut">
          <string>Ctrl+Return</string>
@@ -264,25 +286,6 @@
        </widget>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QTableView" name="tableView">
-     <property name="minimumSize">
-      <size>
-       <width>300</width>
-       <height>300</height>
-      </size>
-     </property>
-     <property name="alternatingRowColors">
-      <bool>true</bool>
-     </property>
-     <property name="gridStyle">
-      <enum>Qt::PenStyle::DotLine</enum>
-     </property>
-     <property name="sortingEnabled">
-      <bool>true</bool>
-     </property>
     </widget>
    </item>
   </layout>
