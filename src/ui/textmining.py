@@ -70,7 +70,7 @@ class Ui_TextMining(object):
         self.startDate = QDateEdit(self.groupBox_4)
         self.startDate.setObjectName(u"startDate")
         self.startDate.setDateTime(QDateTime(QDate(2001, 1, 1), QTime(9, 0, 0)))
-        self.startDate.setMaximumDate(QDate(9994, 1, 1))
+        self.startDate.setMaximumDate(QDate(9994, 1, 2))
         self.startDate.setCalendarPopup(True)
         self.startDate.setTimeSpec(Qt.TimeSpec.LocalTime)
 
@@ -283,6 +283,7 @@ class Ui_TextMining(object):
 
         self.fontComboBox = QFontComboBox(self.groupBox_2)
         self.fontComboBox.setObjectName(u"fontComboBox")
+        self.fontComboBox.setMaximumSize(QSize(150, 16777215))
 
         self.formLayout_3.setWidget(0, QFormLayout.FieldRole, self.fontComboBox)
 
@@ -292,6 +293,16 @@ class Ui_TextMining(object):
         self.comboBox.setObjectName(u"comboBox")
 
         self.formLayout_3.setWidget(2, QFormLayout.FieldRole, self.comboBox)
+
+        self.bg = QLabel(self.groupBox_2)
+        self.bg.setObjectName(u"bg")
+
+        self.formLayout_3.setWidget(4, QFormLayout.LabelRole, self.bg)
+
+        self.bgColor = QComboBox(self.groupBox_2)
+        self.bgColor.setObjectName(u"bgColor")
+
+        self.formLayout_3.setWidget(4, QFormLayout.FieldRole, self.bgColor)
 
 
         self.verticalLayout_4.addWidget(self.groupBox_2)
@@ -332,11 +343,11 @@ class Ui_TextMining(object):
         self.TFTab.setObjectName(u"TFTab")
         self.verticalLayout_7 = QVBoxLayout(self.TFTab)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.webEngineView_2 = QWebEngineView(self.TFTab)
-        self.webEngineView_2.setObjectName(u"webEngineView_2")
-        self.webEngineView_2.setUrl(QUrl(u"about:blank"))
+        self.TFplot = QWebEngineView(self.TFTab)
+        self.TFplot.setObjectName(u"TFplot")
+        self.TFplot.setUrl(QUrl(u"about:blank"))
 
-        self.verticalLayout_7.addWidget(self.webEngineView_2)
+        self.verticalLayout_7.addWidget(self.TFplot)
 
         self.saveTF = QPushButton(self.TFTab)
         self.saveTF.setObjectName(u"saveTF")
@@ -358,20 +369,20 @@ class Ui_TextMining(object):
         self.networkTab.setObjectName(u"networkTab")
         self.verticalLayout_9 = QVBoxLayout(self.networkTab)
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
-        self.webEngineView = QWebEngineView(self.networkTab)
-        self.webEngineView.setObjectName(u"webEngineView")
-        self.webEngineView.setUrl(QUrl(u"about:blank"))
+        self.networkPlot = QWebEngineView(self.networkTab)
+        self.networkPlot.setObjectName(u"networkPlot")
+        self.networkPlot.setUrl(QUrl(u"about:blank"))
 
-        self.verticalLayout_9.addWidget(self.webEngineView)
+        self.verticalLayout_9.addWidget(self.networkPlot)
 
         self.tabWidget1.addTab(self.networkTab, "")
 
         self.verticalLayout_2.addWidget(self.tabWidget1)
 
-        self.pushButton = QPushButton(TextMining)
-        self.pushButton.setObjectName(u"pushButton")
+        self.initTable = QPushButton(TextMining)
+        self.initTable.setObjectName(u"initTable")
 
-        self.verticalLayout_2.addWidget(self.pushButton)
+        self.verticalLayout_2.addWidget(self.initTable)
 
 
         self.formLayout.setLayout(0, QFormLayout.FieldRole, self.verticalLayout_2)
@@ -379,7 +390,7 @@ class Ui_TextMining(object):
 
         self.retranslateUi(TextMining)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         self.applyFilter.setDefault(False)
         self.tabWidget1.setCurrentIndex(0)
 
@@ -415,10 +426,11 @@ class Ui_TextMining(object):
 " \ub178\ub4dc\uc758 \uac1c\uc218\uac00 \ub9ce\uc744\uc218\ub85d \uc2dc\uc778\uc131\uc740 \ub5a8\uc5b4\uc9d1\ub2c8\ub2e4.", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("TextMining", u"\ub514\uc790\uc778", None))
         self.label_3.setText(QCoreApplication.translate("TextMining", u"\ud3f0\ud2b8 \uc124\uc815 :", None))
-        self.label_2.setText(QCoreApplication.translate("TextMining", u"\uae00\uc790 \uc0c9\uc0c1", None))
+        self.label_2.setText(QCoreApplication.translate("TextMining", u"\uae00\uc790 \uc0c9\uc0c1 :", None))
         self.comboBox.setItemText(0, QCoreApplication.translate("TextMining", u"\ud654\uc774\ud2b8", None))
         self.comboBox.setItemText(1, QCoreApplication.translate("TextMining", u"\ub2e4\ud06c", None))
 
+        self.bg.setText(QCoreApplication.translate("TextMining", u"\ubc30\uacbd\uc0c9\uc0c1 :", None))
         self.pushButton_2.setText(QCoreApplication.translate("TextMining", u"\uc635\uc158 \ucd08\uae30\ud654", None))
         self.pushButton_3.setText(QCoreApplication.translate("TextMining", u"\uc635\uc158 \uc801\uc6a9", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabWidgetPage2), QCoreApplication.translate("TextMining", u"\ucc28\ud2b8 \uc635\uc158", None))
@@ -427,6 +439,6 @@ class Ui_TextMining(object):
         self.tabWidget1.setTabText(self.tabWidget1.indexOf(self.TFTab), QCoreApplication.translate("TextMining", u"\u25a6 \ub2e8\uc5b4 \ube48\ub3c4\ud45c", None))
         self.tabWidget1.setTabText(self.tabWidget1.indexOf(self.wcTab), QCoreApplication.translate("TextMining", u"\u2601 \uc6cc\ub4dc\ud074\ub77c\uc6b0\ub4dc", None))
         self.tabWidget1.setTabText(self.tabWidget1.indexOf(self.networkTab), QCoreApplication.translate("TextMining", u"\u2668 \ub124\ud2b8\uc6cc\ud06c", None))
-        self.pushButton.setText(QCoreApplication.translate("TextMining", u"\uc0c8\ub85c\uace0\uce68", None))
+        self.initTable.setText(QCoreApplication.translate("TextMining", u"\uc0c8\ub85c\uace0\uce68", None))
     # retranslateUi
 

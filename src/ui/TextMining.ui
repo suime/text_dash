@@ -52,7 +52,7 @@
         <enum>QTabWidget::TabShape::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="documentMode">
         <bool>false</bool>
@@ -118,7 +118,7 @@
                  <date>
                   <year>9994</year>
                   <month>1</month>
-                  <day>1</day>
+                  <day>2</day>
                  </date>
                 </property>
                 <property name="calendarPopup">
@@ -575,7 +575,7 @@ color: #EEA47F;</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_7">
          <item>
-          <widget class="QWebEngineView" name="webEngineView_2">
+          <widget class="QWebEngineView" name="TFplot">
            <property name="url">
             <url>
              <string>about:blank</string>
@@ -608,7 +608,7 @@ color: #EEA47F;</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_9">
          <item>
-          <widget class="QWebEngineView" name="webEngineView">
+          <widget class="QWebEngineView" name="networkPlot">
            <property name="url">
             <url>
              <string>about:blank</string>
@@ -621,7 +621,7 @@ color: #EEA47F;</string>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="initTable">
        <property name="text">
         <string>새로고침</string>
        </property>

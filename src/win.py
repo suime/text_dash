@@ -12,15 +12,17 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QGridLayout
                                QGroupBox, QHeaderView, QLabel, QPushButton,
                                QSizePolicy, QTableWidget, QTableWidgetItem, QVBoxLayout,
                                QWidget, QMainWindow, QStatusBar, QTabWidget, QHBoxLayout,
-                               QTableView, QFileDialog, QMessageBox, QDateEdit)
+                               QTableView, QFileDialog, QMessageBox, QDateEdit) 
 
 from PySide6.QtWebEngineWidgets import QWebEngineView
 
 import pandas as pd
-import polars as pl
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.offline as plt
+from polars import head
 
 # ^ ---
-import page
 import components.data as data
 import components.Menu
 import components.read_df
@@ -162,9 +164,24 @@ class TextMiningTab(QWidget):
         self.ui = Ui_TextMining()
         self.ui.setupUi(self)
         self.init_filter(data)
+        self.ui.initTable.clicked.connect(lambda: self.init_just_table(data))
 
     def init_filter(self, data):
         data_filter = filterComponent(self.ui, data)
+
+    def init_just_table(self, data):
+        view = self.ui.tablePlot
+        df = data.df
+        cols = list(data.cols.values())
+        
+        fig = go.Figure(data=[go.Table(
+            header=dict(values=df.columns[[0, 1, 2]],
+                        align='center'),
+            cells=dict(values=[df[cols[0]], df[cols[1]], df[cols[2]],])
+        )])
+        html = plt.plot(fig, include_plotlyjs='cdn', output_type='div')
+        view.setHtml(html)
+
 
 
 # & tab4 딕셔너리
@@ -207,28 +224,43 @@ class filterComponent():
 
         # * 문자열 설정
         # * 문자열 없으면 비활성화
-        if data.cols['text'] != '':
-            ui.inText.setDisabled(False)
-            ui.inText.setPlaceholderText("ex) 한국, 도로, 공사")
-            ui.exText.setDisabled(False)
-            ui.exText.setPlaceholderText("ex) 한국, 도로, 공사")
-        else:
-            ui.inText.setDisabled(True)
-            ui.inText.setPlaceholderText("입력 탭에서 문자열을 설정하세요.")
-            ui.exText.setDisabled(True)
-            ui.exText.setPlaceholderText("입력 탭에서 문자열을 설정하세요.")
+        text_enabled = data.cols['text'] != ''
+        placeholder_text = "ex) 한국, 도로, 공사" if text_enabled else "입력 탭에서 문자열을 설정하세요."
+        ui.inText.setDisabled(not text_enabled)
+        ui.inText.setPlaceholderText(placeholder_text)
+        ui.inText.clear()
+        ui.exText.setDisabled(not text_enabled)
+        ui.exText.setPlaceholderText(placeholder_text)
+        ui.exText.clear()
 
-    #* 현재 필터 옵션 가져오기 
+        # * 카테고리열 설정 
+        for category, ui_element in [
+            ('category1', ui.category1),
+            ('category2', ui.category2),
+            ('category3', ui.category3)
+        ]:
+            if data.cols[category] != '':
+                ui_element.setDisabled(False)
+                ui_element.clear()
+                ui_element.addItems(data.get_unique_value(data.cols[category]))
+                ui_element.setCurrentIndex(0) 
+            else:
+                ui_element.setDisabled(True)
+
+
+    # * 현재 필터 옵션 가져오기
     def get_filter(self, ui):
         startDate = ui.startDate.dateTime().toString()
         endDate = ui.endDate.dateTime().toString(Qt.ISODate)
         print(startDate)
         return [startDate, endDate]
 
+
 # @ Main
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     main_window = MainWindow()
     main_window.setWindowTitle("텍스트 분석 대시 보드")
+    main_window.setWindowIcon(QIcon('src/public/Icon.png'))
     main_window.show()
     sys.exit(app.exec())

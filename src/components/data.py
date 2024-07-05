@@ -27,6 +27,12 @@ class data():
         cols.insert(0, "미설정")
         return cols
 
+    def get_unique_value(self, col, all: bool = True):
+        result = list(self.df[col].unique())
+        if all:
+            result.insert(0, "전체")
+        return result
+
     def set_col_auto(self):
         self.set_date_col()
         self.set_category_col()

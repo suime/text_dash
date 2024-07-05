@@ -1,7 +1,7 @@
 from PySide6.QtWebEngineWidgets import QWebEngineView
 import plotly.graph_objects as go
-import pandas as pd
 import plotly.offline as plt
+import pandas as pd
 
 from PySide6.QtCore import *
 from PySide6.QtGui import *
