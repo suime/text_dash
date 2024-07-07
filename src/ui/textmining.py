@@ -390,7 +390,7 @@ class Ui_TextMining(object):
 
         self.retranslateUi(TextMining)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.applyFilter.setDefault(False)
         self.tabWidget1.setCurrentIndex(0)
 

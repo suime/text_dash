@@ -20,7 +20,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.offline as plt
-from polars import head
 
 # ^ ---
 import components.data as data
@@ -250,10 +249,32 @@ class filterComponent():
 
     # * 현재 필터 옵션 가져오기
     def get_filter(self, ui):
-        startDate = ui.startDate.dateTime().toString()
-        endDate = ui.endDate.dateTime().toString(Qt.ISODate)
-        print(startDate)
-        return [startDate, endDate]
+        try:
+            startDate = ui.startDate.date().toString("yyyy-MM-dd")
+            endDate = ui.endDate.date().toString("yyyy-MM-dd")
+        except:
+            startDate = ''
+            endDate = ''
+        
+        try:
+            inText = ui.inText.text()
+            exText = ui.exText.text()
+        except:
+            inText = ""
+            exText = ""
+        
+        category1 = ui.category1.currentText()
+        category2 = ui.category2.currentText()
+        category3 = ui.category3.currentText()
+
+
+        result = dict(startDate = startDate, endDate = endDate, inText = inText, exText = exText, 
+                      category1 = category1, category2 = category2, category3 = category3)
+        print(result)
+        return result
+    
+    def apply_filter(self, df, config: dict):
+        pass 
 
 
 # @ Main
