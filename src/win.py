@@ -173,7 +173,10 @@ class TextMiningTab(QWidget):
         self.ui.initTF.clicked.connect(lambda: self.init_TF(data))
 
         self.ui.initWC.clicked.connect(self.init_WC)
-        self.ui.fontComboBox.currentFontChanged.connect(lambda: print(self.ui.fontComboBox.currentFont().family()))
+        self.ui.saveWC.clicked.connect(self.save_chart)
+
+        self.ui.fontComboBox.currentFontChanged.connect(
+            lambda: print(self.ui.fontComboBox.currentFont().family()))
 
     def init_filter(self, data):
         self.data_filter = filterComponent(self.ui, data)
@@ -200,14 +203,12 @@ class TextMiningTab(QWidget):
         html_tf = set_plot(self.fig_tf)
         view.setHtml(html_tf)
 
-
     def init_WC(self):
         font = r"C:\Windows\Fonts\GmarketSansTTFMedium.ttf"
         try:
             self.wc.generate_wordcloud(self.tf, font)
         except:
             QMessageBox.warning(self, "워드클라우드", "단어 빈도표를 먼저 만드세요.")
-
 
     def save_image(self, fig: go.Figure, dir: str):
         import os
@@ -218,6 +219,17 @@ class TextMiningTab(QWidget):
                 f"C:\\Users\\Administrator\\Downloads\\{dir}_0.png")
 
         print(f'{dir} 이미지를 내보내었습니다.')
+
+    def save_chart(self):
+        # 차트 위젯의 내용을 QPixmap으로 캡처
+        pixmap = self.wc.grab()
+
+        # 이미지 저장
+        filename, _ = QFileDialog.getSaveFileName(
+            self, "차트 저장", "", "PNG 파일 (*.png);;JPEG 파일 (*.jpg *.jpeg)")
+        if filename:
+            pixmap.save(filename)
+            print(f"차트가 {filename}에 저장되었습니다.")
 
 
 # & tab4 딕셔너리
@@ -403,7 +415,7 @@ def set_plot(fig: go.Figure,
     }, displaylogo=False)
 
     html = plotly.offline.plot(fig, include_plotlyjs='cdn',
-                    output_type='div', config=html_config)
+                               output_type='div', config=html_config)
 
     return html
 
@@ -413,19 +425,23 @@ class WordCloudWidget(QWidget):
         super().__init__(parent)
         self.figure = Figure(figsize=(6, 5), dpi=300)
         self.canvas = FigureCanvas(self.figure)
-
         layout = QVBoxLayout()
         layout.addWidget(self.canvas)
         self.setLayout(layout)
+        self.ax = self.figure.add_subplot(111)  # 초기 axes 생성
+        self.ax.axis('off')
 
-    def generate_wordcloud(self, tf: pd.DataFrame, 
+    def generate_wordcloud(self, tf: pd.DataFrame,
                            font_path: str,
-                           color_set: str = 'Set2', 
+                           color_set: str = 'Set2',
                            background_color: str = 'rgba(236, 236, 236, 10)'):
 
+        # 기존 차트 지우기
+        self.ax.clear()
+
         wc = WordCloud(font_path=font_path,
-                       width=700,
-                       height=700,
+                       width=800,
+                       height=600,
                        prefer_horizontal=1,
                        background_color=background_color,
                        mode="RGBA",
@@ -433,13 +449,22 @@ class WordCloudWidget(QWidget):
                        colormap=color_set,
                        max_words=100,
                        max_font_size=100)
-        wc.generate_from_frequencies(dict(zip(tf['단어'], tf['빈도'])))
 
-        ax = self.figure.add_subplot(111)
-        ax.clear()
-        ax.imshow(wc, interpolation='bilinear')
-        ax.axis('off')
+        try:
+            wc.generate_from_frequencies(dict(zip(tf['단어'], tf['빈도'])))
+        except Exception as e:
+            print(f"워드클라우드 생성 중 오류 발생: {e}")
+            return None
+
+        # 새로운 워드클라우드 그리기
+        self.ax.imshow(wc, interpolation='bilinear')
+        self.ax.axis('off')
+
+        # 레이아웃 조정 및 캔버스 업데이트
+        self.figure.tight_layout()
         self.canvas.draw()
+
+        return wc
 
 
 # @ Main

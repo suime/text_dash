@@ -62,7 +62,9 @@ class Ui_FileInput(object):
 
         self.fileBtn = QPushButton(self.groupBox)
         self.fileBtn.setObjectName(u"fileBtn")
-        self.fileBtn.setMinimumSize(QSize(0, 50))
+        self.fileBtn.setMinimumSize(QSize(0, 60))
+        self.fileBtn.setAutoFillBackground(False)
+        self.fileBtn.setStyleSheet(u"")
         icon = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.FolderVisiting))
         self.fileBtn.setIcon(icon)
 
@@ -127,52 +129,66 @@ class Ui_FileInput(object):
         self.Label = QLabel(self.groupBox)
         self.Label.setObjectName(u"Label")
 
-        self.formLayout.setWidget(3, QFormLayout.LabelRole, self.Label)
+        self.formLayout.setWidget(4, QFormLayout.LabelRole, self.Label)
 
         self.category1ComboBox = QComboBox(self.groupBox)
         self.category1ComboBox.setObjectName(u"category1ComboBox")
 
-        self.formLayout.setWidget(3, QFormLayout.FieldRole, self.category1ComboBox)
+        self.formLayout.setWidget(4, QFormLayout.FieldRole, self.category1ComboBox)
 
         self.Label_2 = QLabel(self.groupBox)
         self.Label_2.setObjectName(u"Label_2")
 
-        self.formLayout.setWidget(4, QFormLayout.LabelRole, self.Label_2)
+        self.formLayout.setWidget(5, QFormLayout.LabelRole, self.Label_2)
 
         self.category2ComboBox = QComboBox(self.groupBox)
         self.category2ComboBox.setObjectName(u"category2ComboBox")
 
-        self.formLayout.setWidget(4, QFormLayout.FieldRole, self.category2ComboBox)
+        self.formLayout.setWidget(5, QFormLayout.FieldRole, self.category2ComboBox)
 
         self.Label_3 = QLabel(self.groupBox)
         self.Label_3.setObjectName(u"Label_3")
 
-        self.formLayout.setWidget(5, QFormLayout.LabelRole, self.Label_3)
+        self.formLayout.setWidget(6, QFormLayout.LabelRole, self.Label_3)
 
         self.category3ComboBox = QComboBox(self.groupBox)
         self.category3ComboBox.setObjectName(u"category3ComboBox")
 
-        self.formLayout.setWidget(5, QFormLayout.FieldRole, self.category3ComboBox)
+        self.formLayout.setWidget(6, QFormLayout.FieldRole, self.category3ComboBox)
 
         self.Label_4 = QLabel(self.groupBox)
         self.Label_4.setObjectName(u"Label_4")
 
-        self.formLayout.setWidget(6, QFormLayout.LabelRole, self.Label_4)
+        self.formLayout.setWidget(8, QFormLayout.LabelRole, self.Label_4)
 
         self.removeDupCheckBox = QCheckBox(self.groupBox)
         self.removeDupCheckBox.setObjectName(u"removeDupCheckBox")
 
-        self.formLayout.setWidget(6, QFormLayout.FieldRole, self.removeDupCheckBox)
+        self.formLayout.setWidget(8, QFormLayout.FieldRole, self.removeDupCheckBox)
 
         self.Label_5 = QLabel(self.groupBox)
         self.Label_5.setObjectName(u"Label_5")
 
-        self.formLayout.setWidget(7, QFormLayout.LabelRole, self.Label_5)
+        self.formLayout.setWidget(9, QFormLayout.LabelRole, self.Label_5)
 
         self.removeNanCheckBox = QCheckBox(self.groupBox)
         self.removeNanCheckBox.setObjectName(u"removeNanCheckBox")
 
-        self.formLayout.setWidget(7, QFormLayout.FieldRole, self.removeNanCheckBox)
+        self.formLayout.setWidget(9, QFormLayout.FieldRole, self.removeNanCheckBox)
+
+        self.line_3 = QFrame(self.groupBox)
+        self.line_3.setObjectName(u"line_3")
+        self.line_3.setFrameShape(QFrame.Shape.HLine)
+        self.line_3.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.formLayout.setWidget(3, QFormLayout.SpanningRole, self.line_3)
+
+        self.line_4 = QFrame(self.groupBox)
+        self.line_4.setObjectName(u"line_4")
+        self.line_4.setFrameShape(QFrame.Shape.HLine)
+        self.line_4.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.formLayout.setWidget(7, QFormLayout.SpanningRole, self.line_4)
 
 
         self.verticalLayout.addLayout(self.formLayout)
@@ -193,6 +209,15 @@ class Ui_FileInput(object):
 
         self.gridLayout.addWidget(self.groupBox, 1, 0, 1, 1)
 
+        QWidget.setTabOrder(self.fileBtn, self.DateCol)
+        QWidget.setTabOrder(self.DateCol, self.TextCol)
+        QWidget.setTabOrder(self.TextCol, self.category1ComboBox)
+        QWidget.setTabOrder(self.category1ComboBox, self.category2ComboBox)
+        QWidget.setTabOrder(self.category2ComboBox, self.category3ComboBox)
+        QWidget.setTabOrder(self.category3ComboBox, self.removeDupCheckBox)
+        QWidget.setTabOrder(self.removeDupCheckBox, self.removeNanCheckBox)
+        QWidget.setTabOrder(self.removeNanCheckBox, self.setCols)
+        QWidget.setTabOrder(self.setCols, self.tableView)
 
         self.retranslateUi(FileInput)
 
@@ -202,7 +227,7 @@ class Ui_FileInput(object):
     def retranslateUi(self, FileInput):
         FileInput.setWindowTitle(QCoreApplication.translate("FileInput", u"Form", None))
         self.groupBox.setTitle("")
-        self.label.setText(QCoreApplication.translate("FileInput", u"\ud14d\uc2a4\ud2b8 \ud30c\uc77c\uc744 \uc785\ub825\ud558\uc138\uc694.", None))
+        self.label.setText(QCoreApplication.translate("FileInput", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; font-weight:700;\">\ud14d\uc2a4\ud2b8 \ub370\uc774\ud130 \ubd84\uc11d\uae30</span><span style=\" font-size:12pt; vertical-align:sub;\">(24.07)</span></p></body></html>", None))
         self.fileBtn.setText(QCoreApplication.translate("FileInput", u"\ud14d\uc2a4\ud2b8 \ud30c\uc77c \ubd88\ub7ec\uc624\uae30 (ctrl + o)", None))
 #if QT_CONFIG(shortcut)
         self.fileBtn.setShortcut(QCoreApplication.translate("FileInput", u"Ctrl+O", None))

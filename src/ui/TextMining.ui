@@ -642,6 +642,13 @@ color: rgb(255, 255, 255);</string>
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="saveWC">
+           <property name="text">
+            <string>이미지로 저장하기</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="networkTab">
