@@ -1,8 +1,13 @@
-from typing import Optional
 import pandas as pd
 import re
+import sys
 from PySide6.QtCore import *
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox, QRadioButton
+import plotly.graph_objects as go
+import plotly.io as pio
+import plotly.express as px
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
 
 
 class data():
@@ -87,8 +92,6 @@ class data():
         self.fdf = df
         print('set_col_manual')
 
-    def start_df(self):
-        pass
 
 
 class PandasModel(QAbstractTableModel):

@@ -17,8 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QComboBox, QDateEdit,
-    QFontComboBox, QFormLayout, QGraphicsView, QGroupBox,
-    QLabel, QLineEdit, QPushButton, QSizePolicy,
+    QFontComboBox, QFormLayout, QGroupBox, QLabel,
+    QLineEdit, QPushButton, QSizePolicy, QSpacerItem,
     QSpinBox, QTabWidget, QVBoxLayout, QWidget)
 
 class Ui_TextMining(object):
@@ -56,6 +56,8 @@ class Ui_TextMining(object):
         self.formLayout_4 = QFormLayout()
         self.formLayout_4.setObjectName(u"formLayout_4")
         self.formLayout_4.setRowWrapPolicy(QFormLayout.RowWrapPolicy.DontWrapRows)
+        self.formLayout_4.setHorizontalSpacing(4)
+        self.formLayout_4.setVerticalSpacing(4)
         self.label = QLabel(self.groupBox_4)
         self.label.setObjectName(u"label")
         self.label.setEnabled(True)
@@ -70,7 +72,7 @@ class Ui_TextMining(object):
         self.startDate = QDateEdit(self.groupBox_4)
         self.startDate.setObjectName(u"startDate")
         self.startDate.setDateTime(QDateTime(QDate(2001, 1, 1), QTime(9, 0, 0)))
-        self.startDate.setMaximumDate(QDate(9994, 1, 2))
+        self.startDate.setMaximumDate(QDate(9994, 1, 3))
         self.startDate.setCalendarPopup(True)
         self.startDate.setTimeSpec(Qt.TimeSpec.LocalTime)
 
@@ -326,8 +328,9 @@ class Ui_TextMining(object):
 
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.tabWidget1 = QTabWidget(TextMining)
-        self.tabWidget1.setObjectName(u"tabWidget1")
+        self.Main = QTabWidget(TextMining)
+        self.Main.setObjectName(u"Main")
+        self.Main.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.tableTab = QWidget()
         self.tableTab.setObjectName(u"tableTab")
         self.verticalLayout = QVBoxLayout(self.tableTab)
@@ -338,7 +341,19 @@ class Ui_TextMining(object):
 
         self.verticalLayout.addWidget(self.tablePlot)
 
-        self.tabWidget1.addTab(self.tableTab, "")
+        self.initTable = QPushButton(self.tableTab)
+        self.initTable.setObjectName(u"initTable")
+        self.initTable.setStyleSheet(u"background-color: rgb(64, 64, 64);\n"
+"color: rgb(255, 255, 255);")
+
+        self.verticalLayout.addWidget(self.initTable)
+
+        self.savePNG = QPushButton(self.tableTab)
+        self.savePNG.setObjectName(u"savePNG")
+
+        self.verticalLayout.addWidget(self.savePNG)
+
+        self.Main.addTab(self.tableTab, "")
         self.TFTab = QWidget()
         self.TFTab.setObjectName(u"TFTab")
         self.verticalLayout_7 = QVBoxLayout(self.TFTab)
@@ -349,22 +364,35 @@ class Ui_TextMining(object):
 
         self.verticalLayout_7.addWidget(self.TFplot)
 
-        self.saveTF = QPushButton(self.TFTab)
-        self.saveTF.setObjectName(u"saveTF")
+        self.initTF = QPushButton(self.TFTab)
+        self.initTF.setObjectName(u"initTF")
+        self.initTF.setStyleSheet(u"background-color: rgb(64, 64, 64);\n"
+"color: rgb(255, 255, 255);")
 
-        self.verticalLayout_7.addWidget(self.saveTF)
+        self.verticalLayout_7.addWidget(self.initTF)
 
-        self.tabWidget1.addTab(self.TFTab, "")
+        self.Main.addTab(self.TFTab, "")
         self.wcTab = QWidget()
         self.wcTab.setObjectName(u"wcTab")
         self.verticalLayout_8 = QVBoxLayout(self.wcTab)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.graphicsView = QGraphicsView(self.wcTab)
-        self.graphicsView.setObjectName(u"graphicsView")
+        self.WClayout = QVBoxLayout()
+        self.WClayout.setObjectName(u"WClayout")
 
-        self.verticalLayout_8.addWidget(self.graphicsView)
+        self.verticalLayout_8.addLayout(self.WClayout)
 
-        self.tabWidget1.addTab(self.wcTab, "")
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_8.addItem(self.verticalSpacer)
+
+        self.initWC = QPushButton(self.wcTab)
+        self.initWC.setObjectName(u"initWC")
+        self.initWC.setStyleSheet(u"background-color: rgb(64, 64, 64);\n"
+"color: rgb(255, 255, 255);")
+
+        self.verticalLayout_8.addWidget(self.initWC)
+
+        self.Main.addTab(self.wcTab, "")
         self.networkTab = QWidget()
         self.networkTab.setObjectName(u"networkTab")
         self.verticalLayout_9 = QVBoxLayout(self.networkTab)
@@ -375,14 +403,16 @@ class Ui_TextMining(object):
 
         self.verticalLayout_9.addWidget(self.networkPlot)
 
-        self.tabWidget1.addTab(self.networkTab, "")
+        self.initNetwork = QPushButton(self.networkTab)
+        self.initNetwork.setObjectName(u"initNetwork")
+        self.initNetwork.setStyleSheet(u"background-color: rgb(64, 64, 64);\n"
+"color: rgb(255, 255, 255);")
 
-        self.verticalLayout_2.addWidget(self.tabWidget1)
+        self.verticalLayout_9.addWidget(self.initNetwork)
 
-        self.initTable = QPushButton(TextMining)
-        self.initTable.setObjectName(u"initTable")
+        self.Main.addTab(self.networkTab, "")
 
-        self.verticalLayout_2.addWidget(self.initTable)
+        self.verticalLayout_2.addWidget(self.Main)
 
 
         self.formLayout.setLayout(0, QFormLayout.FieldRole, self.verticalLayout_2)
@@ -392,7 +422,7 @@ class Ui_TextMining(object):
 
         self.tabWidget.setCurrentIndex(0)
         self.applyFilter.setDefault(False)
-        self.tabWidget1.setCurrentIndex(0)
+        self.Main.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(TextMining)
@@ -434,11 +464,14 @@ class Ui_TextMining(object):
         self.pushButton_2.setText(QCoreApplication.translate("TextMining", u"\uc635\uc158 \ucd08\uae30\ud654", None))
         self.pushButton_3.setText(QCoreApplication.translate("TextMining", u"\uc635\uc158 \uc801\uc6a9", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabWidgetPage2), QCoreApplication.translate("TextMining", u"\ucc28\ud2b8 \uc635\uc158", None))
-        self.tabWidget1.setTabText(self.tabWidget1.indexOf(self.tableTab), QCoreApplication.translate("TextMining", u"\uadf8\ub0e5 \ud45c", None))
-        self.saveTF.setText(QCoreApplication.translate("TextMining", u"\ud45c\ub85c \uc800\uc7a5\ud558\uae30", None))
-        self.tabWidget1.setTabText(self.tabWidget1.indexOf(self.TFTab), QCoreApplication.translate("TextMining", u"\u25a6 \ub2e8\uc5b4 \ube48\ub3c4\ud45c", None))
-        self.tabWidget1.setTabText(self.tabWidget1.indexOf(self.wcTab), QCoreApplication.translate("TextMining", u"\u2601 \uc6cc\ub4dc\ud074\ub77c\uc6b0\ub4dc", None))
-        self.tabWidget1.setTabText(self.tabWidget1.indexOf(self.networkTab), QCoreApplication.translate("TextMining", u"\u2668 \ub124\ud2b8\uc6cc\ud06c", None))
-        self.initTable.setText(QCoreApplication.translate("TextMining", u"\uc0c8\ub85c\uace0\uce68", None))
+        self.initTable.setText(QCoreApplication.translate("TextMining", u"\ud1b5\uacc4\ud45c \uc0dd\uc131\ud558\uae30", None))
+        self.savePNG.setText(QCoreApplication.translate("TextMining", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
+        self.Main.setTabText(self.Main.indexOf(self.tableTab), QCoreApplication.translate("TextMining", u"\ud1b5\uacc4\ud45c", None))
+        self.initTF.setText(QCoreApplication.translate("TextMining", u"\ub2e8\uc5b4 \ube48\ub3c4\ud45c \uc0dd\uc131\ud558\uae30", None))
+        self.Main.setTabText(self.Main.indexOf(self.TFTab), QCoreApplication.translate("TextMining", u"\ub2e8\uc5b4 \ube48\ub3c4\ud45c", None))
+        self.initWC.setText(QCoreApplication.translate("TextMining", u"\uc6cc\ub4dc\ud074\ub77c\uc6b0\ub4dc \uc0dd\uc131\ud558\uae30", None))
+        self.Main.setTabText(self.Main.indexOf(self.wcTab), QCoreApplication.translate("TextMining", u"\uc6cc\ub4dc\ud074\ub77c\uc6b0\ub4dc", None))
+        self.initNetwork.setText(QCoreApplication.translate("TextMining", u"\ub124\ud2b8\uc6cc\ud06c \ucc28\ud2b8 \uc0dd\uc131\ud558\uae30", None))
+        self.Main.setTabText(self.Main.indexOf(self.networkTab), QCoreApplication.translate("TextMining", u"\ub124\ud2b8\uc6cc\ud06c", None))
     # retranslateUi
 

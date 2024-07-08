@@ -52,7 +52,7 @@
         <enum>QTabWidget::TabShape::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="documentMode">
         <bool>false</bool>
@@ -84,6 +84,12 @@
              <layout class="QFormLayout" name="formLayout_4">
               <property name="rowWrapPolicy">
                <enum>QFormLayout::RowWrapPolicy::DontWrapRows</enum>
+              </property>
+              <property name="horizontalSpacing">
+               <number>4</number>
+              </property>
+              <property name="verticalSpacing">
+               <number>4</number>
               </property>
               <item row="0" column="0" colspan="2">
                <widget class="QLabel" name="label">
@@ -118,7 +124,7 @@
                  <date>
                   <year>9994</year>
                   <month>1</month>
-                  <day>2</day>
+                  <day>3</day>
                  </date>
                 </property>
                 <property name="calendarPopup">
@@ -549,13 +555,16 @@ color: #EEA47F;</string>
    <item row="0" column="1">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QTabWidget" name="tabWidget">
+      <widget class="QTabWidget" name="Main">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);</string>
+       </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tableTab">
         <attribute name="title">
-         <string>그냥 표</string>
+         <string>통계표</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
@@ -567,11 +576,29 @@ color: #EEA47F;</string>
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="initTable">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(64, 64, 64);
+color: rgb(255, 255, 255);</string>
+           </property>
+           <property name="text">
+            <string>통계표 생성하기</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="savePNG">
+           <property name="text">
+            <string>이미지로 저장하기</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="TFTab">
         <attribute name="title">
-         <string>▦ 단어 빈도표</string>
+         <string>단어 빈도표</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_7">
          <item>
@@ -584,9 +611,13 @@ color: #EEA47F;</string>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="saveTF">
+          <widget class="QPushButton" name="initTF">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(64, 64, 64);
+color: rgb(255, 255, 255);</string>
+           </property>
            <property name="text">
-            <string>표로 저장하기</string>
+            <string>단어 빈도표 생성하기</string>
            </property>
           </widget>
          </item>
@@ -594,17 +625,28 @@ color: #EEA47F;</string>
        </widget>
        <widget class="QWidget" name="wcTab">
         <attribute name="title">
-         <string>☁ 워드클라우드</string>
+         <string>워드클라우드</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_8">
          <item>
-          <widget class="QGraphicsView" name="graphicsView"/>
+          <layout class="QVBoxLayout" name="WClayout"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="initWC">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(64, 64, 64);
+color: rgb(255, 255, 255);</string>
+           </property>
+           <property name="text">
+            <string>워드클라우드 생성하기</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
        <widget class="QWidget" name="networkTab">
         <attribute name="title">
-         <string>♨ 네트워크</string>
+         <string>네트워크</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_9">
          <item>
@@ -616,15 +658,19 @@ color: #EEA47F;</string>
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="initNetwork">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(64, 64, 64);
+color: rgb(255, 255, 255);</string>
+           </property>
+           <property name="text">
+            <string>네트워크 차트 생성하기</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="initTable">
-       <property name="text">
-        <string>새로고침</string>
-       </property>
       </widget>
      </item>
     </layout>

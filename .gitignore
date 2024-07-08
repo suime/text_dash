@@ -45,4 +45,5 @@ test*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-mac-env/lib/python3.9/site-packages/_pyinstaller_hooks_contrib/hooks/stdhooks/hook-avro.py
+mac-env/
+통계표.png
