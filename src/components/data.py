@@ -1,3 +1,4 @@
+from numpy import vectorize
 import pandas as pd
 import re
 import sys
@@ -8,6 +9,7 @@ import plotly.io as pio
 import plotly.express as px
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from wordcloud import WordCloud
 
 
 class data():
@@ -16,7 +18,6 @@ class data():
 
     def init_df(self):
         self.df = pd.DataFrame()
-        self.fdf = pd.DataFrame()
         self.fileName = ''
         self.cols = dict(date='', text='', category1='',
                          category2='', category3='')
@@ -26,6 +27,22 @@ class data():
         self.df = pd.DataFrame(df)
         self.fileName = filename
         self.set_col_auto()
+
+    def set_sdf(self, df):
+        self.sdf = df
+        try:
+            del self.vectorizer
+            del self.tf
+            del self.wc
+            del self.network
+        except Exception:
+            pass
+
+    def get_sdf(self):
+        if hasattr(self, 'sdf'):
+            return self.sdf
+        else:
+            return self.fdf
 
     def get_col(self):
         cols = self.df.columns.to_list()
@@ -80,6 +97,8 @@ class data():
         for key in column_config:
             if column_config[key].strip() != '' and column_config[key] != '미설정':
                 self.cols[key] = column_config[key]
+            else:
+                self.cols[key] = ''
 
         columns = [col for col in self.cols.values() if col != '']
         print(f"칼럼값 : {self.cols.values()}")
@@ -88,10 +107,173 @@ class data():
             df = df.dropna(how='all')
         if rm_duplicate:
             df = df.drop_duplicates()
-
         self.fdf = df
-        print('set_col_manual')
 
+        print('수동으로 설정함')
+
+    def set_vectorizer(self, ngram: tuple[float, float] = (2, 2), in_text='', ex_text=''):
+        from sklearn.feature_extraction.text import CountVectorizer
+        if hasattr(self, 'vectorizer'):
+            return self.vectorizer
+        else:
+            print("vectorizer가 없어서 생성합니다.")
+            df = self.get_sdf()
+            col = self.cols['text']
+            df = df[col]
+
+            if in_text.strip() != '':
+                df = df[df.str.contains(to_regex(in_text))]
+            if ex_text.strip() != '':
+                df = df[~df.str.contains(to_regex(ex_text))]
+
+            vectorizer = CountVectorizer(ngram_range=ngram, max_features=40)
+            self.vectorizer = vectorizer
+            return self.vectorizer
+
+    def set_tf(self,
+               ngram: tuple[float, float] = (2, 2),
+               topn: int = 40,
+               inText: str = '',
+               exText: str = ''):
+        if hasattr(self, 'tf'):
+            return self.tf
+        else:
+            print("tf가 없어서 생성합니다.")
+            vectorizer = self.set_vectorizer()
+            df = self.get_sdf()
+            col = self.cols['text']
+            df = df[col]
+            X = vectorizer.fit_transform(df)
+            term_freq_df = pd.DataFrame({
+                '단어': vectorizer.get_feature_names_out(),
+                '빈도': X.toarray().sum(axis=0)})\
+                .sort_values('빈도', ascending=False).head(topn)
+
+        self.tf = term_freq_df
+        return self.tf
+
+    def set_wc(self,
+               font_path='',
+               colormap='Set2',
+               background_color='#FFF'):
+        if hasattr(self, 'wc'):
+            return self.wc
+        else:
+            self.wc = WordCloud(font_path=font_path,
+                                width=800,
+                                height=600,
+                                prefer_horizontal=1,
+                                background_color=background_color,
+                                mode="RGBA",
+                                font_step=0.1,
+                                colormap=colormap,
+                                max_words=100,
+                                max_font_size=100)
+            return self.wc
+
+    def set_network(self):
+        if hasattr(self, 'network'):
+            return self.network
+        else:
+            print("network가 없어서 생성합니다.")
+
+        import numpy as np
+        from pyvis.network import Network
+        import networkx as nx
+        from sklearn.preprocessing import MinMaxScaler
+        scaler = MinMaxScaler()
+
+        # if stopwords is None or stopwords.strip() == '':
+        #     stop_words = None
+        # else:
+        #     stop_words = stopwords.split(',')
+        print("1---")
+        vectorizer = self.set_vectorizer()
+        df = self.get_sdf()
+        col = self.cols['text']
+        data = df[col].apply(clean_text_for_cp949)
+        data.apply(lambda x: x.replace('\xa0', '').replace('\xa9', ''))
+        X = vectorizer.fit_transform(data)
+
+        print("2---")
+        adjacency_matrix = (X.T * X).toarray()
+        np.fill_diagonal(adjacency_matrix, 0)
+
+        G = nx.from_numpy_array(adjacency_matrix)
+        nt = Network(width="100%", height="600px",
+                     notebook=False, cdn_resources='remote')
+        print("3---")
+        # pd.DataFrame(adjacency_matrix).to_csv('adjen.csv', index = False)
+        nt.from_nx(G)
+        print("4---")
+        # 노드 및 엣지 수정
+        for n in nt.nodes:
+            n["font"] = {"size": 10}
+        N = pd.DataFrame(nt.nodes).sort_values('id')
+        nt.options = nt.options.set(self.set_network_option())
+
+        # 노드 수정하기
+        N['label'] = vectorizer.get_feature_names_out()
+        N['size'] = np.sum(adjacency_matrix, axis=1)
+        N['size'] = scaler.fit_transform(N[['size']])*15 + 1
+        N['labelHighlightBold'] = True
+
+        N.sort_index(inplace=True)
+        for n, i in enumerate(N['font']):
+            i['size'] = round(N['size'][n], 1) + 10
+            i['face'] = 'Gong gothic'
+
+        nt.nodes = N.to_dict(orient='records')
+        # 엣지수정
+        print("5---")
+        E = pd.DataFrame(nt.edges)
+        E['width'] = scaler.fit_transform(E[['width']])*20
+        nt.edges = E.to_dict(orient='records')
+        nt.generate_html()
+        self.network = nt.html
+        return nt.html
+
+    def set_network_option(self, solver: str = 'hierarchicalRepulsion'):
+        option = f""" 
+            const options = {{
+            "nodes": {{
+                "borderWidth": 3,
+                "borderWidthSelected": 1,
+                "opacity": 1,
+                "shape": "dot",
+                "font": {{
+                    "strokeWidth": 4
+                }},
+                "size": null
+            }},
+            "edges": {{
+                "color": {{
+                    "opacity": 0.3
+                }},
+                "selfReferenceSize": "null",
+                "selfReference": {{
+                    "angle": 0.785
+                }},
+                "smooth": {{
+                "type": "cubicBezier",
+                "forceDirection": "none",
+                "roundness": 0.6
+                }}
+            }},
+            "physics": {{
+                "maxVelocity": 30,
+                "minVelocity": 0.75,
+                "solver": "{solver}",
+                
+                "{solver}": {{
+                "centralGravity": 0,
+                "nodeDistance": 100,
+                "avoidOverlap": 1,
+                "springLength": 100
+                }}
+                }}
+            }}"""
+        return option
 
 
 class PandasModel(QAbstractTableModel):
@@ -148,3 +330,14 @@ class PandasModel(QAbstractTableModel):
                 return str(self._dataframe.index[section])
 
         return None
+
+
+def to_regex(text: str):
+    pattern = re.sub(r'\s*[,\n]\s*', '|', text)
+    pattern = re.sub(r'\|+', '|', pattern)
+    pattern = pattern.strip('|')
+    return pattern
+
+
+def clean_text_for_cp949(text):
+    return text.encode('cp949', errors='replace').decode('cp949')

@@ -1,4 +1,5 @@
 import sys
+import os
 from typing import Optional
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
@@ -8,7 +9,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
                            QFont, QFontDatabase, QGradient, QIcon,
                            QImage, QKeySequence, QLinearGradient, QPainter,
                            QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QFormLayout, QGridLayout,
+from PySide6.QtWidgets import (QApplication, QComboBox, QColorDialog, QFormLayout, QGridLayout,
                                QGroupBox, QHeaderView, QLabel, QPushButton,
                                QSizePolicy, QTableWidget, QTableWidgetItem, QVBoxLayout,
                                QWidget, QMainWindow, QStatusBar, QTabWidget, QHBoxLayout,
@@ -20,7 +21,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.offline
-from wordcloud import WordCloud
+
 
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
@@ -72,8 +73,8 @@ class MainWindow(QMainWindow):
         self.main.addTab(tab2, "통계 차트 생성")
 
     # ^ 탭 3: 텍스트 마이닝
-        tab3 = TextMiningTab(self.data)
-        self.main.addTab(tab3, "텍스트 마이닝")
+        self.tab3 = TextMiningTab(self.data)
+        self.main.addTab(self.tab3, "텍스트 마이닝")
 
     # ^ 탭 4: 사전
         tab4 = DictionaryTab()
@@ -109,8 +110,11 @@ class FileInputTab(QWidget):
         # * 누르면 데이터프레임 열에 맞게 타입 캐스트 하고, 중복 등 간단한 처리 하기
         self.ui.setCols.clicked.connect(
             lambda: main.data.set_col_manual(self.get_options()))
+
         self.ui.setCols.clicked.connect(main.set_status)
         self.ui.setCols.clicked.connect(lambda: self.show_df(main.data.fdf))
+        self.ui.setCols.clicked.connect(
+            lambda: main.tab3.init_filter(main.data))
 
     def selectFile(self, main):
         file, _ = QFileDialog.getOpenFileName(self, "텍스트 파일 열기",
@@ -166,26 +170,48 @@ class TextMiningTab(QWidget):
         super().__init__()
         self.ui = Ui_TextMining()
         self.ui.setupUi(self)
+        self.figure = Figure(figsize=(6, 5), dpi=300)
+        self.canvas = FigureCanvas(self.figure)
+        self.ui.WClayout.addWidget(self.canvas)
+        self.ax = self.figure.add_subplot(111)  # 초기 axes 생성
+        self.ax.axis('off')
         self.init_filter(data)
+
+        # ^ 데이터프레임 표 생성
+        self.ui.initDf.clicked.connect(lambda: self.init_data_tab(data))
+        self.ui.saveData.clicked.connect(lambda: to_excel(data.get_sdf()))
+
+        # ^ 통계표 차트 생성
         self.ui.initTable.clicked.connect(lambda: self.init_just_table(data))
-        self.ui.savePNG.clicked.connect(
-            lambda: self.save_image(self.fig_stat, '통계표'))
+
+        # ^ 통계표 차트 저장
+        self.ui.saveStat.clicked.connect(lambda: to_image(self.ui.tablePlot))
+
+        # ^ tf 생성
         self.ui.initTF.clicked.connect(lambda: self.init_TF(data))
+        self.ui.saveTf.clicked.connect(lambda: to_excel(data.set_tf()))
 
-        self.ui.initWC.clicked.connect(self.init_WC)
-        self.ui.saveWC.clicked.connect(self.save_chart)
+        # ^ wc 생성
+        self.ui.initWC.clicked.connect(lambda: self.init_WC(data))
+        self.ui.saveWC.clicked.connect(lambda: to_image(self.canvas))
 
-        self.ui.fontComboBox.currentFontChanged.connect(
-            lambda: print(self.ui.fontComboBox.currentFont().family()))
+        # ^ network 생성
+        self.ui.initNetwork.clicked.connect(lambda: self.init_network(data))
 
     def init_filter(self, data):
         self.data_filter = filterComponent(self.ui, data)
-        self.wc = WordCloudWidget(self)
-        self.ui.WClayout.addWidget(self.wc)
+        self.option = optionComponent(self.ui, data)
+
+    def init_data_tab(self, data):
+        view = self.ui.dfplot
+        df = data.get_sdf()
+        fig = get_table_plot(df.head(100))
+        html = set_plot(fig)
+        view.setHtml(html)
 
     def init_just_table(self, data):
         view = self.ui.tablePlot
-        df = data.df
+        df = data.get_sdf()
         cols = list(data.cols.values())
         df_grouped = df.groupby([cols[2], cols[3]]).agg(
             건수=(cols[1], 'count')).reset_index()
@@ -195,41 +221,32 @@ class TextMiningTab(QWidget):
 
     def init_TF(self, data):
         view = self.ui.TFplot
-        df = data.df
-        col = data.cols['text']
-
-        self.tf = get_tf(df[col])
+        self.tf = data.set_tf()
         self.fig_tf = get_table_plot(self.tf)
         html_tf = set_plot(self.fig_tf)
         view.setHtml(html_tf)
 
-    def init_WC(self):
-        font = r"C:\Windows\Fonts\GmarketSansTTFMedium.ttf"
+    def init_WC(self, data):
         try:
-            self.wc.generate_wordcloud(self.tf, font)
-        except:
-            QMessageBox.warning(self, "워드클라우드", "단어 빈도표를 먼저 만드세요.")
+            font = r"C:\Windows\Fonts\GmarketSansTTFMedium.ttf"
+            self.ax.clear()
+            wc = data.set_wc(font_path=font)
+            tf = data.set_tf()
+            wc.generate_from_frequencies(dict(zip(tf['단어'], tf['빈도'])))
+            self.ax.imshow(wc, interpolation='bilinear')
+            self.ax.axis('off')
 
-    def save_image(self, fig: go.Figure, dir: str):
-        import os
-        if not os.path.exists(f"C:\\Users\\Administrator\\Downloads\\{dir}.png"):
-            fig.write_image(f"C:\\Users\\Administrator\\Downloads\\{dir}.png")
-        else:
-            fig.write_image(
-                f"C:\\Users\\Administrator\\Downloads\\{dir}_0.png")
+            # 레이아웃 조정 및 캔버스 업데이트
+            self.figure.tight_layout()
+            self.canvas.draw()
 
-        print(f'{dir} 이미지를 내보내었습니다.')
+        except Exception as e:
+            QMessageBox.warning(self, "워드클라우드 생성 중 오류", f"{e}")
 
-    def save_chart(self):
-        # 차트 위젯의 내용을 QPixmap으로 캡처
-        pixmap = self.wc.grab()
-
-        # 이미지 저장
-        filename, _ = QFileDialog.getSaveFileName(
-            self, "차트 저장", "", "PNG 파일 (*.png);;JPEG 파일 (*.jpg *.jpeg)")
-        if filename:
-            pixmap.save(filename)
-            print(f"차트가 {filename}에 저장되었습니다.")
+    def init_network(self, data):
+        view = self.ui.networkPlot
+        self.network = data.set_network()
+        view.setHtml(self.network)
 
 
 # & tab4 딕셔너리
@@ -249,7 +266,7 @@ class filterComponent():
         ui.resetFilter.clicked.connect(lambda: self.init_ui(ui, data))
 
         # ^ 필터 적용하기
-        ui.applyFilter.clicked.connect(lambda: self.get_filter(ui))
+        ui.applyFilter.clicked.connect(lambda: self.apply_filter(ui, data))
 
     # ^ 최초 필터의 기본값을 초기화 하는 과정
     # ^ 데이터프레임 변경 또는 필터 초기화 버튼을 눌렀을때 실행
@@ -274,7 +291,10 @@ class filterComponent():
         # * 문자열 설정
         # * 문자열 없으면 비활성화
         text_enabled = data.cols['text'] != ''
-        placeholder_text = "ex) 한국, 도로, 공사" if text_enabled else "입력 탭에서 문자열을 설정하세요."
+        if text_enabled:
+            placeholder_text = "쉼표와 줄바꿈으로 구분하여 입력하세요."
+        else:
+            placeholder_text = "입력 탭에서 문자열을 설정하세요."
         ui.inText.setDisabled(not text_enabled)
         ui.inText.setPlaceholderText(placeholder_text)
         ui.inText.clear()
@@ -302,28 +322,91 @@ class filterComponent():
         try:
             startDate = ui.startDate.date().toString("yyyy-MM-dd")
             endDate = ui.endDate.date().toString("yyyy-MM-dd")
-        except:
+        except Exception as e:
             startDate = ''
             endDate = ''
+            print(f"{e} 에러 발생해서 변수 설정안됨.")
 
         try:
-            inText = ui.inText.text()
-            exText = ui.exText.text()
-        except:
+            inText = ui.inText.toPlainText()
+            exText = ui.exText.toPlainText()
+        except Exception as e:
             inText = ""
             exText = ""
+            print(f"{e} 에러 발생해서 변수 설정안됨.")
 
         category1 = ui.category1.currentText()
         category2 = ui.category2.currentText()
         category3 = ui.category3.currentText()
 
-        result = dict(startDate=startDate, endDate=endDate, inText=inText, exText=exText,
-                      category1=category1, category2=category2, category3=category3)
+        result = dict(startDate=startDate, endDate=endDate,
+                      inText=inText, exText=exText,
+                      category1=category1, category2=category2,
+                      category3=category3)
         print(result)
         return result
 
-    def apply_filter(self, df, config: dict):
+    def apply_filter(self, ui, data):
+        df = data.fdf.copy()
+        config = self.get_filter(ui)
+        cols = data.cols
+
+        if config['startDate'] != '' and config['endDate'] != '':
+            df = df[df[cols['date']].dt.date.between(
+                pd.to_datetime(config['startDate']).date(),
+                pd.to_datetime(config['endDate']).date())]
+
+        if config['inText'] != '':
+            df = df[df[cols['text']].str.contains(
+                to_regex(config['inText']), case=False, na=False)]
+        if config['exText'] != '':
+            df = df[~df[cols['text']].str.contains(
+                to_regex(config['exText']), case=False, na=False)]
+
+        if config['category1'] != '' and config['category1'] != '전체':
+            df = df[df[cols['category1']] == config['category1']]
+        if config['category2'] != '' and config['category2'] != '전체':
+            df = df[df[cols['category2']] == config['category2']]
+        if config['category3'] != '' and config['category3'] != '전체':
+            df = df[df[cols['category3']] == config['category3']]
+
+        data.set_sdf(df)
+        print('적용완료')
+        return df
+
+
+class optionComponent():
+    def __init__(self, ui, data) -> None:
+        self.init_ui(ui, data)
+
+    def init_ui(self, ui, data):
+        self.init_text_option(ui, data)
+        self.init_design_option(ui, data)
+
+    def init_text_option(self, ui, data):
         pass
+
+    def init_design_option(self, ui, data):
+        ui.bgcolorPicker.clicked.connect(
+            lambda: self.set_color(ui, ui.sampleText))
+
+    def set_color(self, ui, widget=None):
+        color = QColorDialog.getColor()
+
+        if color.isValid() and widget is not None:
+            try:
+                widget.setStyleSheet(f"background-color: {color.name()};")
+                widget.text(f"{color.name()}")
+            except Exception as e:
+                print(e)
+
+
+def to_regex(text: str):
+    import re
+    pattern = re.sub(r'\s*[,\n]\s*', '|', text)
+    pattern = re.sub(r'\|+', '|', pattern)
+    pattern = pattern.strip('|')
+    return pattern
 
 
 def get_table_plot(df: pd.DataFrame):
@@ -356,49 +439,6 @@ def get_table_plot(df: pd.DataFrame):
     return fig
 
 
-def get_tf(data: pd.Series,
-           ngram: tuple[float, float] = (2, 2),
-           topn: int = 40,
-           inText: str = '',
-           exText: str = '',
-           stopwords: str = ''):
-    """_요약_
-
-    Args:
-        data (pd.Series): 문자열 시리즈
-        ngram (tuple, optional): 엔그람 범위. Defaults to (2,2).
-        topn (int, optional): 추출할 단어의 개수. Defaults to 40.
-
-    Returns:
-        _type_: _description_
-    """
-    from sklearn.feature_extraction.text import CountVectorizer
-    import numpy as np
-
-    if inText.strip() != '':
-        data = data[data.str.contains(to_regex(inText))]
-    if exText.strip() != '':
-        data = data[~data.str.contains(to_regex(exText))]
-
-    vectorizer = CountVectorizer(
-        ngram_range=ngram,
-        max_features=1000)
-
-    X = vectorizer.fit_transform(data)
-    term_freq_df = pd.DataFrame({
-        '단어': vectorizer.get_feature_names_out(),
-        '빈도': X.toarray().sum(axis=0)})\
-        .sort_values('빈도', ascending=False).head(topn)
-
-    return term_freq_df
-
-
-def to_regex(text: str):
-    import re
-    result = re.sub(r",\s*", '|', text)
-    return '(' + result + ')'
-
-
 def set_plot(fig: go.Figure,
              config: dict = {'bgcolor': 'white', 'font': '맑은 고딕'}):
     # 기본 플로틀리 차트
@@ -417,54 +457,56 @@ def set_plot(fig: go.Figure,
     html = plotly.offline.plot(fig, include_plotlyjs='cdn',
                                output_type='div', config=html_config)
 
+    # todo: 오프라인에서도 되도록 cdn 변환 코드를 넣어야함
     return html
 
 
-class WordCloudWidget(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.figure = Figure(figsize=(6, 5), dpi=300)
-        self.canvas = FigureCanvas(self.figure)
+class FontSelector(QWidget):
+    def __init__(self, font_path=r"C:\Windows\Fonts"):
+        super().__init__()
+        self.font_path = font_path
+        self.initUI()
+
+    def initUI(self):
         layout = QVBoxLayout()
-        layout.addWidget(self.canvas)
+
+        self.combo_box = QComboBox(self)
+        self.load_fonts()
+
+        layout.addWidget(self.combo_box)
         self.setLayout(layout)
-        self.ax = self.figure.add_subplot(111)  # 초기 axes 생성
-        self.ax.axis('off')
 
-    def generate_wordcloud(self, tf: pd.DataFrame,
-                           font_path: str,
-                           color_set: str = 'Set2',
-                           background_color: str = 'rgba(236, 236, 236, 10)'):
+    def load_fonts(self):
+        font_files = [f for f in os.listdir(
+            self.font_path) if f.endswith(('.ttf', '.otf'))]
 
-        # 기존 차트 지우기
-        self.ax.clear()
+        for font_file in font_files:
+            font_path = os.path.join(self.font_path, font_file)
+            font_id = QFontDatabase.addApplicationFont(font_path)
+            if font_id != -1:
+                font_families = QFontDatabase.applicationFontFamilies(font_id)
+                for family in font_families:
+                    self.combo_box.addItem(family)
 
-        wc = WordCloud(font_path=font_path,
-                       width=800,
-                       height=600,
-                       prefer_horizontal=1,
-                       background_color=background_color,
-                       mode="RGBA",
-                       font_step=0.1,
-                       colormap=color_set,
-                       max_words=100,
-                       max_font_size=100)
 
-        try:
-            wc.generate_from_frequencies(dict(zip(tf['단어'], tf['빈도'])))
-        except Exception as e:
-            print(f"워드클라우드 생성 중 오류 발생: {e}")
-            return None
+def to_image(QWidget: QWidget, dir: str = ''):
+    # 차트 위젯의 내용을 QPixmap으로 캡처
+    pixmap = QWidget.grab()
+    # 이미지 저장
+    filename, _ = QFileDialog.getSaveFileName(
+        None, "차트 저장", dir, "PNG 파일 (*.png);;JPEG 파일 (*.jpg *.jpeg)")
+    if filename:
+        pixmap.save(filename)
+        print(f"이미지가 {filename}에 저장되었습니다.")
 
-        # 새로운 워드클라우드 그리기
-        self.ax.imshow(wc, interpolation='bilinear')
-        self.ax.axis('off')
 
-        # 레이아웃 조정 및 캔버스 업데이트
-        self.figure.tight_layout()
-        self.canvas.draw()
-
-        return wc
+def to_excel(df: pd.DataFrame, dir: str = ''):
+    # 이미지 저장
+    filename, _ = QFileDialog.getSaveFileName(
+        None, "차트 저장", dir, "xlsx 파일 (*.xlsx *.xls);;csv 파일 (*.csv)")
+    if filename:
+        df.to_csv(filename, encoding='UTF-8', index=False)
+        print(f"데이터가 {filename}에 저장되었습니다.")
 
 
 # @ Main

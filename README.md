@@ -164,7 +164,9 @@ pyside6-uic src/ui/Dictionary.ui -o src/ui/Dictionary.py
     - 설정 페이지에서 설정을 저장하면 setting.ini 파일에 변경사항 저장하기 
 
 ---
-
+- 상태바 
+    - 현재 fdf의 열개수 : 필터링 되었는지 
+    - 마지막 실행한 명령 표시해서 진행상태 알려주기 
 - 메인 
     - 사이드바 
         - 파일 입력 
@@ -194,4 +196,5 @@ pyside6-uic src/ui/Dictionary.ui -o src/ui/Dictionary.py
         - ollama 옵션 : 기본 프롬프트 
         - 단어사전
     - 메인 
+
 ### 
