@@ -415,13 +415,18 @@ class optionComponent():
             lambda: self.set_color(ui.colorPicker, 'color'))
         ui.bgcolorPicker.clicked.connect(
             lambda: self.set_color(ui.bgcolorPicker, 'bgcolor'))
+        ui.colorPicker.clicked.connect(
+            lambda: self.change_color(ui.colorPicker, self.color))
+        ui.bgcolorPicker.clicked.connect(
+            lambda: self.change_color(ui.bgcolorPicker, self.bgcolor))
 
-    def set_color(self, widget: None | QWidget, obj: str):
+    def set_color(self, widget: QWidget, obj: str):
         color = QColorDialog.getColor()
-
         setattr(self, obj, color.name())
-        widget.setStyleSheet(f"background-color: {color.name()};")
-        widget.setText(f"{color.name()}")
+
+    def change_color(self, widget, color):
+        widget.setStyleSheet(f"background-color: {color};")
+        widget.setText(f"{color}")
 
     def get_option(self, ui):
 
@@ -495,7 +500,7 @@ def set_plot(fig: go.Figure,
     html = plotly.offline.plot(fig, include_plotlyjs='cdn',
                                output_type='div', config=html_config)
     html = '<script charset="utf-8" src="C:\\Users\\Administrator\\plotly.min.js"></script>' + html
-    
+
     # todo: 오프라인에서도 되도록 cdn 변환 코드를 넣어야함
     return html
 

@@ -194,7 +194,7 @@ class data():
 
         G = nx.from_numpy_array(adjacency_matrix)
         nt = Network(width="100%", height="500px",
-                     notebook=False, cdn_resources='remote')
+                     notebook=False, cdn_resources='local')
         print("3---")
         nt.from_nx(G)
         print("4---")
@@ -231,6 +231,7 @@ class data():
         nt.html = '<link rel="stylesheet" href="C:\\Users\\Administrator\\vis-network.min.css">' + nt.html
         nt.html = '<link rel="stylesheet" href="C:\\Users\\Administrator\\bootstrap.min.css">' + nt.html
         self.network = nt.html
+        nt.write_html('index.html')
         return self.network
 
     def set_network_option(self, solver: str = 'hierarchicalRepulsion'):
