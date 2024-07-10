@@ -16,22 +16,22 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWebEngineWidgets import QWebEngineView
-from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QComboBox, QDateEdit,
-    QFontComboBox, QFormLayout, QFrame, QGridLayout,
-    QGroupBox, QLabel, QPlainTextEdit, QPushButton,
-    QSizePolicy, QSpinBox, QTabWidget, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QAbstractSpinBox, QApplication, QCheckBox, QComboBox,
+    QDateEdit, QFormLayout, QFrame, QGridLayout,
+    QGroupBox, QHBoxLayout, QLabel, QPlainTextEdit,
+    QPushButton, QSizePolicy, QSpinBox, QTabWidget,
+    QVBoxLayout, QWidget)
 
 class Ui_TextMining(object):
     def setupUi(self, TextMining):
         if not TextMining.objectName():
             TextMining.setObjectName(u"TextMining")
         TextMining.resize(912, 591)
-        self.formLayout = QFormLayout(TextMining)
-        self.formLayout.setObjectName(u"formLayout")
-        self.formLayout.setContentsMargins(0, 0, 0, 0)
-        self.formLayout_2 = QFormLayout()
-        self.formLayout_2.setObjectName(u"formLayout_2")
+        self.horizontalLayout = QHBoxLayout(TextMining)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.tabWidget = QTabWidget(TextMining)
         self.tabWidget.setObjectName(u"tabWidget")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
@@ -75,7 +75,7 @@ class Ui_TextMining(object):
         self.startDate.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.startDate.setProperty("showGroupSeparator", True)
         self.startDate.setDateTime(QDateTime(QDate(2024, 7, 1), QTime(9, 0, 0)))
-        self.startDate.setMaximumDate(QDate(9994, 1, 4))
+        self.startDate.setMaximumDate(QDate(9994, 1, 5))
         self.startDate.setCalendarPopup(True)
         self.startDate.setTimeSpec(Qt.TimeSpec.LocalTime)
 
@@ -187,70 +187,60 @@ class Ui_TextMining(object):
 
         self.verticalLayout_3.addWidget(self.resetFilter)
 
-        self.applyFilter = QPushButton(self.tabWidgetPage1)
-        self.applyFilter.setObjectName(u"applyFilter")
-        self.applyFilter.setStyleSheet(u"background-color: #00539C;\n"
-"color: #FFF;\n"
-"font-weight: bold;")
-        self.applyFilter.setAutoDefault(False)
-        self.applyFilter.setFlat(False)
-
-        self.verticalLayout_3.addWidget(self.applyFilter)
-
         self.tabWidget.addTab(self.tabWidgetPage1, "")
         self.tabWidgetPage2 = QWidget()
         self.tabWidgetPage2.setObjectName(u"tabWidgetPage2")
-        self.verticalLayout_4 = QVBoxLayout(self.tabWidgetPage2)
-        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.gridLayout_3 = QGridLayout(self.tabWidgetPage2)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.designBox = QGroupBox(self.tabWidgetPage2)
+        self.designBox.setObjectName(u"designBox")
+        self.gridLayout_2 = QGridLayout(self.designBox)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.colorPicker = QPushButton(self.designBox)
+        self.colorPicker.setObjectName(u"colorPicker")
+        self.colorPicker.setStyleSheet(u"background-color: rgb(0, 0, 0);\n"
+"color: rgb(255, 255, 255);\n"
+"border-color: rgb(117, 117, 117);")
+
+        self.gridLayout_2.addWidget(self.colorPicker, 1, 1, 1, 1)
+
+        self.bgcolorPicker = QPushButton(self.designBox)
+        self.bgcolorPicker.setObjectName(u"bgcolorPicker")
+        self.bgcolorPicker.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+
+        self.gridLayout_2.addWidget(self.bgcolorPicker, 2, 1, 1, 1)
+
+        self.label_2 = QLabel(self.designBox)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setMinimumSize(QSize(0, 0))
+        self.label_2.setMaximumSize(QSize(16777215, 300))
+
+        self.gridLayout_2.addWidget(self.label_2, 1, 0, 1, 1)
+
+        self.bg = QLabel(self.designBox)
+        self.bg.setObjectName(u"bg")
+
+        self.gridLayout_2.addWidget(self.bg, 2, 0, 1, 1)
+
+        self.label_3 = QLabel(self.designBox)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_2.addWidget(self.label_3, 0, 0, 1, 1)
+
+
+        self.gridLayout_3.addWidget(self.designBox, 1, 0, 1, 1)
+
         self.groupBox = QGroupBox(self.tabWidgetPage2)
         self.groupBox.setObjectName(u"groupBox")
         self.groupBox.setMinimumSize(QSize(0, 100))
         self.groupBox.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.gridLayout = QGridLayout(self.groupBox)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.nnCount = QSpinBox(self.groupBox)
-        self.nnCount.setObjectName(u"nnCount")
-        self.nnCount.setAutoFillBackground(False)
-        self.nnCount.setWrapping(False)
-        self.nnCount.setFrame(True)
-        self.nnCount.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-        self.nnCount.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
-        self.nnCount.setMinimum(1)
-        self.nnCount.setMaximum(5)
-        self.nnCount.setValue(1)
-
-        self.gridLayout.addWidget(self.nnCount, 1, 1, 1, 1)
-
-        self.Label_4 = QLabel(self.groupBox)
-        self.Label_4.setObjectName(u"Label_4")
-
-        self.gridLayout.addWidget(self.Label_4, 1, 0, 1, 1)
-
-        self.Label_2 = QLabel(self.groupBox)
-        self.Label_2.setObjectName(u"Label_2")
-        self.Label_2.setScaledContents(False)
-        self.Label_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
-
-        self.gridLayout.addWidget(self.Label_2, 3, 0, 1, 1)
-
-        self.nnCount_2 = QSpinBox(self.groupBox)
-        self.nnCount_2.setObjectName(u"nnCount_2")
-        self.nnCount_2.setAutoFillBackground(False)
-        self.nnCount_2.setWrapping(False)
-        self.nnCount_2.setFrame(True)
-        self.nnCount_2.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-        self.nnCount_2.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
-        self.nnCount_2.setMinimum(1)
-        self.nnCount_2.setMaximum(5)
-        self.nnCount_2.setValue(2)
-
-        self.gridLayout.addWidget(self.nnCount_2, 1, 2, 1, 1)
-
         self.stopwordsEdit = QPlainTextEdit(self.groupBox)
         self.stopwordsEdit.setObjectName(u"stopwordsEdit")
         self.stopwordsEdit.setTabChangesFocus(True)
 
-        self.gridLayout.addWidget(self.stopwordsEdit, 4, 0, 1, 3)
+        self.gridLayout.addWidget(self.stopwordsEdit, 6, 0, 1, 3)
 
         self.topnCount = QSpinBox(self.groupBox)
         self.topnCount.setObjectName(u"topnCount")
@@ -261,84 +251,73 @@ class Ui_TextMining(object):
         self.topnCount.setSingleStep(5)
         self.topnCount.setValue(40)
 
-        self.gridLayout.addWidget(self.topnCount, 0, 2, 1, 1)
+        self.gridLayout.addWidget(self.topnCount, 1, 2, 1, 1)
 
         self.Label_3 = QLabel(self.groupBox)
         self.Label_3.setObjectName(u"Label_3")
 
-        self.gridLayout.addWidget(self.Label_3, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.Label_3, 1, 0, 1, 1)
+
+        self.Label_4 = QLabel(self.groupBox)
+        self.Label_4.setObjectName(u"Label_4")
+
+        self.gridLayout.addWidget(self.Label_4, 2, 0, 1, 1)
+
+        self.Label_2 = QLabel(self.groupBox)
+        self.Label_2.setObjectName(u"Label_2")
+        self.Label_2.setScaledContents(False)
+        self.Label_2.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.gridLayout.addWidget(self.Label_2, 5, 0, 1, 1)
+
+        self.ngram_1 = QSpinBox(self.groupBox)
+        self.ngram_1.setObjectName(u"ngram_1")
+        self.ngram_1.setAutoFillBackground(False)
+        self.ngram_1.setWrapping(False)
+        self.ngram_1.setFrame(True)
+        self.ngram_1.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.ngram_1.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+        self.ngram_1.setMinimum(1)
+        self.ngram_1.setMaximum(5)
+        self.ngram_1.setValue(2)
+
+        self.gridLayout.addWidget(self.ngram_1, 2, 2, 1, 1)
+
+        self.ngram_0 = QSpinBox(self.groupBox)
+        self.ngram_0.setObjectName(u"ngram_0")
+        self.ngram_0.setAutoFillBackground(False)
+        self.ngram_0.setWrapping(False)
+        self.ngram_0.setFrame(True)
+        self.ngram_0.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.ngram_0.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.PlusMinus)
+        self.ngram_0.setMinimum(1)
+        self.ngram_0.setMaximum(5)
+        self.ngram_0.setValue(1)
+
+        self.gridLayout.addWidget(self.ngram_0, 2, 1, 1, 1)
+
+        self.NLPcheck = QCheckBox(self.groupBox)
+        self.NLPcheck.setObjectName(u"NLPcheck")
+
+        self.gridLayout.addWidget(self.NLPcheck, 3, 0, 1, 3)
 
 
-        self.verticalLayout_4.addWidget(self.groupBox)
+        self.gridLayout_3.addWidget(self.groupBox, 0, 0, 1, 1)
 
-        self.designBox = QGroupBox(self.tabWidgetPage2)
-        self.designBox.setObjectName(u"designBox")
-        self.gridLayout_2 = QGridLayout(self.designBox)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.label_3 = QLabel(self.designBox)
-        self.label_3.setObjectName(u"label_3")
+        self.resetOption = QPushButton(self.tabWidgetPage2)
+        self.resetOption.setObjectName(u"resetOption")
+        self.resetOption.setStyleSheet(u"background-color: #A4193D;\n"
+"color: #FFF;\n"
+"font-weight: bold;")
 
-        self.gridLayout_2.addWidget(self.label_3, 0, 0, 1, 1)
-
-        self.bg = QLabel(self.designBox)
-        self.bg.setObjectName(u"bg")
-
-        self.gridLayout_2.addWidget(self.bg, 2, 0, 1, 1)
-
-        self.fontComboBox = QFontComboBox(self.designBox)
-        self.fontComboBox.setObjectName(u"fontComboBox")
-        self.fontComboBox.setMaximumSize(QSize(150, 16777215))
-
-        self.gridLayout_2.addWidget(self.fontComboBox, 0, 1, 1, 1)
-
-        self.label_2 = QLabel(self.designBox)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setMinimumSize(QSize(0, 0))
-        self.label_2.setMaximumSize(QSize(16777215, 300))
-
-        self.gridLayout_2.addWidget(self.label_2, 1, 0, 1, 1)
-
-        self.comboBox = QComboBox(self.designBox)
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.setObjectName(u"comboBox")
-
-        self.gridLayout_2.addWidget(self.comboBox, 1, 1, 1, 1)
-
-        self.bgcolorPicker = QPushButton(self.designBox)
-        self.bgcolorPicker.setObjectName(u"bgcolorPicker")
-
-        self.gridLayout_2.addWidget(self.bgcolorPicker, 2, 2, 1, 1)
-
-        self.sampleText = QLabel(self.designBox)
-        self.sampleText.setObjectName(u"sampleText")
-        self.sampleText.setStyleSheet(u"border-color: rgb(255, 255, 255);\n"
-"background-color: rgb(255, 255, 255);")
-        self.sampleText.setFrameShape(QFrame.Shape.StyledPanel)
-        self.sampleText.setFrameShadow(QFrame.Shadow.Plain)
-        self.sampleText.setLineWidth(1)
-
-        self.gridLayout_2.addWidget(self.sampleText, 2, 1, 1, 1)
-
-
-        self.verticalLayout_4.addWidget(self.designBox)
-
-        self.pushButton_2 = QPushButton(self.tabWidgetPage2)
-        self.pushButton_2.setObjectName(u"pushButton_2")
-
-        self.verticalLayout_4.addWidget(self.pushButton_2)
-
-        self.pushButton_3 = QPushButton(self.tabWidgetPage2)
-        self.pushButton_3.setObjectName(u"pushButton_3")
-
-        self.verticalLayout_4.addWidget(self.pushButton_3)
+        self.gridLayout_3.addWidget(self.resetOption, 2, 0, 1, 1)
 
         self.tabWidget.addTab(self.tabWidgetPage2, "")
 
-        self.formLayout_2.setWidget(0, QFormLayout.LabelRole, self.tabWidget)
+        self.horizontalLayout_2.addWidget(self.tabWidget)
 
 
-        self.formLayout.setLayout(0, QFormLayout.LabelRole, self.formLayout_2)
+        self.horizontalLayout.addLayout(self.horizontalLayout_2)
 
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -389,6 +368,8 @@ class Ui_TextMining(object):
 
         self.saveStat = QPushButton(self.tableTab)
         self.saveStat.setObjectName(u"saveStat")
+        self.saveStat.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
+"color: rgb(255, 255, 255);")
 
         self.verticalLayout.addWidget(self.saveStat)
 
@@ -412,6 +393,8 @@ class Ui_TextMining(object):
 
         self.saveTf = QPushButton(self.TFTab)
         self.saveTf.setObjectName(u"saveTf")
+        self.saveTf.setStyleSheet(u"background-color: #178047;\n"
+"color: rgb(255, 255, 255);")
 
         self.verticalLayout_7.addWidget(self.saveTf)
 
@@ -434,6 +417,8 @@ class Ui_TextMining(object):
 
         self.saveWC = QPushButton(self.wcTab)
         self.saveWC.setObjectName(u"saveWC")
+        self.saveWC.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
+"color: rgb(255, 255, 255);")
 
         self.verticalLayout_8.addWidget(self.saveWC)
 
@@ -457,6 +442,8 @@ class Ui_TextMining(object):
 
         self.saveNetwork = QPushButton(self.networkTab)
         self.saveNetwork.setObjectName(u"saveNetwork")
+        self.saveNetwork.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
+"color: rgb(255, 255, 255);")
 
         self.verticalLayout_9.addWidget(self.saveNetwork)
 
@@ -465,21 +452,17 @@ class Ui_TextMining(object):
         self.verticalLayout_2.addWidget(self.Main)
 
 
-        self.formLayout.setLayout(0, QFormLayout.FieldRole, self.verticalLayout_2)
+        self.horizontalLayout.addLayout(self.verticalLayout_2)
 
-        QWidget.setTabOrder(self.topnCount, self.nnCount)
-        QWidget.setTabOrder(self.nnCount, self.nnCount_2)
-        QWidget.setTabOrder(self.nnCount_2, self.stopwordsEdit)
-        QWidget.setTabOrder(self.stopwordsEdit, self.fontComboBox)
-        QWidget.setTabOrder(self.fontComboBox, self.comboBox)
-        QWidget.setTabOrder(self.comboBox, self.pushButton_2)
-        QWidget.setTabOrder(self.pushButton_2, self.pushButton_3)
-        QWidget.setTabOrder(self.pushButton_3, self.initTable)
+        QWidget.setTabOrder(self.topnCount, self.ngram_0)
+        QWidget.setTabOrder(self.ngram_0, self.ngram_1)
+        QWidget.setTabOrder(self.ngram_1, self.stopwordsEdit)
+        QWidget.setTabOrder(self.stopwordsEdit, self.resetOption)
+        QWidget.setTabOrder(self.resetOption, self.initTable)
         QWidget.setTabOrder(self.initTable, self.saveStat)
         QWidget.setTabOrder(self.saveStat, self.category3)
         QWidget.setTabOrder(self.category3, self.resetFilter)
-        QWidget.setTabOrder(self.resetFilter, self.applyFilter)
-        QWidget.setTabOrder(self.applyFilter, self.tabWidget)
+        QWidget.setTabOrder(self.resetFilter, self.tabWidget)
         QWidget.setTabOrder(self.tabWidget, self.Main)
         QWidget.setTabOrder(self.Main, self.startDate)
         QWidget.setTabOrder(self.startDate, self.category2)
@@ -496,8 +479,7 @@ class Ui_TextMining(object):
 
         self.retranslateUi(TextMining)
 
-        self.tabWidget.setCurrentIndex(1)
-        self.applyFilter.setDefault(False)
+        self.tabWidget.setCurrentIndex(0)
         self.Main.setCurrentIndex(0)
 
 
@@ -525,14 +507,14 @@ class Ui_TextMining(object):
         self.Label_13.setText(QCoreApplication.translate("TextMining", u"\uc18c\ubd84\ub958 :", None))
         self.category3.setPlaceholderText(QCoreApplication.translate("TextMining", u"\ubbf8\uc124\uc815", None))
         self.resetFilter.setText(QCoreApplication.translate("TextMining", u"\ud544\ud130 \ucd08\uae30\ud654", None))
-        self.applyFilter.setText(QCoreApplication.translate("TextMining", u"\ud544\ud130 \uc801\uc6a9\ud558\uae30", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabWidgetPage1), QCoreApplication.translate("TextMining", u"\ub370\uc774\ud130 \ud544\ud130", None))
+        self.designBox.setTitle(QCoreApplication.translate("TextMining", u"\ub514\uc790\uc778 \uc635\uc158", None))
+        self.colorPicker.setText(QCoreApplication.translate("TextMining", u"#000000", None))
+        self.bgcolorPicker.setText(QCoreApplication.translate("TextMining", u"#ffffff", None))
+        self.label_2.setText(QCoreApplication.translate("TextMining", u"\uae00\uc790 \uc0c9\uc0c1 :", None))
+        self.bg.setText(QCoreApplication.translate("TextMining", u"\ucc28\ud2b8 \ubc30\uacbd \uc0c9\uc0c1 :", None))
+        self.label_3.setText(QCoreApplication.translate("TextMining", u"\ud3f0\ud2b8 \uc124\uc815 :", None))
         self.groupBox.setTitle(QCoreApplication.translate("TextMining", u"\ud14d\uc2a4\ud2b8 \uc635\uc158", None))
-        self.Label_4.setText(QCoreApplication.translate("TextMining", u"n-gram \ubc94\uc704 :", None))
-#if QT_CONFIG(tooltip)
-        self.Label_2.setToolTip(QCoreApplication.translate("TextMining", u"<html><head/><body><p>\ubd88\uc6a9\uc5b4\ub294 \ucc28\ud2b8\uc5d0\uc11c\ub9cc \uc228\uae38 \ub2e8\uc5b4\uc785\ub2c8\ub2e4.</p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.Label_2.setText(QCoreApplication.translate("TextMining", u"\ubd88\uc6a9\uc5b4", None))
         self.stopwordsEdit.setDocumentTitle("")
         self.stopwordsEdit.setPlaceholderText(QCoreApplication.translate("TextMining", u"\ucc28\ud2b8\uc5d0\uc11c \uc228\uae38 \ub2e8\uc5b4\ub97c \uc27c\ud45c\uc640 \uc904\ubc14\uafc8\uc73c\ub85c \uad6c\ubd84\ud574\uc11c \uc785\ub825\ud558\uc138\uc694.", None))
 #if QT_CONFIG(tooltip)
@@ -542,17 +524,16 @@ class Ui_TextMining(object):
         self.Label_3.setWhatsThis(QCoreApplication.translate("TextMining", u"<html><head/><body><p>\ub178\ub4dc \uac1c\uc218\ub294 \ud45c\uc2dc\ud560 \ub2e8\uc5b4\uc758 \uac1c\uc218\uc785\ub2c8\ub2e4. </p></body></html>", None))
 #endif // QT_CONFIG(whatsthis)
         self.Label_3.setText(QCoreApplication.translate("TextMining", u"\ub178\ub4dc\uac1c\uc218 :", None))
-        self.designBox.setTitle(QCoreApplication.translate("TextMining", u"\ub514\uc790\uc778 \uc635\uc158", None))
-        self.label_3.setText(QCoreApplication.translate("TextMining", u"\ud3f0\ud2b8 \uc124\uc815 :", None))
-        self.bg.setText(QCoreApplication.translate("TextMining", u"\ucc28\ud2b8 \ubc30\uacbd \uc0c9\uc0c1 :", None))
-        self.label_2.setText(QCoreApplication.translate("TextMining", u"\uae00\uc790 \uc0c9\uc0c1 :", None))
-        self.comboBox.setItemText(0, QCoreApplication.translate("TextMining", u"\ud654\uc774\ud2b8", None))
-        self.comboBox.setItemText(1, QCoreApplication.translate("TextMining", u"\ub2e4\ud06c", None))
-
-        self.bgcolorPicker.setText(QCoreApplication.translate("TextMining", u"\uc0c9\uc0c1 \uc120\ud0dd", None))
-        self.sampleText.setText(QCoreApplication.translate("TextMining", u" 0", None))
-        self.pushButton_2.setText(QCoreApplication.translate("TextMining", u"\uc635\uc158 \ucd08\uae30\ud654", None))
-        self.pushButton_3.setText(QCoreApplication.translate("TextMining", u"\uc635\uc158 \uc801\uc6a9", None))
+        self.Label_4.setText(QCoreApplication.translate("TextMining", u"n-gram \ubc94\uc704 :", None))
+#if QT_CONFIG(tooltip)
+        self.Label_2.setToolTip(QCoreApplication.translate("TextMining", u"<html><head/><body><p>\ubd88\uc6a9\uc5b4\ub294 \ucc28\ud2b8\uc5d0\uc11c\ub9cc \uc228\uae38 \ub2e8\uc5b4\uc785\ub2c8\ub2e4.</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.Label_2.setText(QCoreApplication.translate("TextMining", u"\ubd88\uc6a9\uc5b4", None))
+#if QT_CONFIG(tooltip)
+        self.NLPcheck.setToolTip(QCoreApplication.translate("TextMining", u"<html><head/><body><p>\uccb4\uc5b8 \ubd84\ub9ac, \uc624\ud0c8\uc790 \uad50\uc815 \ub4f1 \uc790\uc5f0\uc5b4 \ucc98\ub9ac\ub97c \ud569\ub2c8\ub2e4. </p><p>\uc2dc\uac04\uc774 \uc624\ub798 \uac78\ub9b4 \uc218 \uc788\uc2b5\ub2c8\ub2e4.</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.NLPcheck.setText(QCoreApplication.translate("TextMining", u"\uc790\uc5f0\uc5b4 \ucc98\ub9ac (!)", None))
+        self.resetOption.setText(QCoreApplication.translate("TextMining", u"\uc635\uc158 \ucd08\uae30\ud654", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabWidgetPage2), QCoreApplication.translate("TextMining", u"\ucc28\ud2b8 \uc635\uc158", None))
         self.initDf.setText(QCoreApplication.translate("TextMining", u"\uc0dd\uc131\ud558\uae30", None))
         self.saveData.setText(QCoreApplication.translate("TextMining", u"\uc5d1\uc140\ub85c \uc800\uc7a5\ud558\uae30", None))

@@ -1,6 +1,5 @@
 import sys
 import os
-from typing import Optional
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
                             QMetaObject, QObject, QPoint, QRect,
@@ -69,8 +68,8 @@ class MainWindow(QMainWindow):
         self.main.addTab(tab1, "파일 입력")
 
     # ^ 탭 2: 탐색적 분석
-        tab2 = ChartTab()
-        self.main.addTab(tab2, "통계 차트 생성")
+        # tab2 = ChartTab()
+        # self.main.addTab(tab2, "통계 차트 생성")
 
     # ^ 탭 3: 텍스트 마이닝
         self.tab3 = TextMiningTab(self.data)
@@ -81,8 +80,8 @@ class MainWindow(QMainWindow):
         self.main.addTab(tab4, "사전")
 
     # ^ 탭 6:
-        tab6 = QTabWidget()
-        self.main.addTab(tab6, "TEST")
+        # tab6 = QTabWidget()
+        # self.main.addTab(tab6, "TEST")
 
         self.show()
 
@@ -197,42 +196,56 @@ class TextMiningTab(QWidget):
 
         # ^ network 생성
         self.ui.initNetwork.clicked.connect(lambda: self.init_network(data))
+        self.ui.saveNetwork.clicked.connect(
+            lambda: to_image(self.ui.networkPlot))
 
     def init_filter(self, data):
-        self.data_filter = filterComponent(self.ui, data)
+        self.filter = filterComponent(self.ui, data)
         self.option = optionComponent(self.ui, data)
 
     def init_data_tab(self, data):
         view = self.ui.dfplot
-        df = data.get_sdf()
+        df = self.filter.apply_filter(self.ui, data)
         fig = get_table_plot(df.head(100))
         html = set_plot(fig)
         view.setHtml(html)
 
     def init_just_table(self, data):
+        self.filter.apply_filter(self.ui, data)
         view = self.ui.tablePlot
         df = data.get_sdf()
         cols = list(data.cols.values())
-        df_grouped = df.groupby([cols[2], cols[3]]).agg(
+        df_grouped = df.groupby([cols[2], cols[3], cols[4]]).agg(
             건수=(cols[1], 'count')).reset_index()
         self.fig_stat = get_table_plot(df_grouped)
         html_stat = set_plot(self.fig_stat)
         view.setHtml(html_stat)
 
     def init_TF(self, data):
+        self.filter.apply_filter(self.ui, data)
+        option = self.option.get_option(self.ui)
         view = self.ui.TFplot
-        self.tf = data.set_tf()
+
+        self.tf = data.set_tf(
+            ngram=option['ngram'], topn=option['topn'],
+            stopwords=option['stopword'])
         self.fig_tf = get_table_plot(self.tf)
         html_tf = set_plot(self.fig_tf)
         view.setHtml(html_tf)
 
     def init_WC(self, data):
+        self.filter.apply_filter(self.ui, data)
+        option = self.option.get_option(self.ui)
+
         try:
-            font = r"C:\Windows\Fonts\GmarketSansTTFMedium.ttf"
+            font = r"C:\Windows\Fonts\malgun.ttf"
             self.ax.clear()
-            wc = data.set_wc(font_path=font)
-            tf = data.set_tf()
-            wc.generate_from_frequencies(dict(zip(tf['단어'], tf['빈도'])))
+            wc = data.set_wc(
+                font_path=font, background_color=option['bgcolor'])
+            self.tf = data.set_tf(ngram=option['ngram'], topn=option['topn'],
+                                  stopwords=option['stopword'])
+            wc.generate_from_frequencies(
+                dict(zip(self.tf['단어'], self.tf['빈도'])))
             self.ax.imshow(wc, interpolation='bilinear')
             self.ax.axis('off')
 
@@ -244,8 +257,12 @@ class TextMiningTab(QWidget):
             QMessageBox.warning(self, "워드클라우드 생성 중 오류", f"{e}")
 
     def init_network(self, data):
+        self.filter.apply_filter(self.ui, data)
+        option = self.option.get_option(self.ui)
         view = self.ui.networkPlot
-        self.network = data.set_network()
+
+        self.network = data.set_network(
+            ngram=option['ngram'], topn=option['topn'])
         view.setHtml(self.network)
 
 
@@ -265,16 +282,12 @@ class filterComponent():
         # ^ 필터 초기화
         ui.resetFilter.clicked.connect(lambda: self.init_ui(ui, data))
 
-        # ^ 필터 적용하기
-        ui.applyFilter.clicked.connect(lambda: self.apply_filter(ui, data))
-
     # ^ 최초 필터의 기본값을 초기화 하는 과정
     # ^ 데이터프레임 변경 또는 필터 초기화 버튼을 눌렀을때 실행
 
     def init_ui(self, ui, data):
         # * 일자열 설정
         # * 일자열이 없으면 비활성화
-        print(f"필터 초기화 되었습니다. {data.cols['date']}")
         if data.cols['date'] != '':
             ui.startDate.setDisabled(False)
             ui.endDate.setDisabled(False)
@@ -375,30 +388,55 @@ class filterComponent():
         return df
 
 
+#
 class optionComponent():
     def __init__(self, ui, data) -> None:
         self.init_ui(ui, data)
+        self.color = '#000'
+        self.bgcolor = '#fff'
+        self.font = r'C:\Windows\Fonts\malgun.ttf'
 
     def init_ui(self, ui, data):
         self.init_text_option(ui, data)
-        self.init_design_option(ui, data)
+        self.init_design_option(ui)
 
     def init_text_option(self, ui, data):
         pass
 
-    def init_design_option(self, ui, data):
-        ui.bgcolorPicker.clicked.connect(
-            lambda: self.set_color(ui, ui.sampleText))
+    def init_design_option(self, ui):
+        self.fontPicker = FontSelector()
+        self.fontPicker.setMinimumWidth(150)
+        self.fontPicker.combo_box.setCurrentText('Malgun Gothic')
+        self.fontPicker.setSizePolicy(
+            QSizePolicy.Expanding,  QSizePolicy.Fixed)
+        ui.designBox.layout().addWidget(self.fontPicker, 0, 1)
 
-    def set_color(self, ui, widget=None):
+        ui.colorPicker.clicked.connect(
+            lambda: self.set_color(ui.colorPicker, 'color'))
+        ui.bgcolorPicker.clicked.connect(
+            lambda: self.set_color(ui.bgcolorPicker, 'bgcolor'))
+
+    def set_color(self, widget: None | QWidget, obj: str):
         color = QColorDialog.getColor()
 
-        if color.isValid() and widget is not None:
-            try:
-                widget.setStyleSheet(f"background-color: {color.name()};")
-                widget.text(f"{color.name()}")
-            except Exception as e:
-                print(e)
+        setattr(self, obj, color.name())
+        widget.setStyleSheet(f"background-color: {color.name()};")
+        widget.setText(f"{color.name()}")
+
+    def get_option(self, ui):
+
+        topn = ui.topnCount.value()
+        ngram = tuple(sorted((ui.ngram_0.value(), ui.ngram_1.value())))
+        stopword = to_regex(ui.stopwordsEdit.toPlainText())
+
+        # > 일단 폰트는 아직
+        options = dict(topn=topn, ngram=ngram, stopword=stopword, font=self.font,
+                       color=self.color, bgcolor=self.bgcolor)
+        return options
+
+    def apply_option(self, ui, data):
+
+        pass
 
 
 def to_regex(text: str):
@@ -456,7 +494,8 @@ def set_plot(fig: go.Figure,
 
     html = plotly.offline.plot(fig, include_plotlyjs='cdn',
                                output_type='div', config=html_config)
-
+    html = '<script charset="utf-8" src="C:\\Users\\Administrator\\plotly.min.js"></script>' + html
+    
     # todo: 오프라인에서도 되도록 cdn 변환 코드를 넣어야함
     return html
 
@@ -472,7 +511,7 @@ class FontSelector(QWidget):
 
         self.combo_box = QComboBox(self)
         self.load_fonts()
-
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.combo_box)
         self.setLayout(layout)
 
@@ -501,11 +540,14 @@ def to_image(QWidget: QWidget, dir: str = ''):
 
 
 def to_excel(df: pd.DataFrame, dir: str = ''):
-    # 이미지 저장
+    # 파일 저장
     filename, _ = QFileDialog.getSaveFileName(
         None, "차트 저장", dir, "xlsx 파일 (*.xlsx *.xls);;csv 파일 (*.csv)")
     if filename:
-        df.to_csv(filename, encoding='UTF-8', index=False)
+        if filename.endswith('.xlsx') or filename.endswith('.xls'):
+            df.to_excel(filename, index=False)
+        elif filename.endswith('.csv'):
+            df.to_csv(filename, encoding='UTF-8', index=False)
         print(f"데이터가 {filename}에 저장되었습니다.")
 
 

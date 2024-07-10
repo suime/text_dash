@@ -111,7 +111,7 @@ class data():
 
         print('수동으로 설정함')
 
-    def set_vectorizer(self, ngram: tuple[float, float] = (2, 2), in_text='', ex_text=''):
+    def set_vectorizer(self, ngram: tuple[float, float] = (2, 2), topn: int = 40):
         from sklearn.feature_extraction.text import CountVectorizer
         if hasattr(self, 'vectorizer'):
             return self.vectorizer
@@ -121,25 +121,19 @@ class data():
             col = self.cols['text']
             df = df[col]
 
-            if in_text.strip() != '':
-                df = df[df.str.contains(to_regex(in_text))]
-            if ex_text.strip() != '':
-                df = df[~df.str.contains(to_regex(ex_text))]
-
-            vectorizer = CountVectorizer(ngram_range=ngram, max_features=40)
+            vectorizer = CountVectorizer(ngram_range=ngram, max_features=topn)
             self.vectorizer = vectorizer
             return self.vectorizer
 
     def set_tf(self,
                ngram: tuple[float, float] = (2, 2),
-               topn: int = 40,
-               inText: str = '',
-               exText: str = ''):
+               topn: int = 40, stopwords: str = ''):
         if hasattr(self, 'tf'):
             return self.tf
         else:
             print("tf가 없어서 생성합니다.")
-            vectorizer = self.set_vectorizer()
+            vectorizer = self.set_vectorizer(
+                topn=topn, ngram=ngram)
             df = self.get_sdf()
             col = self.cols['text']
             df = df[col]
@@ -149,7 +143,11 @@ class data():
                 '빈도': X.toarray().sum(axis=0)})\
                 .sort_values('빈도', ascending=False).head(topn)
 
+        if stopwords.strip() != '':
+            term_freq_df['단어'] = term_freq_df['단어'].str.replace(
+                to_regex(stopwords), '', regex=True)
         self.tf = term_freq_df
+
         return self.tf
 
     def set_wc(self,
@@ -171,7 +169,7 @@ class data():
                                 max_font_size=100)
             return self.wc
 
-    def set_network(self):
+    def set_network(self, ngram: tuple[float, float] = (2, 2), topn: int = 40):
         if hasattr(self, 'network'):
             return self.network
         else:
@@ -183,16 +181,11 @@ class data():
         from sklearn.preprocessing import MinMaxScaler
         scaler = MinMaxScaler()
 
-        # if stopwords is None or stopwords.strip() == '':
-        #     stop_words = None
-        # else:
-        #     stop_words = stopwords.split(',')
         print("1---")
-        vectorizer = self.set_vectorizer()
-        df = self.get_sdf()
+        vectorizer = self.set_vectorizer(topn=topn, ngram=ngram)
+        df = self.get_sdf().copy()
         col = self.cols['text']
         data = df[col].apply(clean_text_for_cp949)
-        data.apply(lambda x: x.replace('\xa0', '').replace('\xa9', ''))
         X = vectorizer.fit_transform(data)
 
         print("2---")
@@ -200,10 +193,9 @@ class data():
         np.fill_diagonal(adjacency_matrix, 0)
 
         G = nx.from_numpy_array(adjacency_matrix)
-        nt = Network(width="100%", height="600px",
+        nt = Network(width="100%", height="500px",
                      notebook=False, cdn_resources='remote')
         print("3---")
-        # pd.DataFrame(adjacency_matrix).to_csv('adjen.csv', index = False)
         nt.from_nx(G)
         print("4---")
         # 노드 및 엣지 수정
@@ -230,8 +222,16 @@ class data():
         E['width'] = scaler.fit_transform(E[['width']])*20
         nt.edges = E.to_dict(orient='records')
         nt.generate_html()
+        nt.html.replace("width: 800px;", "width: 100%;")
+        nt.html.replace('style="width: 100%"',
+                        'style="width: 100%; height: 100%;"')
+        #> text 용 
+        nt.html = '<script charset="utf-8" src="C:\\Users\\Administrator\\bootstrap.bundle.min.js"></script>' + nt.html
+        nt.html = '<script charset="utf-8" src="C:\\Users\\Administrator\\vis-network.min.js"></script>' + nt.html
+        nt.html = '<link rel="stylesheet" href="C:\\Users\\Administrator\\vis-network.min.css">' + nt.html
+        nt.html = '<link rel="stylesheet" href="C:\\Users\\Administrator\\bootstrap.min.css">' + nt.html
         self.network = nt.html
-        return nt.html
+        return self.network
 
     def set_network_option(self, solver: str = 'hierarchicalRepulsion'):
         option = f""" 
@@ -243,14 +243,12 @@ class data():
                 "shape": "dot",
                 "font": {{
                     "strokeWidth": 4
-                }},
-                "size": null
+                }}
             }},
             "edges": {{
                 "color": {{
                     "opacity": 0.3
                 }},
-                "selfReferenceSize": "null",
                 "selfReference": {{
                     "angle": 0.785
                 }},

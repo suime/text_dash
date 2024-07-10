@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QFormLayout" name="formLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -26,9 +26,9 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
-    <layout class="QFormLayout" name="formLayout_2">
-     <item row="0" column="0">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
       <widget class="QTabWidget" name="tabWidget">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
@@ -52,7 +52,7 @@
         <enum>QTabWidget::TabShape::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="documentMode">
         <bool>false</bool>
@@ -130,7 +130,7 @@
                  <date>
                   <year>9994</year>
                   <month>1</month>
-                  <day>4</day>
+                  <day>5</day>
                  </date>
                 </property>
                 <property name="calendarPopup">
@@ -319,35 +319,78 @@ font-weight: bold;</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="applyFilter">
-           <property name="styleSheet">
-            <string notr="true">background-color: #00539C;
-color: #FFF;
-font-weight: bold;</string>
-           </property>
-           <property name="text">
-            <string>필터 적용하기</string>
-           </property>
-           <property name="autoDefault">
-            <bool>false</bool>
-           </property>
-           <property name="default">
-            <bool>false</bool>
-           </property>
-           <property name="flat">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="tabWidgetPage2">
         <attribute name="title">
          <string>차트 옵션</string>
         </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="1" column="0">
+          <widget class="QGroupBox" name="designBox">
+           <property name="title">
+            <string>디자인 옵션</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="1" column="1">
+             <widget class="QPushButton" name="colorPicker">
+              <property name="styleSheet">
+               <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);
+border-color: rgb(117, 117, 117);</string>
+              </property>
+              <property name="text">
+               <string>#000000</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="bgcolorPicker">
+              <property name="styleSheet">
+               <string notr="true">background-color: rgb(255, 255, 255);</string>
+              </property>
+              <property name="text">
+               <string>#ffffff</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>300</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>글자 색상 :</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="bg">
+              <property name="text">
+               <string>차트 배경 색상 :</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>폰트 설정 :</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="0">
           <widget class="QGroupBox" name="groupBox">
            <property name="minimumSize">
             <size>
@@ -362,17 +405,21 @@ font-weight: bold;</string>
             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
            </property>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="nnCount">
-              <property name="autoFillBackground">
-               <bool>false</bool>
-              </property>
-              <property name="wrapping">
-               <bool>false</bool>
-              </property>
-              <property name="frame">
+            <item row="6" column="0" colspan="3">
+             <widget class="QPlainTextEdit" name="stopwordsEdit">
+              <property name="tabChangesFocus">
                <bool>true</bool>
               </property>
+              <property name="documentTitle">
+               <string/>
+              </property>
+              <property name="placeholderText">
+               <string>차트에서 숨길 단어를 쉼표와 줄바꿈으로 구분해서 입력하세요.</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QSpinBox" name="topnCount">
               <property name="alignment">
                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
@@ -380,24 +427,40 @@ font-weight: bold;</string>
                <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
               </property>
               <property name="minimum">
-               <number>1</number>
+               <number>10</number>
               </property>
               <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="singleStep">
                <number>5</number>
               </property>
               <property name="value">
-               <number>1</number>
+               <number>40</number>
               </property>
              </widget>
             </item>
             <item row="1" column="0">
+             <widget class="QLabel" name="Label_3">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;노드개수는 표시할 단어의 개수입니다.&lt;/p&gt;&lt;p&gt;많을수록 차트가 복잡하여 보기가 어려워집니다.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="whatsThis">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;노드 개수는 표시할 단어의 개수입니다. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>노드개수 :</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
              <widget class="QLabel" name="Label_4">
               <property name="text">
                <string>n-gram 범위 :</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item row="5" column="0">
              <widget class="QLabel" name="Label_2">
               <property name="toolTip">
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;불용어는 차트에서만 숨길 단어입니다.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -413,8 +476,8 @@ font-weight: bold;</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="2">
-             <widget class="QSpinBox" name="nnCount_2">
+            <item row="2" column="2">
+             <widget class="QSpinBox" name="ngram_1">
               <property name="autoFillBackground">
                <bool>false</bool>
               </property>
@@ -441,21 +504,17 @@ font-weight: bold;</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="0" colspan="3">
-             <widget class="QPlainTextEdit" name="stopwordsEdit">
-              <property name="tabChangesFocus">
+            <item row="2" column="1">
+             <widget class="QSpinBox" name="ngram_0">
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="wrapping">
+               <bool>false</bool>
+              </property>
+              <property name="frame">
                <bool>true</bool>
               </property>
-              <property name="documentTitle">
-               <string/>
-              </property>
-              <property name="placeholderText">
-               <string>차트에서 숨길 단어를 쉼표와 줄바꿈으로 구분해서 입력하세요.</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QSpinBox" name="topnCount">
               <property name="alignment">
                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
@@ -463,139 +522,38 @@ font-weight: bold;</string>
                <enum>QAbstractSpinBox::ButtonSymbols::PlusMinus</enum>
               </property>
               <property name="minimum">
-               <number>10</number>
+               <number>1</number>
               </property>
               <property name="maximum">
-               <number>100</number>
-              </property>
-              <property name="singleStep">
                <number>5</number>
               </property>
               <property name="value">
-               <number>40</number>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="Label_3">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;노드개수는 표시할 단어의 개수입니다.&lt;/p&gt;&lt;p&gt;많을수록 차트가 복잡하여 보기가 어려워집니다.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="whatsThis">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;노드 개수는 표시할 단어의 개수입니다. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>노드개수 :</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="designBox">
-           <property name="title">
-            <string>디자인 옵션</string>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_2">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>폰트 설정 :</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="bg">
-              <property name="text">
-               <string>차트 배경 색상 :</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QFontComboBox" name="fontComboBox">
-              <property name="maximumSize">
-               <size>
-                <width>150</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>300</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>글자 색상 :</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QComboBox" name="comboBox">
-              <item>
-               <property name="text">
-                <string>화이트</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>다크</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QPushButton" name="bgcolorPicker">
-              <property name="text">
-               <string>색상 선택</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLabel" name="sampleText">
-              <property name="styleSheet">
-               <string notr="true">border-color: rgb(255, 255, 255);
-background-color: rgb(255, 255, 255);</string>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Shape::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Shadow::Plain</enum>
-              </property>
-              <property name="lineWidth">
                <number>1</number>
               </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="3">
+             <widget class="QCheckBox" name="NLPcheck">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;체언 분리, 오탈자 교정 등 자연어 처리를 합니다. &lt;/p&gt;&lt;p&gt;시간이 오래 걸릴 수 있습니다.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="text">
-               <string> 0</string>
+               <string>자연어 처리 (!)</string>
               </property>
              </widget>
             </item>
            </layout>
           </widget>
          </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_2">
+         <item row="2" column="0">
+          <widget class="QPushButton" name="resetOption">
+           <property name="styleSheet">
+            <string notr="true">background-color: #A4193D;
+color: #FFF;
+font-weight: bold;</string>
+           </property>
            <property name="text">
             <string>옵션 초기화</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_3">
-           <property name="text">
-            <string>옵션 적용</string>
            </property>
           </widget>
          </item>
@@ -605,7 +563,7 @@ background-color: rgb(255, 255, 255);</string>
      </item>
     </layout>
    </item>
-   <item row="0" column="1">
+   <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QTabWidget" name="Main">
@@ -680,6 +638,10 @@ color: rgb(255, 255, 255);</string>
          </item>
          <item>
           <widget class="QPushButton" name="saveStat">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(249, 87, 0);
+color: rgb(255, 255, 255);</string>
+           </property>
            <property name="text">
             <string>이미지로 저장하기</string>
            </property>
@@ -714,6 +676,10 @@ color: rgb(255, 255, 255);</string>
          </item>
          <item>
           <widget class="QPushButton" name="saveTf">
+           <property name="styleSheet">
+            <string notr="true">background-color: #178047;
+color: rgb(255, 255, 255);</string>
+           </property>
            <property name="text">
             <string>엑셀로 저장하기</string>
            </property>
@@ -742,6 +708,10 @@ color: rgb(255, 255, 255);</string>
          </item>
          <item>
           <widget class="QPushButton" name="saveWC">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(249, 87, 0);
+color: rgb(255, 255, 255);</string>
+           </property>
            <property name="text">
             <string>이미지로 저장하기</string>
            </property>
@@ -776,6 +746,10 @@ color: rgb(255, 255, 255);</string>
          </item>
          <item>
           <widget class="QPushButton" name="saveNetwork">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(249, 87, 0);
+color: rgb(255, 255, 255);</string>
+           </property>
            <property name="text">
             <string>이미지로 저장하기</string>
            </property>
@@ -798,18 +772,14 @@ color: rgb(255, 255, 255);</string>
  </customwidgets>
  <tabstops>
   <tabstop>topnCount</tabstop>
-  <tabstop>nnCount</tabstop>
-  <tabstop>nnCount_2</tabstop>
+  <tabstop>ngram_0</tabstop>
+  <tabstop>ngram_1</tabstop>
   <tabstop>stopwordsEdit</tabstop>
-  <tabstop>fontComboBox</tabstop>
-  <tabstop>comboBox</tabstop>
-  <tabstop>pushButton_2</tabstop>
-  <tabstop>pushButton_3</tabstop>
+  <tabstop>resetOption</tabstop>
   <tabstop>initTable</tabstop>
   <tabstop>saveStat</tabstop>
   <tabstop>category3</tabstop>
   <tabstop>resetFilter</tabstop>
-  <tabstop>applyFilter</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>Main</tabstop>
   <tabstop>startDate</tabstop>

@@ -39,7 +39,9 @@ python \src\main.py
 
 - pyinstaller 
 ```sh
-pyinstaller src/win.py -n "test_app" --noconsole --onefile --exclude PyQt5
+pyinstaller src/win.py -n "test_app" --noconsole --onefile --exclude PyQt5 --icon=src/public/Icon.png
+
+pyinstaller test_app.spec
 ```
 
 ### 6. ui 파일 빌드하기 
