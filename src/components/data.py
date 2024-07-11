@@ -57,15 +57,15 @@ class data():
         self.set_text_col()
 
     def set_date_col(self):
-        for col in self.df.columns:
-            if re.search(r'(일자)', col):
-                try:
+        try:
+            for col in self.df.columns:
+                if re.search(r'(일자)', col):
                     self.df[col] = pd.to_datetime(self.df[col])
                     self.cols['date'] = col
                     print(f"{col} : 일자열 설정 완료!")
                     break
-                except ValueError:
-                    print("데이터에 일자 형식의 열을 확인할 수 없습니다. 수동으로 지정해주세요.")
+        except ValueError:
+            print("데이터에 일자 형식의 열을 확인할 수 없습니다. 수동으로 지정해주세요.")
 
     def set_category_col(self):
         for col in self.df.columns:
