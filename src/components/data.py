@@ -1,23 +1,19 @@
-from numpy import vectorize
 import pandas as pd
 import re
-import sys
-from PySide6.QtCore import *
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox, QRadioButton
+from PySide6.QtCore import QUrl
+from PySide6.QtWidgets import *
 import plotly.graph_objects as go
-import plotly.io as pio
 import plotly.express as px
-from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
 from wordcloud import WordCloud
 
 
 class data():
-    def __init__(self, main) -> None:
+    def __init__(self) -> None:
         self.init_df()
 
     def init_df(self):
         self.df = pd.DataFrame()
+        self.fdf = pd.DataFrame()
         self.fileName = ''
         self.cols = dict(date='', text='', category1='',
                          category2='', category3='')
@@ -62,41 +58,45 @@ class data():
 
     def set_date_col(self):
         for col in self.df.columns:
-            try:
-                self.df[col] = pd.to_datetime(self.df[col])
-                self.cols['date'] = col
-                print(f"{col} : 일자열 설정 완료!")
-                break
-            except ValueError:
-                print(f"{col}은 날짜 타입이 아닙니다.")
+            if re.search(r'(일자)', col):
+                try:
+                    self.df[col] = pd.to_datetime(self.df[col])
+                    self.cols['date'] = col
+                    print(f"{col} : 일자열 설정 완료!")
+                    break
+                except ValueError:
+                    print("데이터에 일자 형식의 열을 확인할 수 없습니다. 수동으로 지정해주세요.")
 
     def set_category_col(self):
         for col in self.df.columns:
             if re.search(r'대', col):
                 self.cols['category1'] = col
+                print(f"{col} : category1 열 설정 완료!")
             elif re.search(r'중', col):
                 self.cols['category2'] = col
+                print(f"{col} : category2 열 설정 완료!")
             elif re.search(r'소', col):
                 self.cols['category3'] = col
 
     def set_text_col(self):
         for col in self.df.columns:
-            if re.search(r'(내용|메모)', col):
+            if re.search(r'(내용|메모|단어)', col):
                 self.cols['text'] = col
+                print(f"{col} : 문자열 설정 완료!")
                 break
             else:
                 self.cols['text'] = ''
-        print(self.cols['text'])
+                print("데이터에 일자 형식의 열을 확인할 수 없습니다. 수동으로 지정해주세요.")
 
     # todo : 나중에 세팅 값에서 받아올수 있도록 하기
     def set_col_manual(self, config: dict):
-        column_config = config['column_config']
+        configs = config['column_config']
         rm_na = config['rm_na']
         rm_duplicate = config['rm_duplicate']
 
-        for key in column_config:
-            if column_config[key].strip() != '' and column_config[key] != '미설정':
-                self.cols[key] = column_config[key]
+        for key in configs:
+            if configs[key].strip() != '' and configs[key] != '미설정':
+                self.cols[key] = configs[key]
             else:
                 self.cols[key] = ''
 
@@ -107,8 +107,7 @@ class data():
             df = df.dropna(how='all')
         if rm_duplicate:
             df = df.drop_duplicates()
-        self.fdf = df
-
+        setattr(self, 'fdf', df)
         print('수동으로 설정함')
 
     def set_vectorizer(self, ngram: tuple[float, float] = (2, 2), topn: int = 40):
@@ -117,7 +116,7 @@ class data():
             return self.vectorizer
         else:
             print("vectorizer가 없어서 생성합니다.")
-            df = self.get_sdf()
+            df = self.get_sdf().copy()
             col = self.cols['text']
             df = df[col]
 
@@ -134,7 +133,7 @@ class data():
             print("tf가 없어서 생성합니다.")
             vectorizer = self.set_vectorizer(
                 topn=topn, ngram=ngram)
-            df = self.get_sdf()
+            df = self.get_sdf().copy()
             col = self.cols['text']
             df = df[col]
             X = vectorizer.fit_transform(df)
@@ -145,7 +144,7 @@ class data():
 
         if stopwords.strip() != '':
             term_freq_df['단어'] = term_freq_df['단어'].str.replace(
-                to_regex(stopwords), '', regex=True)
+                self._to_regex(stopwords), '', regex=True)
         self.tf = term_freq_df
 
         return self.tf
@@ -163,13 +162,14 @@ class data():
                                 prefer_horizontal=1,
                                 background_color=background_color,
                                 mode="RGBA",
-                                font_step=0.1,
+                                font_step=1,
                                 colormap=colormap,
                                 max_words=100,
                                 max_font_size=100)
             return self.wc
 
     def set_network(self, ngram: tuple[float, float] = (2, 2), topn: int = 40):
+        import os
         if hasattr(self, 'network'):
             return self.network
         else:
@@ -185,7 +185,7 @@ class data():
         vectorizer = self.set_vectorizer(topn=topn, ngram=ngram)
         df = self.get_sdf().copy()
         col = self.cols['text']
-        data = df[col].apply(clean_text_for_cp949)
+        data = df[col].apply(self._clean_text_for_cp949)
         X = vectorizer.fit_transform(data)
 
         print("2---")
@@ -194,7 +194,7 @@ class data():
 
         G = nx.from_numpy_array(adjacency_matrix)
         nt = Network(width="100%", height="500px",
-                     notebook=False, cdn_resources='local')
+                     notebook=False, cdn_resources='in_line')
         print("3---")
         nt.from_nx(G)
         print("4---")
@@ -213,7 +213,7 @@ class data():
         N.sort_index(inplace=True)
         for n, i in enumerate(N['font']):
             i['size'] = round(N['size'][n], 1) + 10
-            i['face'] = 'Gong gothic'
+            # i['face'] = 'Gong gothic'
 
         nt.nodes = N.to_dict(orient='records')
         # 엣지수정
@@ -221,21 +221,22 @@ class data():
         E = pd.DataFrame(nt.edges)
         E['width'] = scaler.fit_transform(E[['width']])*20
         nt.edges = E.to_dict(orient='records')
-        nt.generate_html()
-        nt.html.replace("width: 800px;", "width: 100%;")
-        nt.html.replace('style="width: 100%"',
-                        'style="width: 100%; height: 100%;"')
-        #> text 용 
-        nt.html = '<script charset="utf-8" src="C:\\Users\\Administrator\\bootstrap.bundle.min.js"></script>' + nt.html
-        nt.html = '<script charset="utf-8" src="C:\\Users\\Administrator\\vis-network.min.js"></script>' + nt.html
-        nt.html = '<link rel="stylesheet" href="C:\\Users\\Administrator\\vis-network.min.css">' + nt.html
-        nt.html = '<link rel="stylesheet" href="C:\\Users\\Administrator\\bootstrap.min.css">' + nt.html
-        self.network = nt.html
-        nt.write_html('index.html')
-        return self.network
+        if not os.path.exists(r"dash_chart"):
+            os.makedirs(r"dash_chart")
+        network = nt.generate_html(name=r'dash_chart\network.html')
+        network = re.sub('style="width: 100%"',
+                         'style="width: 100%; height: 100%;"', network)
+        network = re.sub('height: 500px;',
+                         'height: 100%;', network)
+        self.network = network
+        with open(r'dash_chart\network.html', 'w', encoding='utf-8') as file:
+            file.write(network)
+        html_path = os.path.realpath(r'dash_chart\network.html')
+        html_path = QUrl.fromLocalFile(html_path)
+        return html_path
 
     def set_network_option(self, solver: str = 'hierarchicalRepulsion'):
-        option = f""" 
+        option = f"""
             const options = {{
             "nodes": {{
                 "borderWidth": 3,
@@ -263,7 +264,6 @@ class data():
                 "maxVelocity": 30,
                 "minVelocity": 0.75,
                 "solver": "{solver}",
-                
                 "{solver}": {{
                 "centralGravity": 0,
                 "nodeDistance": 100,
@@ -274,69 +274,39 @@ class data():
             }}"""
         return option
 
+    def _clean_text_for_cp949(self, text):
+        return text.encode('cp949', errors='replace').decode('cp949')
 
-class PandasModel(QAbstractTableModel):
-    """A model to interface a Qt view with pandas dataframe """
+    def _to_regex(self, text: str):
+        import re
+        pattern = re.sub(r'\s*[,\n]\s*', '|', text)
+        pattern = re.sub(r'\|+', '|', pattern)
+        pattern = pattern.strip('|')
+        return pattern
 
-    def __init__(self, dataframe: pd.DataFrame, parent=None):
-        QAbstractTableModel.__init__(self, parent)
-        self._dataframe = dataframe
+    def apply_filter(self, config: dict):
+        df = self.get_sdf()
+        cols = self.cols
 
-    def rowCount(self, parent=QModelIndex()) -> int:
-        """ Override method from QAbstractTableModel
+        if config['startDate'] != '' and config['endDate'] != '':
+            df = df[df[cols['date']].dt.date.between(
+                pd.to_datetime(config['startDate']).date(),
+                pd.to_datetime(config['endDate']).date())]
 
-        Return row count of the pandas DataFrame
-        """
-        if parent == QModelIndex():
-            return len(self._dataframe)
+        if config['inText'] != '':
+            df = df[df[cols['text']].str.contains(
+                self._to_regex(config['inText']), case=False, na=False)]
+        if config['exText'] != '':
+            df = df[~df[cols['text']].str.contains(
+                self._to_regex(config['exText']), case=False, na=False)]
 
-        return 0
+        if config['category1'] != '' and config['category1'] != '전체':
+            df = df[df[cols['category1']] == config['category1']]
+        if config['category2'] != '' and config['category2'] != '전체':
+            df = df[df[cols['category2']] == config['category2']]
+        if config['category3'] != '' and config['category3'] != '전체':
+            df = df[df[cols['category3']] == config['category3']]
 
-    def columnCount(self, parent=QModelIndex()) -> int:
-        """Override method from QAbstractTableModel
+        self.set_sdf(df)
 
-        Return column count of the pandas DataFrame
-        """
-        if parent == QModelIndex():
-            return len(self._dataframe.columns)
-        return 0
-
-    def data(self, index: QModelIndex, role=Qt.ItemDataRole):
-        """Override method from QAbstractTableModel
-
-        Return data cell from the pandas DataFrame
-        """
-        if not index.isValid():
-            return None
-
-        if role == Qt.DisplayRole:
-            return str(self._dataframe.iloc[index.row(), index.column()])
-
-        return None
-
-    def headerData(
-        self, section: int, orientation: Qt.Orientation, role: Qt.ItemDataRole
-    ):
-        """Override method from QAbstractTableModel
-
-        Return dataframe index as vertical header data and columns as horizontal header data.
-        """
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Horizontal:
-                return str(self._dataframe.columns[section])
-
-            if orientation == Qt.Vertical:
-                return str(self._dataframe.index[section])
-
-        return None
-
-
-def to_regex(text: str):
-    pattern = re.sub(r'\s*[,\n]\s*', '|', text)
-    pattern = re.sub(r'\|+', '|', pattern)
-    pattern = pattern.strip('|')
-    return pattern
-
-
-def clean_text_for_cp949(text):
-    return text.encode('cp949', errors='replace').decode('cp949')
+        return self.sdf
