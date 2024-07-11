@@ -71,6 +71,13 @@ class Ui_Dictionary(object):
 
         self.groupBox_2 = QGroupBox(Dictionary)
         self.groupBox_2.setObjectName(u"groupBox_2")
+        self.horizontalLayout_2 = QHBoxLayout(self.groupBox_2)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.label_4 = QLabel(self.groupBox_2)
+        self.label_4.setObjectName(u"label_4")
+
+        self.horizontalLayout_2.addWidget(self.label_4)
+
 
         self.gridLayout.addWidget(self.groupBox_2, 1, 0, 1, 1)
 
@@ -192,6 +199,7 @@ class Ui_Dictionary(object):
         self.checkBox_4.setText(QCoreApplication.translate("Dictionary", u"\uac1c\uc778\uc815\ubcf4 \uc81c\uac70", None))
         self.checkBox_5.setText(QCoreApplication.translate("Dictionary", u"\uad6d\ubbfc\uc2e0\ubb38\uace0, \uc548\uc804\uc2e0\ubb38\uace0 \uc790\ub3d9 \uc785\ub825 \ubb38\uc790 \uc81c\uac70", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("Dictionary", u"GroupBox", None))
+        self.label_4.setText(QCoreApplication.translate("Dictionary", u"\uc5ec\uae30\ub294 \ub9cc\ub4dc\ub294 \uc911\uc785\ub2c8\ub2e4.", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("Dictionary", u"\uc124\uc815", None))
         self.pushButton.setText(QCoreApplication.translate("Dictionary", u"\uc124\uc815 \ub0b4\ubcf4\ub0b4\uae30", None))
         self.pushButton_2.setText(QCoreApplication.translate("Dictionary", u"\uc124\uc815 \ubd88\ub7ec\uc624\uae30", None))

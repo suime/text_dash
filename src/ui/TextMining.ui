@@ -130,7 +130,7 @@
                  <date>
                   <year>9994</year>
                   <month>1</month>
-                  <day>5</day>
+                  <day>6</day>
                  </date>
                 </property>
                 <property name="calendarPopup">
@@ -570,8 +570,17 @@ font-weight: bold;</string>
        <property name="styleSheet">
         <string notr="true">background-color: rgb(255, 255, 255);</string>
        </property>
+       <property name="tabShape">
+        <enum>QTabWidget::TabShape::Rounded</enum>
+       </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>4</number>
+       </property>
+       <property name="documentMode">
+        <bool>false</bool>
+       </property>
+       <property name="movable">
+        <bool>true</bool>
        </property>
        <widget class="QWidget" name="datatab">
         <attribute name="title">
@@ -590,11 +599,15 @@ font-weight: bold;</string>
          <item>
           <widget class="QPushButton" name="initDf">
            <property name="styleSheet">
-            <string notr="true">background-color: rgb(64, 64, 64);
-color: rgb(255, 255, 255);</string>
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
            </property>
            <property name="text">
-            <string>생성하기</string>
+            <string>표 확인하기</string>
            </property>
           </widget>
          </item>
@@ -602,7 +615,11 @@ color: rgb(255, 255, 255);</string>
           <widget class="QPushButton" name="saveData">
            <property name="styleSheet">
             <string notr="true">background-color: #178047;
-color: rgb(255, 255, 255);</string>
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
            </property>
            <property name="text">
             <string>엑셀로 저장하기</string>
@@ -628,8 +645,12 @@ color: rgb(255, 255, 255);</string>
          <item>
           <widget class="QPushButton" name="initTable">
            <property name="styleSheet">
-            <string notr="true">background-color: rgb(64, 64, 64);
-color: rgb(255, 255, 255);</string>
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
            </property>
            <property name="text">
             <string>통계표 생성하기</string>
@@ -639,11 +660,15 @@ color: rgb(255, 255, 255);</string>
          <item>
           <widget class="QPushButton" name="saveStat">
            <property name="styleSheet">
-            <string notr="true">background-color: rgb(249, 87, 0);
-color: rgb(255, 255, 255);</string>
+            <string notr="true">background-color: #178047;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
            </property>
            <property name="text">
-            <string>이미지로 저장하기</string>
+            <string>엑셀로 저장하기</string>
            </property>
           </widget>
          </item>
@@ -666,8 +691,12 @@ color: rgb(255, 255, 255);</string>
          <item>
           <widget class="QPushButton" name="initTF">
            <property name="styleSheet">
-            <string notr="true">background-color: rgb(64, 64, 64);
-color: rgb(255, 255, 255);</string>
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
            </property>
            <property name="text">
             <string>단어 빈도표 생성하기</string>
@@ -678,7 +707,11 @@ color: rgb(255, 255, 255);</string>
           <widget class="QPushButton" name="saveTf">
            <property name="styleSheet">
             <string notr="true">background-color: #178047;
-color: rgb(255, 255, 255);</string>
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
            </property>
            <property name="text">
             <string>엑셀로 저장하기</string>
@@ -698,8 +731,12 @@ color: rgb(255, 255, 255);</string>
          <item>
           <widget class="QPushButton" name="initWC">
            <property name="styleSheet">
-            <string notr="true">background-color: rgb(64, 64, 64);
-color: rgb(255, 255, 255);</string>
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
            </property>
            <property name="text">
             <string>워드클라우드 생성하기</string>
@@ -710,7 +747,11 @@ color: rgb(255, 255, 255);</string>
           <widget class="QPushButton" name="saveWC">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(249, 87, 0);
-color: rgb(255, 255, 255);</string>
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
            </property>
            <property name="text">
             <string>이미지로 저장하기</string>
@@ -736,8 +777,12 @@ color: rgb(255, 255, 255);</string>
          <item>
           <widget class="QPushButton" name="initNetwork">
            <property name="styleSheet">
-            <string notr="true">background-color: rgb(64, 64, 64);
-color: rgb(255, 255, 255);</string>
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
            </property>
            <property name="text">
             <string>네트워크 차트 생성하기</string>
@@ -748,7 +793,11 @@ color: rgb(255, 255, 255);</string>
           <widget class="QPushButton" name="saveNetwork">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(249, 87, 0);
-color: rgb(255, 255, 255);</string>
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
            </property>
            <property name="text">
             <string>이미지로 저장하기</string>

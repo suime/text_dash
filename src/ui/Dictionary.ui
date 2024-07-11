@@ -98,6 +98,15 @@
        <property name="title">
         <string>GroupBox</string>
        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>여기는 만드는 중입니다.</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item row="2" column="0">

@@ -24,7 +24,7 @@ class Ui_FileInput(object):
     def setupUi(self, FileInput):
         if not FileInput.objectName():
             FileInput.setObjectName(u"FileInput")
-        FileInput.resize(847, 460)
+        FileInput.resize(847, 502)
         self.gridLayout = QGridLayout(FileInput)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -64,7 +64,13 @@ class Ui_FileInput(object):
         self.fileBtn.setObjectName(u"fileBtn")
         self.fileBtn.setMinimumSize(QSize(0, 60))
         self.fileBtn.setAutoFillBackground(False)
-        self.fileBtn.setStyleSheet(u"")
+        self.fileBtn.setStyleSheet(u"font-size: 15px;\n"
+"font-weight: 600;\n"
+"border-radius: 4px;\n"
+"border-width: 0;\n"
+"background-color: #242a35;\n"
+"color: white;\n"
+"border: solid 1px #e8e8e82d;")
         icon = QIcon(QIcon.fromTheme(QIcon.ThemeIcon.FolderVisiting))
         self.fileBtn.setIcon(icon)
 
@@ -203,6 +209,13 @@ class Ui_FileInput(object):
         self.setCols = QPushButton(self.groupBox)
         self.setCols.setObjectName(u"setCols")
         self.setCols.setMinimumSize(QSize(0, 50))
+        self.setCols.setStyleSheet(u"font-size: 15px;\n"
+"font-weight: 600;\n"
+"border-radius: 4px;\n"
+"border-width: 0;\n"
+"background-color: #21dc62;\n"
+"color: white;\n"
+"border: solid 1px #e8e8e82d;")
 
         self.verticalLayout.addWidget(self.setCols)
 
@@ -228,7 +241,8 @@ class Ui_FileInput(object):
         FileInput.setWindowTitle(QCoreApplication.translate("FileInput", u"Form", None))
         self.groupBox.setTitle("")
         self.label.setText(QCoreApplication.translate("FileInput", u"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; font-weight:700;\">\ud14d\uc2a4\ud2b8 \ub370\uc774\ud130 \ubd84\uc11d\uae30</span><span style=\" font-size:12pt; vertical-align:sub;\">(24.07)</span></p></body></html>", None))
-        self.fileBtn.setText(QCoreApplication.translate("FileInput", u"\ud14d\uc2a4\ud2b8 \ud30c\uc77c \ubd88\ub7ec\uc624\uae30 (ctrl + o)", None))
+        self.fileBtn.setText(QCoreApplication.translate("FileInput", u"\ud14d\uc2a4\ud2b8 \ud30c\uc77c \ubd88\ub7ec\uc624\uae30 (Ctrl + O)\n"
+".xlsx, .xls, .csv", None))
 #if QT_CONFIG(shortcut)
         self.fileBtn.setShortcut(QCoreApplication.translate("FileInput", u"Ctrl+O", None))
 #endif // QT_CONFIG(shortcut)

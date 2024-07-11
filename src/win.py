@@ -178,9 +178,7 @@ class TextMiningTab(QWidget):
 
         # ^ 통계표 차트 생성
         self.ui.initTable.clicked.connect(lambda: self.init_just_table(data))
-
-        # ^ 통계표 차트 저장
-        self.ui.saveStat.clicked.connect(lambda: to_image(self.ui.tablePlot))
+        self.ui.saveStat.clicked.connect(lambda: to_excel(self.df_grouped))
 
         # ^ tf 생성
         self.ui.initTF.clicked.connect(lambda: self.init_TF(data))
@@ -211,9 +209,9 @@ class TextMiningTab(QWidget):
         view = self.ui.tablePlot
         df = data.get_sdf()
         cols = list(data.cols.values())
-        df_grouped = df.groupby([cols[2], cols[3], cols[4]]).agg(
+        self.df_grouped = df.groupby([cols[2], cols[3], cols[4]]).agg(
             건수=(cols[1], 'count')).reset_index()
-        self.fig_stat = get_table_plot(df_grouped)
+        self.fig_stat = get_table_plot(self.df_grouped)
         html_stat = set_plot(self.fig_stat, 'stat')
         view.setUrl(html_stat)
 
