@@ -26,7 +26,7 @@ class Ui_TextMining(object):
     def setupUi(self, TextMining):
         if not TextMining.objectName():
             TextMining.setObjectName(u"TextMining")
-        TextMining.resize(912, 591)
+        TextMining.resize(939, 566)
         self.horizontalLayout = QHBoxLayout(TextMining)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -75,7 +75,7 @@ class Ui_TextMining(object):
         self.startDate.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.startDate.setProperty("showGroupSeparator", True)
         self.startDate.setDateTime(QDateTime(QDate(2024, 7, 1), QTime(9, 0, 0)))
-        self.startDate.setMaximumDate(QDate(9994, 1, 6))
+        self.startDate.setMaximumDate(QDate(9994, 1, 7))
         self.startDate.setCalendarPopup(True)
         self.startDate.setTimeSpec(Qt.TimeSpec.LocalTime)
 
@@ -491,12 +491,59 @@ class Ui_TextMining(object):
         self.verticalLayout_9.addWidget(self.saveNetwork)
 
         self.Main.addTab(self.networkTab, "")
+        self.tab = QWidget()
+        self.tab.setObjectName(u"tab")
+        self.verticalLayout_12 = QVBoxLayout(self.tab)
+        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
+        self.groupBox_2 = QGroupBox(self.tab)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.groupBox_2.setMinimumSize(QSize(0, 100))
+        self.groupBox_2.setMaximumSize(QSize(16777215, 90))
+        self.verticalLayout_4 = QVBoxLayout(self.groupBox_2)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.label_4 = QLabel(self.groupBox_2)
+        self.label_4.setObjectName(u"label_4")
+
+        self.verticalLayout_4.addWidget(self.label_4)
+
+
+        self.verticalLayout_12.addWidget(self.groupBox_2)
+
+        self.webEngineView = QWebEngineView(self.tab)
+        self.webEngineView.setObjectName(u"webEngineView")
+        self.webEngineView.setStyleSheet(u"border: solid 1px #e8e8e82d;")
+        self.webEngineView.setUrl(QUrl(u"about:blank"))
+
+        self.verticalLayout_12.addWidget(self.webEngineView)
+
+        self.pushButton_3 = QPushButton(self.tab)
+        self.pushButton_3.setObjectName(u"pushButton_3")
+
+        self.verticalLayout_12.addWidget(self.pushButton_3)
+
+        self.horizontalLayout_3 = QHBoxLayout()
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.pushButton_2 = QPushButton(self.tab)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+
+        self.horizontalLayout_3.addWidget(self.pushButton_2)
+
+        self.pushButton = QPushButton(self.tab)
+        self.pushButton.setObjectName(u"pushButton")
+
+        self.horizontalLayout_3.addWidget(self.pushButton)
+
+
+        self.verticalLayout_12.addLayout(self.horizontalLayout_3)
+
+        self.Main.addTab(self.tab, "")
 
         self.verticalLayout_2.addWidget(self.Main)
 
 
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
+        self.horizontalLayout.setStretch(1, 1)
         QWidget.setTabOrder(self.topnCount, self.ngram_0)
         QWidget.setTabOrder(self.ngram_0, self.ngram_1)
         QWidget.setTabOrder(self.ngram_1, self.stopwordsEdit)
@@ -523,7 +570,7 @@ class Ui_TextMining(object):
         self.retranslateUi(TextMining)
 
         self.tabWidget.setCurrentIndex(0)
-        self.Main.setCurrentIndex(4)
+        self.Main.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(TextMining)
@@ -593,5 +640,11 @@ class Ui_TextMining(object):
         self.initNetwork.setText(QCoreApplication.translate("TextMining", u"\ub124\ud2b8\uc6cc\ud06c \ucc28\ud2b8 \uc0dd\uc131\ud558\uae30", None))
         self.saveNetwork.setText(QCoreApplication.translate("TextMining", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
         self.Main.setTabText(self.Main.indexOf(self.networkTab), QCoreApplication.translate("TextMining", u"\ub124\ud2b8\uc6cc\ud06c", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("TextMining", u"\ud14d\uc2a4\ud2b8 \uc8fc\uc81c \ubd84\ub958", None))
+        self.label_4.setText(QCoreApplication.translate("TextMining", u"<html><head/><body><p>Bertopic\uc744 \ud1b5\ud558\uc5ec \ud14d\uc2a4\ud2b8\uc758 \uc8fc\uc81c\ub97c \ucd94\ub860\ud558\uace0 \uc720\uc0ac\ud55c \uadf8\ub8f9\uc73c\ub85c \ubd84\ub958\ud569\ub2c8\ub2e4.</p><p>\uc790\uc138\ud55c \uc124\uba85\uc740 \ub3c4\uc6c0 \ud0ed\uc744 \ucc38\uc870\ud558\uc138\uc694. </p></body></html>", None))
+        self.pushButton_3.setText(QCoreApplication.translate("TextMining", u"\uc8fc\uc81c \ubd84\ub958\ud558\uae30", None))
+        self.pushButton_2.setText(QCoreApplication.translate("TextMining", u"\ucc28\ud2b8 \uc800\uc7a5\ud558\uae30", None))
+        self.pushButton.setText(QCoreApplication.translate("TextMining", u"\uc8fc\uc81c \ubd84\ub958\ub41c \uac83 \uc5d1\uc140\ub85c \uc800\uc7a5\ud558\uae30", None))
+        self.Main.setTabText(self.Main.indexOf(self.tab), QCoreApplication.translate("TextMining", u"(AI) \uc8fc\uc81c\ubd84\ub958", None))
     # retranslateUi
 

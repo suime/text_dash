@@ -200,18 +200,17 @@ class TextMiningTab(QWidget):
     def init_data_tab(self, data):
         view = self.ui.dfplot
         df = self.filter.apply_filter(self.ui, data)
-        fig = get_table_plot(df.head(100))
+        fig = get_table_plot(df.head(100), data.cols['text'])
         html = set_plot(fig, 'data')
         view.setUrl(html)
 
     def init_just_table(self, data):
-        self.filter.apply_filter(self.ui, data)
         view = self.ui.tablePlot
-        df = data.get_sdf()
+        df = self.filter.apply_filter(self.ui, data)
         cols = list(data.cols.values())
         self.df_grouped = df.groupby([cols[2], cols[3], cols[4]]).agg(
             건수=(cols[1], 'count')).reset_index()
-        self.fig_stat = get_table_plot(self.df_grouped)
+        self.fig_stat = get_table_plot(self.df_grouped, data.cols['text'])
         html_stat = set_plot(self.fig_stat, 'stat')
         view.setUrl(html_stat)
 
@@ -223,7 +222,7 @@ class TextMiningTab(QWidget):
         self.tf = data.set_tf(
             ngram=option['ngram'], topn=option['topn'],
             stopwords=option['stopword'])
-        self.fig_tf = get_table_plot(self.tf)
+        self.fig_tf = get_table_plot(self.tf, data.cols['text'])
         html_tf = set_plot(self.fig_tf, 'tf')
         view.setUrl(html_tf)
 
@@ -405,9 +404,6 @@ class optionComponent():
         options = dict(topn=topn, ngram=ngram, stopword=stopword, font=self.font,
                        color=self.color, bgcolor=self.bgcolor)
         return options
-
-
-
 
 # @ Main
 if __name__ == '__main__':

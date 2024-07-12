@@ -108,14 +108,14 @@ class data():
         if rm_duplicate:
             df = df.drop_duplicates()
         setattr(self, 'fdf', df)
-        print('수동으로 설정함')
+        print('df 설정함')
 
     def set_vectorizer(self, ngram: tuple[float, float] = (2, 2), topn: int = 40):
         from sklearn.feature_extraction.text import CountVectorizer
         if hasattr(self, 'vectorizer'):
             return self.vectorizer
         else:
-            print("vectorizer가 없어서 생성합니다.")
+            print("vectorizer 생성중 ...")
             df = self.get_sdf().copy()
             col = self.cols['text']
             df = df[col]
@@ -130,7 +130,7 @@ class data():
         if hasattr(self, 'tf'):
             return self.tf
         else:
-            print("tf가 없어서 생성합니다.")
+            print("tf 생성중 ...")
             vectorizer = self.set_vectorizer(
                 topn=topn, ngram=ngram)
             df = self.get_sdf().copy()
@@ -170,11 +170,6 @@ class data():
 
     def set_network(self, ngram: tuple[float, float] = (2, 2), topn: int = 40):
         import os
-        if hasattr(self, 'network'):
-            return self.network
-        else:
-            print("network가 없어서 생성합니다.")
-
         import numpy as np
         from pyvis.network import Network
         import networkx as nx
@@ -285,9 +280,12 @@ class data():
         return pattern
 
     def apply_filter(self, config: dict):
-        df = self.get_sdf()
-        cols = self.cols
+        if hasattr(self, 'fdf') :
+            df = self.fdf
+        else: 
+            df = self.df
 
+        cols = self.cols
         if config['startDate'] != '' and config['endDate'] != '':
             df = df[df[cols['date']].dt.date.between(
                 pd.to_datetime(config['startDate']).date(),

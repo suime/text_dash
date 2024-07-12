@@ -27,7 +27,7 @@ source bin/activate
 
 ### 3. 파이썬 요구 패키지 설치하기
 ```sh
-pip install pyside6 plotly pandas polars
+pip install pyside6 plotly pandas
 ```
 
 ### 4. main.py 실행하기

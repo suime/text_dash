@@ -34,7 +34,7 @@ def to_regex(text: str):
     return pattern
 
 
-def get_table_plot(df: pd.DataFrame):
+def get_table_plot(df: pd.DataFrame, text_col_name: str = '내용'):
     """
     Pandas DataFrame을 Plotly의 go.Table로 출력하는 함수
 
@@ -47,17 +47,19 @@ def get_table_plot(df: pd.DataFrame):
     # 데이터 프레임의 컬럼과 값을 리스트로 변환
     header = list(df.columns)
 
+    columnwidth = [400 if col == text_col_name else 40 for col in header]
     # Plotly의 go.Table 객체 생성
     table = go.Table(
+        columnwidth=columnwidth,
         header=dict(values=header, fill_color='grey',
                     align='center', line_color='darkslategray',
                     font=dict(color='white', size=13)),
         cells=dict(values=[df[col] for col in df.columns],
-                   fill_color='white',
+                   fill_color=[['white', 'lightgrey'] * (len(df) // 2 + 1)],
                    line_color='darkslategray',
                    align=['left', 'center'],
                    font=dict(color='black', size=12),
-                   format=[None if df[col].dtype == 'object' else ',.0f' for col in df.columns]))
+                   format=['' if df[col].dtype == 'object' else ',.0f' for col in df.columns]))
 
     # Figure 객체 생성
     fig = go.Figure(data=[table])
@@ -66,12 +68,15 @@ def get_table_plot(df: pd.DataFrame):
 
 def set_plot(fig: go.Figure,
              name: str = 'temp',
-             config: dict = {'bgcolor': 'white', 'font': '맑은 고딕'}
+             config: dict = {'bgcolor': 'rgba(0,0,0,0)', 'font': '맑은 고딕',
+                             'title': ''}
              ):
+
     # 기본 플로틀리 차트
-    fig.update_layout(plot_bgcolor='rgba(0,0,0,0)',
-                      paper_bgcolor='rgba(0,0,0,0)')
-    fig.update_layout(margin=dict(r=5, l=5, t=20, b=0))
+    fig.update_layout(plot_bgcolor=config['bgcolor'],
+                      paper_bgcolor=config['bgcolor'])
+    fig.update_layout(margin=dict(r=5, l=5, t=20, b=0),
+                      title=config['title'])
 
     html_config = dict(toImageButtonOptions={
         'format': 'png',  # one of png, svg, jpeg, webp
