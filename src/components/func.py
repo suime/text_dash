@@ -3,6 +3,8 @@
 여러 군데서 자주 쓰이는 각종 함수 집합입니다.
 """
 import os
+import json
+import re
 
 from PySide6.QtWidgets import (QWidget, QFileDialog)
 from PySide6.QtCore import QUrl
@@ -11,6 +13,49 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.offline as plt
+
+from . import func_network
+
+
+def app_start():
+    chart_dir = "dash_chart"
+    config_file = os.path.join(chart_dir, "config.json")
+    network_dir = os.path.join(chart_dir, ".network")
+    network_template = os.path.join(network_dir, "template.html")
+
+    # Create directory if it doesn't exist
+    if not os.path.exists(chart_dir):
+        os.makedirs(chart_dir)
+
+    if not os.path.exists(network_dir):
+        os.makedirs(network_dir)
+
+    # Create default config file if it doesn't exist
+    if not os.path.exists(config_file):
+        default_config = {
+            "bgcolor": "rgba(0,0,0,0)",
+            "font": "맑은 고딕",
+            "title": ""
+        }
+        with open(config_file, 'w', encoding='utf-8') as f:
+            json.dump(default_config, f, ensure_ascii=False, indent=4)
+
+    if not os.path.exists(network_template):
+        template_content = func_network._get_network_template()
+        with open(network_template, 'w', encoding='utf-8') as f:
+            f.write(template_content)
+
+    # Copy contents of public folder to network_dir if network_dir is empty
+    lib_dir = os.path.join(network_dir, "lib")
+
+    if not os.path.exists(lib_dir):
+        os.makedirs(lib_dir)
+
+    # Read the config file
+    with open(config_file, 'r', encoding='utf-8') as f:
+        config = json.load(f)
+
+    return config
 
 
 def read_df(fileName: str):
@@ -27,7 +72,7 @@ def read_df(fileName: str):
 
 
 def to_regex(text: str):
-    import re
+    text = text.strip()
     pattern = re.sub(r'\s*[,\n]\s*', '|', text)
     pattern = re.sub(r'\|+', '|', pattern)
     pattern = pattern.strip('|')

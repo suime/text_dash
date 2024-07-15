@@ -6,6 +6,8 @@ import plotly.graph_objects as go
 import plotly.express as px
 from wordcloud import WordCloud
 
+from kiwipiepy import Kiwi
+
 
 class data():
     def __init__(self) -> None:
@@ -26,13 +28,9 @@ class data():
 
     def set_sdf(self, df):
         self.sdf = df
-        try:
-            del self.vectorizer
-            del self.tf
-            del self.wc
-            del self.network
-        except Exception:
-            pass
+        for attr in ['vectorizer', 'tf', 'wc', 'network']:
+            if hasattr(self, attr):
+                delattr(self, attr)
 
     def get_sdf(self):
         if hasattr(self, 'sdf'):
@@ -42,11 +40,14 @@ class data():
 
     def get_col(self):
         cols = self.df.columns.to_list()
+        cols.sort()
         cols.insert(0, "미설정")
         return cols
 
     def get_unique_value(self, col, all: bool = True):
         result = list(self.df[col].unique())
+        result = [str(x) for x in result]  # Convert all elements to strings
+        result.sort()
         if all:
             result.insert(0, "전체")
         return result
@@ -88,7 +89,6 @@ class data():
                 self.cols['text'] = ''
                 print("데이터에 일자 형식의 열을 확인할 수 없습니다. 수동으로 지정해주세요.")
 
-    # todo : 나중에 세팅 값에서 받아올수 있도록 하기
     def set_col_manual(self, config: dict):
         configs = config['column_config']
         rm_na = config['rm_na']
@@ -143,30 +143,26 @@ class data():
                 .sort_values('빈도', ascending=False).head(topn)
 
         if stopwords.strip() != '':
-            term_freq_df['단어'] = term_freq_df['단어'].str.replace(
-                self._to_regex(stopwords), '', regex=True)
-        self.tf = term_freq_df
+            return term_freq_df[~term_freq_df['단어'].str.contains(
+                stopwords)]
 
-        return self.tf
+        return term_freq_df
 
     def set_wc(self,
                font_path='',
                colormap='Set2',
                background_color='#FFF'):
-        if hasattr(self, 'wc'):
-            return self.wc
-        else:
-            self.wc = WordCloud(font_path=font_path,
-                                width=800,
-                                height=600,
-                                prefer_horizontal=1,
-                                background_color=background_color,
-                                mode="RGBA",
-                                font_step=1,
-                                colormap=colormap,
-                                max_words=100,
-                                max_font_size=100)
-            return self.wc
+        self.wc = WordCloud(font_path=font_path,
+                            width=800,
+                            height=600,
+                            prefer_horizontal=1,
+                            background_color=background_color,
+                            mode="RGBA",
+                            font_step=1,
+                            colormap=colormap,
+                            max_words=100,
+                            max_font_size=100)
+        return self.wc
 
     def set_network(self, ngram: tuple[float, float] = (2, 2), topn: int = 40):
         import os
@@ -218,6 +214,8 @@ class data():
         nt.edges = E.to_dict(orient='records')
         if not os.path.exists(r"dash_chart"):
             os.makedirs(r"dash_chart")
+
+        nt.set_template("dash_chart/.network/template.html")
         network = nt.generate_html(name=r'dash_chart\network.html')
         network = re.sub('style="width: 100%"',
                          'style="width: 100%; height: 100%;"', network)
@@ -273,16 +271,16 @@ class data():
         return text.encode('cp949', errors='replace').decode('cp949')
 
     def _to_regex(self, text: str):
-        import re
+        text = text.strip()
         pattern = re.sub(r'\s*[,\n]\s*', '|', text)
         pattern = re.sub(r'\|+', '|', pattern)
         pattern = pattern.strip('|')
         return pattern
 
     def apply_filter(self, config: dict):
-        if hasattr(self, 'fdf') :
+        if hasattr(self, 'fdf'):
             df = self.fdf
-        else: 
+        else:
             df = self.df
 
         cols = self.cols
@@ -305,6 +303,29 @@ class data():
         if config['category3'] != '' and config['category3'] != '전체':
             df = df[df[cols['category3']] == config['category3']]
 
+        if config['nlp']:
+            df[cols['text']] = self.text_process(df[cols['text']], )
+            print(df[cols['text']].head(10))
         self.set_sdf(df)
-
         return self.sdf
+
+    def text_process(self, text: pd.Series, stopwords=''):
+        kiwi = Kiwi()
+
+        def _extract_noun(text, stopwords=stopwords):
+            result = kiwi.tokenize(text)
+            rl = []
+            for token in result:
+                if stopwords == '':
+                    if (token.len > 1) and (token.tag in ["NNG", "NNP"]):
+                        rl.append(token.form)
+                else:
+                    if (token.len > 1) and (token.tag in ["NNG", "NNP"]) \
+                       and (not re.search(stopwords, token.tag)):
+                        rl.append(token.form)
+
+            return " ".join(rl)
+
+        text = text.apply(_extract_noun, stopwords=stopwords)
+
+        return text

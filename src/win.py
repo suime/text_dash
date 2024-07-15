@@ -1,18 +1,11 @@
 import sys
 import os
+from time import sleep
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect,
-                            QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-                           QFont, QFontDatabase, QGradient, QIcon,
-                           QImage, QKeySequence, QLinearGradient, QPainter,
-                           QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QColorDialog, QFormLayout, QGridLayout,
-                               QGroupBox, QHeaderView, QLabel, QPushButton,
-                               QSizePolicy, QTableWidget, QTableWidgetItem, QVBoxLayout,
-                               QWidget, QMainWindow, QStatusBar, QTabWidget,
-                               QTableView, QFileDialog, QMessageBox, QDateEdit)
+from PySide6.QtCore import QDate
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import (QApplication, QColorDialog, QWidget, QMainWindow, QStatusBar, QTabWidget,
+                               QFileDialog, QMessageBox)
 
 import pandas as pd
 import plotly.graph_objects as go
@@ -20,7 +13,7 @@ from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 # ^ ---
-# ^ components func <= 함수같은거 있는거
+# ^ components func <- 함수같은거 있는거
 # ^ components elements <- 메뉴바, qwidget 같은거, (필터, 옵션 )
 
 # from components import elements, read_df, MenuBar, data
@@ -39,6 +32,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.init_ui()
+        app_start()
         print('앱시작 중입니다...')
 
     # @ init UI
@@ -47,7 +41,7 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(1000, 600)
         self.setMaximumSize(1920, 1280)
         self.setGeometry(100, 100, 1000, 700)
-        self.setMenuBar(MenuBar())
+        # self.setMenuBar(MenuBar())
         self.setStatusBar(QStatusBar())
 
     # ^ 변수 생성
@@ -106,7 +100,7 @@ class FileInputTab(QWidget):
         self.ui.setCols.clicked.connect(main.set_status)
         self.ui.setCols.clicked.connect(lambda: self.show_df(main.data.fdf))
         self.ui.setCols.clicked.connect(
-            lambda: main.tab3.init_filter(main.data))
+            lambda: main.tab3.filter.init_ui(main.tab3.ui, main.data))
 
     def selectFile(self, main):
         file, _ = QFileDialog.getOpenFileName(self, "텍스트 파일 열기",
@@ -170,7 +164,6 @@ class TextMiningTab(QWidget):
         self.ui.WClayout.addWidget(self.canvas)
         self.ax = self.figure.add_subplot(111)  # 초기 axes 생성
         self.ax.axis('off')
-        self.init_filter(data)
 
         # ^ 데이터프레임 표 생성
         self.ui.initDf.clicked.connect(lambda: self.init_data_tab(data))
@@ -193,7 +186,6 @@ class TextMiningTab(QWidget):
         self.ui.saveNetwork.clicked.connect(
             lambda: to_image(self.ui.networkPlot))
 
-    def init_filter(self, data):
         self.filter = filterComponent(self.ui, data)
         self.option = optionComponent(self.ui, data)
 
@@ -216,9 +208,8 @@ class TextMiningTab(QWidget):
 
     def init_TF(self, data):
         self.filter.apply_filter(self.ui, data)
-        option = self.option.get_option(self.ui)
         view = self.ui.TFplot
-
+        option = self.option.get_option(self.ui)
         self.tf = data.set_tf(
             ngram=option['ngram'], topn=option['topn'],
             stopwords=option['stopword'])
@@ -229,10 +220,9 @@ class TextMiningTab(QWidget):
     def init_WC(self, data):
         self.filter.apply_filter(self.ui, data)
         option = self.option.get_option(self.ui)
-        font = r"C:\Windows\Fonts\malgun.ttf"
         self.ax.clear()
         wc = data.set_wc(
-            font_path=font, background_color=option['bgcolor'])
+            font_path=option['font'], background_color=option['bgcolor'])
         self.tf = data.set_tf(ngram=option['ngram'], topn=option['topn'],
                               stopwords=option['stopword'])
         wc.generate_from_frequencies(
@@ -311,7 +301,8 @@ class filterComponent():
             if data.cols[category] != '':
                 ui_element.setDisabled(False)
                 ui_element.clear()
-                ui_element.addItems(data.get_unique_value(data.cols[category]))
+                unique_values = data.get_unique_value(data.cols[category])
+                ui_element.addItems(unique_values)
                 ui_element.setCurrentIndex(0)
             else:
                 ui_element.setDisabled(True)
@@ -343,10 +334,17 @@ class filterComponent():
         category2 = ui.category2.currentText()
         category3 = ui.category3.currentText()
 
+        nlp = ui.NLPcheck.isChecked()
+
+        topn = ui.topnCount.value()
+        ngram = tuple(sorted((ui.ngram_0.value(), ui.ngram_1.value())))
+        stopword = to_regex(ui.stopwordsEdit.toPlainText())
+
         result = dict(startDate=startDate, endDate=endDate,
                       inText=inText, exText=exText,
                       category1=category1, category2=category2,
-                      category3=category3)
+                      category3=category3,
+                      nlp=nlp, topn=topn, ngram=ngram, stopword=stopword)
         print(result)
         return result
 
@@ -355,44 +353,43 @@ class filterComponent():
 
 
 #
-class optionComponent():
+class optionComponent(QWidget):
     def __init__(self, ui, data) -> None:
-        self.init_ui(ui, data)
+        super().__init__()
         self.color = '#000'
         self.bgcolor = '#fff'
         self.font = r'C:\Windows\Fonts\malgun.ttf'
-
-    def init_ui(self, ui, data):
-        self.init_text_option(ui, data)
         self.init_design_option(ui)
 
-    def init_text_option(self, ui, data):
-        pass
-
     def init_design_option(self, ui):
-        self.fontPicker = FontSelector()
-        self.fontPicker.setMinimumWidth(150)
-        self.fontPicker.combo_box.setCurrentText('Malgun Gothic')
-        self.fontPicker.setSizePolicy(
-            QSizePolicy.Expanding,  QSizePolicy.Fixed)
-        ui.designBox.layout().addWidget(self.fontPicker, 0, 1)
+        if not hasattr(self, 'colorPicker_connected'):
+            ui.ChangeFont.clicked.connect(self.select_font)
+            ui.colorPicker.clicked.connect(
+                lambda: self.set_color(ui.colorPicker, 'color'))
+            ui.bgcolorPicker.clicked.connect(
+                lambda: self.set_color(ui.bgcolorPicker, 'bgcolor'))
+            self.colorPicker_connected = True
 
-        ui.colorPicker.clicked.connect(
-            lambda: self.set_color(ui.colorPicker, 'color'))
-        ui.bgcolorPicker.clicked.connect(
-            lambda: self.set_color(ui.bgcolorPicker, 'bgcolor'))
-        ui.colorPicker.clicked.connect(
-            lambda: self.change_color(ui.colorPicker, self.color))
-        ui.bgcolorPicker.clicked.connect(
-            lambda: self.change_color(ui.bgcolorPicker, self.bgcolor))
+    def select_font(self):
+        file, _ = QFileDialog.getOpenFileName(self, "폰트 파일 열기",
+                                              "", "폰트 파일 (*.ttf *.otf)")
+        print(f"폰트 : {file}")
+        if file:
+            if file is not None:
+                self.font = file
+            else:
+                QMessageBox.warning(self, "파일 열기", "파일을 읽을 수 없습니다.")
+        else:
+            self.font = r'C:\Windows\Fonts\malgun.ttf'
+            print(f"폰트 2 : {self.font}")
+        sleep(1)
+
 
     def set_color(self, widget: QWidget, obj: str):
         color = QColorDialog.getColor()
-        # setattr(self, obj, color.name())
-
-    def change_color(self, widget, color):
-        widget.setStyleSheet(f"background-color: {color};")
-        widget.setText(f"{color}")
+        widget.setText(f"{color.name()}")
+        widget.setStyleSheet(f"background-color: {color.name()};")
+        setattr(self, obj, color.name())
 
     def get_option(self, ui):
 
@@ -400,10 +397,10 @@ class optionComponent():
         ngram = tuple(sorted((ui.ngram_0.value(), ui.ngram_1.value())))
         stopword = to_regex(ui.stopwordsEdit.toPlainText())
 
-        # > 일단 폰트는 아직
         options = dict(topn=topn, ngram=ngram, stopword=stopword, font=self.font,
                        color=self.color, bgcolor=self.bgcolor)
         return options
+
 
 # @ Main
 if __name__ == '__main__':

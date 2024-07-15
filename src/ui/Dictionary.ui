@@ -27,7 +27,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0">
+    <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,1,0">
      <property name="sizeConstraint">
       <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
      </property>
@@ -52,22 +52,35 @@
         <string>자연어 처리 옵션</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="2" column="0">
-         <widget class="QCheckBox" name="checkBox_2">
+        <item row="4" column="0">
+         <widget class="QCheckBox" name="opt_personal">
           <property name="text">
-           <string>한글 이외 문자 제거 (영어, 한자 등)</string>
+           <string>개인정보 제거</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QCheckBox" name="checkBox_3">
+         <widget class="QCheckBox" name="opt_space">
           <property name="text">
            <string>띄어쓰기 교정</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="checkBox">
+        <item row="5" column="0">
+         <widget class="QCheckBox" name="opt_sinmungo">
+          <property name="text">
+           <string>국민신문고, 안전신문고 자동 입력 문자 제거</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="opt_special">
           <property name="text">
            <string>특수 문자, 기호 제거</string>
           </property>
@@ -77,22 +90,22 @@
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QCheckBox" name="checkBox_4">
+         <widget class="QCheckBox" name="opt_foriegn">
           <property name="text">
-           <string>개인정보 제거</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
+           <string>한글 이외 문자 제거 (영어, 한자 등)</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="QCheckBox" name="checkBox_5">
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="opt_num">
           <property name="text">
-           <string>국민신문고, 안전신문고 자동 입력 문자 제거</string>
+           <string>숫자 제거</string>
           </property>
           <property name="checked">
            <bool>true</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -111,6 +124,20 @@
         <string>AI 옵션</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pushButton_3">
+          <property name="text">
+           <string>모델 다운로드</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>최소 토픽 개수</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_4">
           <property name="maximumSize">
@@ -121,13 +148,6 @@
           </property>
           <property name="text">
            <string>임베딩 모델 위치</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>최소 토픽 개수</string>
           </property>
          </widget>
         </item>
@@ -150,19 +170,8 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="pushButton_3">
-          <property name="text">
-           <string>모델 다운로드</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="Line" name="line">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-         </widget>
+        <item row="1" column="0" colspan="2">
+         <widget class="QLineEdit" name="lineEdit_2"/>
         </item>
         <item row="1" column="2">
          <widget class="QToolButton" name="toolButton_2">
@@ -170,16 +179,6 @@
            <string>...</string>
           </property>
          </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="Line" name="line_2">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" colspan="2">
-         <widget class="QLineEdit" name="lineEdit_2"/>
         </item>
        </layout>
       </widget>
@@ -193,7 +192,7 @@
         </size>
        </property>
        <property name="title">
-        <string>ollama 설정</string>
+        <string>ollama AI 설정</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="1" column="1">
@@ -251,7 +250,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">

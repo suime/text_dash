@@ -50,7 +50,7 @@
       <enum>QTabWidget::TabShape::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="documentMode">
       <bool>false</bool>
@@ -128,7 +128,7 @@
                <date>
                 <year>9994</year>
                 <month>1</month>
-                <day>8</day>
+                <day>9</day>
                </date>
               </property>
               <property name="calendarPopup">
@@ -270,6 +270,11 @@
               <property name="placeholderText">
                <string>미설정</string>
               </property>
+              <item>
+               <property name="text">
+                <string>미설정</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item row="1" column="0">
@@ -330,29 +335,14 @@ font-weight: bold;</string>
           <string>디자인 옵션</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <item row="1" column="1">
-           <widget class="QPushButton" name="colorPicker">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(0, 0, 0);
-color: rgb(255, 255, 255);
-border-color: rgb(117, 117, 117);</string>
-            </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>#000000</string>
+             <string>폰트 설정 :</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QPushButton" name="bgcolorPicker">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);</string>
-            </property>
-            <property name="text">
-             <string>#ffffff</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
+          <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="minimumSize">
              <size>
@@ -371,17 +361,55 @@ border-color: rgb(117, 117, 117);</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="1">
+           <widget class="QPushButton" name="bgcolorPicker">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+            <property name="text">
+             <string>#ffffff</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
            <widget class="QLabel" name="bg">
             <property name="text">
              <string>차트 배경 색상 :</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_3">
+          <item row="2" column="1">
+           <widget class="QPushButton" name="colorPicker">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);
+border-color: rgb(117, 117, 117);</string>
+            </property>
             <property name="text">
-             <string>폰트 설정 :</string>
+             <string>#000000</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="comboBox">
+            <item>
+             <property name="text">
+              <string>기본</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>테마</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>폰트 변경</string>
             </property>
            </widget>
           </item>
@@ -402,34 +430,41 @@ border-color: rgb(117, 117, 117);</string>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
          </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="1" column="1">
-           <widget class="QRadioButton" name="radioButton_3">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
             <property name="text">
-             <string>RadioButton</string>
+             <string>차트 제목</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="radioButton_2">
+          <item>
+           <widget class="QLineEdit" name="lineEdit"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
             <property name="text">
-             <string>RadioButton</string>
+             <string>차트 소제목</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="radioButton">
-            <property name="text">
-             <string>RadioButton</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QDialogButtonBox" name="buttonBox">
-            <property name="standardButtons">
-             <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
-            </property>
-           </widget>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_2"/>
           </item>
          </layout>
         </widget>
@@ -457,15 +492,333 @@ font-weight: bold;</string>
        <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="tab">
+       <property name="documentMode">
+        <bool>false</bool>
+       </property>
+       <property name="movable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="tab1">
         <attribute name="title">
-         <string>Tab 1</string>
+         <string>분포_트리맵</string>
         </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QWebEngineView" name="webEngineView">
+           <property name="url">
+            <url>
+             <string>about:blank</string>
+            </url>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="initWC">
+           <property name="styleSheet">
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>차트 생성하기</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="saveWC">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(249, 87, 0);
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>이미지로 저장하기</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
-       <widget class="QWidget" name="tab_2">
+       <widget class="QWidget" name="tab2">
         <attribute name="title">
-         <string>Tab 2</string>
+         <string>분포_파이</string>
         </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <item>
+          <widget class="QWebEngineView" name="webEngineView_6">
+           <property name="url">
+            <url>
+             <string>about:blank</string>
+            </url>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="initWC_2">
+           <property name="styleSheet">
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>차트 생성하기</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="saveWC_2">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(249, 87, 0);
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>이미지로 저장하기</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab3">
+        <attribute name="title">
+         <string>분포_바</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_8">
+         <item>
+          <widget class="QWebEngineView" name="webEngineView_5">
+           <property name="url">
+            <url>
+             <string>about:blank</string>
+            </url>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="initWC_3">
+           <property name="styleSheet">
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>차트 생성하기</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="saveWC_3">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(249, 87, 0);
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>이미지로 저장하기</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab4">
+        <attribute name="title">
+         <string>시계열_라인</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_9">
+         <item>
+          <widget class="QWebEngineView" name="webEngineView_4">
+           <property name="url">
+            <url>
+             <string>about:blank</string>
+            </url>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="initWC_4">
+           <property name="styleSheet">
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>차트 생성하기</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="saveWC_4">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(249, 87, 0);
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>이미지로 저장하기</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab5">
+        <attribute name="title">
+         <string>시계열_바</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_11">
+         <item>
+          <widget class="QWebEngineView" name="webEngineView_3">
+           <property name="url">
+            <url>
+             <string>about:blank</string>
+            </url>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="initWC_5">
+           <property name="styleSheet">
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>차트 생성하기</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="saveWC_5">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(249, 87, 0);
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>이미지로 저장하기</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab6">
+        <attribute name="title">
+         <string>생키</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_12">
+         <item>
+          <widget class="QWebEngineView" name="webEngineView_2">
+           <property name="url">
+            <url>
+             <string>about:blank</string>
+            </url>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="initWC_6">
+           <property name="styleSheet">
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>차트 생성하기</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="saveWC_6">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(249, 87, 0);
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>이미지로 저장하기</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_stat">
+        <attribute name="title">
+         <string>통계</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_13">
+         <item>
+          <widget class="QWebEngineView" name="webEngineView_7">
+           <property name="url">
+            <url>
+             <string>about:blank</string>
+            </url>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="initWC_7">
+           <property name="styleSheet">
+            <string notr="true">background-color: #1e90ff;
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>차트 생성하기</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="saveWC_7">
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(249, 87, 0);
+height: 24px;
+border-radius: 0.5em;
+font-size: 13px;
+font-weight: bold;
+color: #ffffff;</string>
+           </property>
+           <property name="text">
+            <string>이미지로 저장하기</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </widget>
      </item>
@@ -473,6 +826,13 @@ font-weight: bold;</string>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
