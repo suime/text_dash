@@ -243,7 +243,7 @@ class TextMiningTab(QWidget):
         view.setUrl(self.network)
 
 
-# & tab4 딕셔너리
+# & tab4 딕셔너리asda
 class DictionaryTab(QWidget):
     def __init__(self) -> None:
         super().__init__()
@@ -381,7 +381,6 @@ class optionComponent(QWidget):
         else:
             self.font = r'C:\Windows\Fonts\malgun.ttf'
             print(f"폰트 : {self.font}")
-
 
     def set_color(self, widget: QWidget, obj: str):
         color = QColorDialog.getColor()

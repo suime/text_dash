@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 from wordcloud import WordCloud
 
-from kiwipiepy import Kiwi
+# from kiwipiepy import Kiwi
 
 
 class data():
@@ -312,7 +312,7 @@ class data():
         return self.sdf
 
     def text_process(self, text: pd.Series, stopwords=''):
-        kiwi = Kiwi(load_default_dict=True)
+        # kiwi = Kiwi(load_default_dict=True)
 
         # ^ 신문고 삭제
 
@@ -336,20 +336,13 @@ class data():
             return text
         text = text.apply(_del_sinmungo)
 
-        def _extract_noun(text, stopwords=stopwords, model=kiwi):
-            result = model.tokenize(text)
-            rl = []
-            for token in result:
-                if stopwords == '':
-                    if (token.len > 1) and (token.tag in ["NNG", "NNP"]):
-                        rl.append(token.form)
-                else:
-                    if (token.len > 1) and (token.tag in ["NNG", "NNP"]) \
-                       and (not re.search(stopwords, token.tag)):
-                        rl.append(token.form)
+        from mecab import MeCab
+        mecab = MeCab()
 
+        def _extract_noun(text, stopwords=stopwords, model=mecab):
+            rl = model.nouns(text)
             return " ".join(rl)
 
-        text = text.apply(_extract_noun, stopwords=stopwords, model=kiwi)
+        text = text.apply(_extract_noun, stopwords=stopwords, model=mecab)
 
         return text

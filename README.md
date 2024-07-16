@@ -39,7 +39,7 @@ python \src\main.py
 
 - pyinstaller 
 ```sh
-pyinstaller src/win.py -n "test_app" --noconsole --onefile --exclude PyQt5 --icon=src/public/Icon.png
+pyinstaller src/win.py -n "test_app" --noconsole --onefile --exclude PyQt5 --icon=src/public/icon.ico
 
 pyinstaller test_app.spec
 ```
