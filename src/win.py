@@ -373,7 +373,6 @@ class optionComponent(QWidget):
     def select_font(self):
         file, _ = QFileDialog.getOpenFileName(self, "폰트 파일 열기",
                                               "", "폰트 파일 (*.ttf *.otf)")
-        print(f"폰트 : {file}")
         if file:
             if file is not None:
                 self.font = file
@@ -381,8 +380,7 @@ class optionComponent(QWidget):
                 QMessageBox.warning(self, "파일 열기", "파일을 읽을 수 없습니다.")
         else:
             self.font = r'C:\Windows\Fonts\malgun.ttf'
-            print(f"폰트 2 : {self.font}")
-        sleep(1)
+            print(f"폰트 : {self.font}")
 
 
     def set_color(self, widget: QWidget, obj: str):
@@ -407,6 +405,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     main_window = MainWindow()
     main_window.setWindowTitle("텍스트 분석 대시 보드")
-    main_window.setWindowIcon(QIcon('src/public/icon.ico'))
+    main_window.setWindowIcon(QIcon('./src/public/icon.ico'))
     main_window.show()
     sys.exit(app.exec())

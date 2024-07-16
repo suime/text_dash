@@ -75,7 +75,7 @@ class Ui_TextMining(object):
         self.startDate.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.startDate.setProperty("showGroupSeparator", True)
         self.startDate.setDateTime(QDateTime(QDate(2024, 7, 1), QTime(9, 0, 0)))
-        self.startDate.setMaximumDate(QDate(9994, 1, 8))
+        self.startDate.setMaximumDate(QDate(9994, 1, 9))
         self.startDate.setCalendarPopup(True)
         self.startDate.setTimeSpec(Qt.TimeSpec.LocalTime)
 
@@ -574,7 +574,7 @@ class Ui_TextMining(object):
 
         self.retranslateUi(TextMining)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.Main.setCurrentIndex(0)
 
 

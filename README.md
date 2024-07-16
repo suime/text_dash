@@ -46,6 +46,7 @@ pyinstaller test_app.spec
 
 ### 6. ui 파일 빌드하기 
 ```sh
+pyside6-designer
 pyside6-uic src/ui/FileInput.ui -o src/ui/FileInput.py `
 pyside6-uic src/ui/TextMining.ui -o src/ui/TextMining.py ` 
 pyside6-uic src/ui/Chart.ui -o src/ui/Chart.py `

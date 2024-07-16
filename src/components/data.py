@@ -215,7 +215,7 @@ class data():
         if not os.path.exists(r"dash_chart"):
             os.makedirs(r"dash_chart")
 
-        nt.set_template("dash_chart/.network/template.html")
+        # nt.set_template("dash_chart/.network/template.html")
         network = nt.generate_html(name=r'dash_chart\network.html')
         network = re.sub('style="width: 100%"',
                          'style="width: 100%; height: 100%;"', network)
@@ -304,16 +304,40 @@ class data():
             df = df[df[cols['category3']] == config['category3']]
 
         if config['nlp']:
-            df[cols['text']] = self.text_process(df[cols['text']], )
-            print(df[cols['text']].head(10))
+            try:
+                df[cols['text']] = self.text_process(df[cols['text']])
+            except Exception as e:
+                print(f'자연어 처리에서 오류가 발생했습니다.\n {e}')
         self.set_sdf(df)
         return self.sdf
 
     def text_process(self, text: pd.Series, stopwords=''):
-        kiwi = Kiwi()
+        kiwi = Kiwi(load_default_dict=True)
 
-        def _extract_noun(text, stopwords=stopwords):
-            result = kiwi.tokenize(text)
+        # ^ 신문고 삭제
+
+        def _del_sinmungo(text):
+            patterns = [
+                '.*국민신문고 알림.*[민원 유입 경로]',
+                '.*제30조(벌칙)',
+                '안전신문고 신고파일.*',
+                '제\d*조',
+                '별표\s?\d*',
+                r'접기펴기 - 현재 축소됨',
+                r'시행령',
+                r'비밀보장',
+                r'아래 동영상 링크.*',
+                r'사진|동영상|촬영|파일|철저',
+                r'\[.*?\]',
+                r'[^\w\s]'
+            ]
+            for pattern in patterns:
+                text = re.sub(pattern, '', text)
+            return text
+        text = text.apply(_del_sinmungo)
+
+        def _extract_noun(text, stopwords=stopwords, model=kiwi):
+            result = model.tokenize(text)
             rl = []
             for token in result:
                 if stopwords == '':
@@ -326,6 +350,6 @@ class data():
 
             return " ".join(rl)
 
-        text = text.apply(_extract_noun, stopwords=stopwords)
+        text = text.apply(_extract_noun, stopwords=stopwords, model=kiwi)
 
         return text
