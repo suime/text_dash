@@ -8,13 +8,13 @@ a = Analysis(
     datas=[('./src/public/*', './src/public'),
            ('./win_env/Lib/site-packages/pyvis', './pyvis')
            ],
-    hiddenimports=['numpy', 'pandas', 'numpy.core._methods', 'numpy.lib.format'],
+    hiddenimports=['numpy', 'pandas', 'numpy.core._methods', 'numpy.lib.format', 'datetime'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     excludes=['PyQt5', 'tensorflow', 'torch', 'pyinstaller', 'pip', 'kaleido',
               'setuptools', 'PySide6.QtOpenGL', 'PySide6.QtDataVisualization', 
-              'jupyterlab_plotly', 'kiwipiepy', 'kiwipiepy_model'],
+              'jupyterlab_plotly'],
     noarchive=False,
     optimize=0,
 )

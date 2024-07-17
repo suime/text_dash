@@ -20,9 +20,9 @@ from matplotlib.figure import Figure
 from components import *
 
 # ^ UI components
-from ui.Chart import Ui_Chart
-from ui.TextMining import Ui_TextMining
 from ui.FileInput import Ui_FileInput
+from ui.Plot import Ui_Plot
+from ui.TextMining import Ui_TextMining
 from ui.Dictionary import Ui_Dictionary
 
 # Main window
@@ -52,25 +52,21 @@ class MainWindow(QMainWindow):
         self.main.setDocumentMode(True)
         self.setCentralWidget(self.main)
 
-    # ^ 탭 1: 파일 입력
-        tab1 = FileInputTab(main=self)
-        self.main.addTab(tab1, "파일 입력")
-
-    # ^ 탭 2: 탐색적 분석
-        # tab2 = ChartTab()
-        # self.main.addTab(tab2, "통계 차트 생성")
-
+    # ^ 탭 2: 플롯
+        self.tab2 = ChartTab(self.data)
     # ^ 탭 3: 텍스트 마이닝
         self.tab3 = TextMiningTab(self.data)
+    # ^ 탭 1: 파일 입력
+        self.tab1 = FileInputTab(main=self)
+
+        self.main.addTab(self.tab1, "파일 입력")
         self.main.addTab(self.tab3, "텍스트 마이닝")
+        self.main.addTab(self.tab2, "통계 분석")
+
 
     # ^ 탭 4: 사전
         tab4 = DictionaryTab()
         self.main.addTab(tab4, "텍스트 옵션")
-
-    # ^ 탭 6:
-        # tab6 = QTabWidget()
-        # self.main.addTab(tab6, "TEST")
 
         self.show()
 
@@ -101,6 +97,9 @@ class FileInputTab(QWidget):
         self.ui.setCols.clicked.connect(lambda: self.show_df(main.data.fdf))
         self.ui.setCols.clicked.connect(
             lambda: main.tab3.filter.init_ui(main.tab3.ui, main.data))
+        
+        self.ui.setCols.clicked.connect(lambda: main.tab2.reset_filter(main.data))
+        self.ui.setCols.clicked.connect(main.tab2.reset_option)
 
     def selectFile(self, main):
         file, _ = QFileDialog.getOpenFileName(self, "텍스트 파일 열기",
@@ -145,10 +144,140 @@ class FileInputTab(QWidget):
 
 
 class ChartTab(QWidget):
-    def __init__(self) -> None:
+    def __init__(self, data) -> None:
         super().__init__()
-        self.ui = Ui_Chart()
+        self.ui = Ui_Plot()
         self.ui.setupUi(self)
+        self.set_btn(data)
+
+        self._fonts = 'Malgun Gothic'
+        self._theme = 'base'
+        self._color = '#000000'
+        self._bgcolor = '#fff'
+
+    def set_btn(self, data):
+
+        self.ui.resetFilter.clicked.connect(lambda: self.reset_filter(data))
+        self.ui.resetOption.clicked.connect(self.reset_option)
+
+        self.ui.initTreemap.clicked.connect(lambda: self.set_treemap(data))
+        self.ui.initPie.clicked.connect(lambda: self.set_pie(data))
+        self.ui.initHbar.clicked.connect(lambda: self.set_Hbar(data))
+        # self.ui.initLine.clicked.connect(lambda: self.set_Line(data))
+        # self.ui.initBar.clicked.connect(lambda: self.set_Bar(data))
+        # self.ui.initSankey.clicked.connect(lambda: self.set_Sankey(data))
+        # self.ui.initStat.clicked.connect(lambda: self.set_Stat(data))
+
+    def reset_filter(self, data):
+        if data.cols['date'] != '':
+            self.ui.startDate.setDisabled(False)
+            self.ui.endDate.setDisabled(False)
+            min_date = data.df[data.cols['date']].min()
+            max_date = data.df[data.cols['date']].max()
+            self.ui.startDate.setDate(
+                QDate(min_date.year, min_date.month, min_date.day))
+            self.ui.endDate.setDate(
+                QDate(max_date.year, max_date.month, max_date.day))
+        else:
+            self.ui.startDate.setDisabled(True)
+            self.ui.endDate.setDisabled(True)
+
+        text_enabled = data.cols['text'] != ''
+        if text_enabled:
+            placeholder_text = "쉼표와 줄바꿈으로 구분하여 입력하세요."
+        else:
+            placeholder_text = "입력 탭에서 문자열을 설정하세요."
+        self.ui.inText.setDisabled(not text_enabled)
+        self.ui.inText.setPlaceholderText(placeholder_text)
+        self.ui.inText.clear()
+        self.ui.exText.setDisabled(not text_enabled)
+        self.ui.exText.setPlaceholderText(placeholder_text)
+        self.ui.exText.clear()
+
+        # * 카테고리열 설정
+        for category, ui_element in [
+            ('category1', self.ui.category1),
+            ('category2', self.ui.category2),
+            ('category3', self.ui.category3)
+        ]:
+            if data.cols[category] != '':
+                ui_element.setDisabled(False)
+                ui_element.clear()
+                unique_values = data.get_unique_value(data.cols[category])
+                unique_values.insert(1, '--제외--')
+                ui_element.addItems(unique_values)
+                ui_element.setCurrentIndex(0)
+            else:
+                ui_element.setDisabled(True)
+
+    def reset_option(self):
+        self.ui.text_title.clear()
+        self.ui.text_sub.clear()
+        self.ui.text_unit.clear()
+
+        self._fonts = 'Malgun Gothic'
+        self._theme = 'base'
+        self._color = '#000000'
+        self._bgcolor = '#fff'
+
+    def get_filter(self):
+        if self.ui.startDate.isEnabled() and self.ui.endDate.isEnabled():
+            startDate = self.ui.startDate.date().toString("yyyy-MM-dd")
+            endDate = self.ui.endDate.date().toString("yyyy-MM-dd")
+        else:
+            startDate, endDate = '', ''
+
+        try:
+            inText = self.ui.inText.toPlainText()
+            exText = self.ui.exText.toPlainText()
+        except Exception:
+            inText, exText = "", ""
+
+        category1 = self.ui.category1.currentText()
+        category2 = self.ui.category2.currentText()
+        category3 = self.ui.category3.currentText()
+
+        result = dict(startDate=startDate, endDate=endDate,
+                      inText=inText, exText=exText,
+                      category1=category1,
+                      category2=category2,
+                      category3=category3)
+        print(result)
+        return result
+
+    def get_option(self):
+        title = self.ui.text_title.text()
+        sub = self.ui.text_sub.text()
+        unit = self.ui.text_unit.text()
+        font = self.ui.fontComboBox.currentFont().family()
+        theme = self._theme
+        min_size = self.ui.minFontSize.value()
+
+        # > 수정
+        color = self._color
+        bgcolor = self._bgcolor
+
+        result = dict(title=title, sub=sub, unit=unit, font=font,
+                      theme=theme, color=color, bgcolor=bgcolor,
+                      min_size=min_size)
+        print(result)
+        return result
+
+    def set_treemap(self, data):
+        html = data.set_treemap(filter=self.get_filter(),
+                                option=self.get_option())
+        self.ui.qtTreemap.setUrl(html)
+
+    def set_pie(self, data):
+        html = data.set_pie(filter=self.get_filter(),
+                            option=self.get_option())
+        self.ui.qtPie.setUrl(html)
+
+    def set_Hbar(self, data):
+        html = data.set_Hbar(filter=self.get_filter(),
+                            option=self.get_option())
+        self.ui.qtHbar.setUrl(html)
+
 
 # & tab3 텍스트 마이닝 탭
 

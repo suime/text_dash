@@ -49,7 +49,7 @@ pyinstaller test_app.spec
 pyside6-designer
 pyside6-uic src/ui/FileInput.ui -o src/ui/FileInput.py `
 pyside6-uic src/ui/TextMining.ui -o src/ui/TextMining.py ` 
-pyside6-uic src/ui/Chart.ui -o src/ui/Chart.py `
+pyside6-uic src/ui/Plot.ui -o src/ui/Plot.py `
 pyside6-uic src/ui/Dictionary.ui -o src/ui/Dictionary.py
 ```
 

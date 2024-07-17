@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 from wordcloud import WordCloud
 
-# from kiwipiepy import Kiwi
+from .func import *
 
 
 class data():
@@ -346,3 +346,86 @@ class data():
         text = text.apply(_extract_noun, stopwords=stopwords, model=mecab)
 
         return text
+
+    def set_treemap(self, filter: dict, option: dict):
+        df = self.get_sdf()
+        cols = self.cols
+
+        cat = [filter['category1'], filter['category2'], filter['category3']]
+
+        path = list()
+        for i, a in enumerate(cat):
+            if a != '--제외--':
+                path.append(cols[f'category{str(i + 1)}'])
+        if len(path) == 0:
+            QMessageBox.warning(None, "설정 오류", "하나 이상의 분석할 데이터를 선택하세요.")
+            return None
+        df = df.dropna(subset=path)
+        fig = px.treemap(df, path=path)
+
+        fig.update_traces(textinfo="label+text+value+percent root",
+                          texttemplate="%{label}<br>%{value:,.0f}건<br>%{percentRoot}",
+                          marker=dict(line=dict(color='rgba(0,0,0,0)', width=1)))
+        html = set_plot(
+            fig, "treemap", title=option['title'], sub=option['sub'], font=option['font'],
+            min_size=option['min_size'])
+        return html
+
+    def set_pie(self, filter: dict, option: dict):
+        """분류가 하나일때는 파이차트, 두개 이상이면 선버스트 차트 만들기"""
+        df = self.get_sdf()
+        cols = self.cols
+
+        cat = [filter['category1'], filter['category2'], filter['category3']]
+
+        path = list()
+        for i, a in enumerate(cat):
+            if a != '--제외--':
+                path.append(cols[f'category{str(i + 1)}'])
+        if len(path) == 0:
+            QMessageBox.warning(None, "설정 오류", "하나 이상의 분석할 데이터를 선택하세요.")
+            return None
+
+        # ^ 선버스트
+        df = df.dropna(subset=path)
+        fig = px.sunburst(df, path=path)
+        fig.update_traces(textinfo="label+text+value+percent root",
+                          texttemplate="%{label}<br>%{value:,.0f}건<br>%{percentRoot}",
+                          marker=dict(line=dict(color='rgba(255,255,255,1)', width=1)))
+
+        html = set_plot(fig, "pie", title=option['title'], sub=option['sub'],
+                        font=option['font'], min_size=option['min_size'])
+        return html
+    
+    def set_Hbar(self, filter: dict, option: dict):
+        """분류가 하나일때는 파이차트, 두개 이상이면 선버스트 차트 만들기"""
+        df = self.get_sdf()
+        cols = self.cols
+
+        cat = [filter['category1'], filter['category2'], filter['category3']]
+
+        path = list()
+        for i, a in enumerate(cat):
+            if a != '--제외--':
+                path.append(cols[f'category{str(i + 1)}'])
+        if len(path) == 0:
+            QMessageBox.warning(None, "설정 오류", "하나 이상의 분석할 데이터를 선택하세요.")
+            return None
+
+        # ^ 선버스트
+        df = df.dropna(subset=path)
+        fig = px.icicle(df, path=[px.Constant("전체")]+path)
+        fig.update_traces(textinfo="label+text+value+percent root",
+                          texttemplate="%{label}<br>%{value:,.0f}건<br>%{percentRoot}",
+                          marker=dict(line=dict(color='rgba(255,255,255,1)', width=1)))
+
+        html = set_plot(fig, "pie", title=option['title'], sub=option['sub'],
+                        font=option['font'], min_size=option['min_size'])
+        return html
+
+    def set_Line(self, filter: dict, option: dict):
+        df = self.get_sdf()
+        cols = self.cols
+
+        
+        return html

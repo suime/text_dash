@@ -14,8 +14,6 @@ import plotly.graph_objects as go
 import plotly.express as px
 import plotly.offline as plt
 
-from . import func_network
-
 
 def app_start():
     chart_dir = "dash_chart"
@@ -113,28 +111,38 @@ def get_table_plot(df: pd.DataFrame, text_col_name: str = '내용'):
 
 def set_plot(fig: go.Figure,
              name: str = 'temp',
-             config: dict = {'bgcolor': 'rgba(0,0,0,0)', 'font': '맑은 고딕',
-                             'title': ''}
-             ):
+             bgcolor='rgba(0,0,0,0)',
+             color='#000',
+             font='맑은 고딕',
+             title='',
+             sub='',
+             unit='',
+             min_size=12):
 
     # 기본 플로틀리 차트
-    fig.update_layout(plot_bgcolor=config['bgcolor'],
-                      paper_bgcolor=config['bgcolor'])
-    fig.update_layout(margin=dict(r=5, l=5, t=20, b=0),
-                      title=config['title'])
+    fig.update_layout(plot_bgcolor=bgcolor,
+                      paper_bgcolor=bgcolor,
+                      font=dict(family=font, color=color),
+                      )
 
-    html_config = dict(toImageButtonOptions={
-        'format': 'png',  # one of png, svg, jpeg, webp
-        'filename': f'dash_chart\\{name}.png',
-        'height': 500,
-        'width': 700,
-    }, displaylogo=False)
+    _title = f'<b>{title}</b><br><sup>{sub}</sup>'
+    fig.update_layout(margin=dict(r=5, l=5, t=50, b=0),
+                      title=dict(font_size=20, x=0, xref='paper',
+                                 yref='container', y=0.95,
+                                 text=_title),
+                      uniformtext=dict(minsize=min_size, mode='hide'))
 
     if not os.path.exists(r"dash_chart"):
         os.makedirs(r"dash_chart")
     filename = f"dash_chart\\{name}.html"
+
+    html_config = dict(
+        displaylogo=False,
+        displayModeBar=False
+    )
     plt.plot(fig, output_type='file', auto_open=False,
              filename=filename, config=html_config)
+
     html_path = os.path.realpath(filename)
     html_path = QUrl.fromLocalFile(html_path)
     return html_path
