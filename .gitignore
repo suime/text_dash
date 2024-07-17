@@ -14,12 +14,13 @@ bin/
 ect/
 src/deployment/
 /mac-env
-/.vscode
 
 # pycache
 __pycache__/
 
 # testing
+/.vscode/*
+/dash_chart/*
 /coverage
 /win_env
 
