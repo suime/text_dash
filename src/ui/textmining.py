@@ -29,7 +29,7 @@ class Ui_TextMining(object):
         TextMining.resize(939, 566)
         self.horizontalLayout = QHBoxLayout(TextMining)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setContentsMargins(3, 3, 3, 3)
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.tabWidget = QTabWidget(TextMining)
@@ -75,7 +75,7 @@ class Ui_TextMining(object):
         self.startDate.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.startDate.setProperty("showGroupSeparator", True)
         self.startDate.setDateTime(QDateTime(QDate(2024, 7, 1), QTime(9, 0, 0)))
-        self.startDate.setMaximumDate(QDate(9994, 1, 9))
+        self.startDate.setMaximumDate(QDate(9994, 1, 11))
         self.startDate.setCalendarPopup(True)
         self.startDate.setTimeSpec(Qt.TimeSpec.LocalTime)
 
@@ -181,9 +181,11 @@ class Ui_TextMining(object):
 
         self.resetFilter = QPushButton(self.tabWidgetPage1)
         self.resetFilter.setObjectName(u"resetFilter")
-        self.resetFilter.setStyleSheet(u"background-color: #A4193D;\n"
-"color: #FFF;\n"
-"font-weight: bold;")
+        self.resetFilter.setStyleSheet(u"background-color: #990011;\n"
+"color: #FCF6F5;\n"
+"font-weight: bold;\n"
+"border-radius: 0.3em;\n"
+"height: 20px;")
 
         self.verticalLayout_3.addWidget(self.resetFilter)
 
@@ -268,9 +270,11 @@ class Ui_TextMining(object):
 
         self.resetOption = QPushButton(self.tabWidgetPage2)
         self.resetOption.setObjectName(u"resetOption")
-        self.resetOption.setStyleSheet(u"background-color: #A4193D;\n"
-"color: #FFF;\n"
-"font-weight: bold;")
+        self.resetOption.setStyleSheet(u"background-color: #990011;\n"
+"color: #FCF6F5;\n"
+"font-weight: bold;\n"
+"border-radius: 0.3em;\n"
+"height: 20px;")
 
         self.gridLayout_3.addWidget(self.resetOption, 2, 0, 1, 1)
 
@@ -541,6 +545,7 @@ class Ui_TextMining(object):
 
         self.verticalLayout_12.addLayout(self.horizontalLayout_3)
 
+        self.verticalLayout_12.setStretch(1, 1)
         self.Main.addTab(self.tab, "")
 
         self.verticalLayout_2.addWidget(self.Main)
@@ -575,7 +580,7 @@ class Ui_TextMining(object):
         self.retranslateUi(TextMining)
 
         self.tabWidget.setCurrentIndex(0)
-        self.Main.setCurrentIndex(0)
+        self.Main.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(TextMining)
@@ -612,7 +617,7 @@ class Ui_TextMining(object):
 #if QT_CONFIG(tooltip)
         self.NLPcheck.setToolTip(QCoreApplication.translate("TextMining", u"<html><head/><body><p>\uccb4\uc5b8 \ubd84\ub9ac, \uc624\ud0c8\uc790 \uad50\uc815 \ub4f1 \uc790\uc5f0\uc5b4 \ucc98\ub9ac\ub97c \ud569\ub2c8\ub2e4. </p><p>\uc2dc\uac04\uc774 \uc624\ub798 \uac78\ub9b4 \uc218 \uc788\uc2b5\ub2c8\ub2e4.</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
-        self.NLPcheck.setText(QCoreApplication.translate("TextMining", u"\uc790\uc5f0\uc5b4 \ucc98\ub9ac (!)", None))
+        self.NLPcheck.setText(QCoreApplication.translate("TextMining", u"\uc790\uc5f0\uc5b4 \ucc98\ub9ac (\uc2dc\uac04\uc774 \uc624\ub798 \uac78\ub9b4\uc218\ub3c4)", None))
 #if QT_CONFIG(tooltip)
         self.Label_3.setToolTip(QCoreApplication.translate("TextMining", u"<html><head/><body><p>\ub178\ub4dc\uac1c\uc218\ub294 \ud45c\uc2dc\ud560 \ub2e8\uc5b4\uc758 \uac1c\uc218\uc785\ub2c8\ub2e4.</p><p>\ub9ce\uc744\uc218\ub85d \ucc28\ud2b8\uac00 \ubcf5\uc7a1\ud558\uc5ec \ubcf4\uae30\uac00 \uc5b4\ub824\uc6cc\uc9d1\ub2c8\ub2e4.<br/></p></body></html>", None))
 #endif // QT_CONFIG(tooltip)

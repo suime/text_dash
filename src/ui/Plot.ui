@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>988</width>
+    <width>942</width>
     <height>612</height>
    </rect>
   </property>
@@ -71,20 +71,14 @@
          <property name="title">
           <string>기간 필터</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_10">
-          <property name="spacing">
-           <number>0</number>
-          </property>
+         <layout class="QGridLayout" name="gridLayout">
           <property name="topMargin">
            <number>3</number>
           </property>
-          <item>
-           <layout class="QFormLayout" name="formLayout_4">
-            <property name="rowWrapPolicy">
-             <enum>QFormLayout::RowWrapPolicy::DontWrapRows</enum>
-            </property>
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_3">
             <property name="horizontalSpacing">
-             <number>4</number>
+             <number>0</number>
             </property>
             <property name="verticalSpacing">
              <number>4</number>
@@ -99,10 +93,61 @@
               </property>
              </widget>
             </item>
+            <item row="5" column="1">
+             <widget class="QRadioButton" name="radioButton_2">
+              <property name="text">
+               <string>주</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QRadioButton" name="radioButton">
+              <property name="text">
+               <string>일</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QRadioButton" name="radioButton_4">
+              <property name="text">
+               <string>연</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QRadioButton" name="radioButton_3">
+              <property name="text">
+               <string>월</string>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="Label_8">
               <property name="text">
                <string>시작일 :</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDateEdit" name="endDate">
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+              </property>
+              <property name="dateTime">
+               <datetime>
+                <hour>9</hour>
+                <minute>0</minute>
+                <second>0</second>
+                <year>2024</year>
+                <month>7</month>
+                <day>1</day>
+               </datetime>
+              </property>
+              <property name="calendarPopup">
+               <bool>true</bool>
+              </property>
+              <property name="timeSpec">
+               <enum>Qt::TimeSpec::LocalTime</enum>
               </property>
              </widget>
             </item>
@@ -146,26 +191,10 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="QDateEdit" name="endDate">
-              <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-              </property>
-              <property name="dateTime">
-               <datetime>
-                <hour>9</hour>
-                <minute>0</minute>
-                <second>0</second>
-                <year>2024</year>
-                <month>7</month>
-                <day>1</day>
-               </datetime>
-              </property>
-              <property name="calendarPopup">
-               <bool>true</bool>
-              </property>
-              <property name="timeSpec">
-               <enum>Qt::TimeSpec::LocalTime</enum>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>그룹 기준</string>
               </property>
              </widget>
             </item>
@@ -558,7 +587,7 @@ color: #ffffff;</string>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="saveWC">
+          <widget class="QPushButton" name="saveTreemap">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(249, 87, 0);
 height: 24px;
@@ -604,7 +633,7 @@ color: #ffffff;</string>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="saveWC_2">
+          <widget class="QPushButton" name="savePie">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(249, 87, 0);
 height: 24px;
@@ -650,7 +679,7 @@ color: #ffffff;</string>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="saveWC_3">
+          <widget class="QPushButton" name="saveHbar">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(249, 87, 0);
 height: 24px;
@@ -696,7 +725,7 @@ color: #ffffff;</string>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="saveWC_4">
+          <widget class="QPushButton" name="saveLine">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(249, 87, 0);
 height: 24px;
@@ -742,7 +771,7 @@ color: #ffffff;</string>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="saveWC_5">
+          <widget class="QPushButton" name="saveBar">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(249, 87, 0);
 height: 24px;
@@ -788,7 +817,7 @@ color: #ffffff;</string>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="saveWC_6">
+          <widget class="QPushButton" name="saveSankey">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(249, 87, 0);
 height: 24px;
@@ -834,7 +863,7 @@ color: #ffffff;</string>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="saveWC_7">
+          <widget class="QPushButton" name="saveStat">
            <property name="styleSheet">
             <string notr="true">background-color: rgb(249, 87, 0);
 height: 24px;

@@ -11,6 +11,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+import warnings
 
 # ^ ---
 # ^ components func <- 함수같은거 있는거
@@ -24,6 +25,7 @@ from ui.FileInput import Ui_FileInput
 from ui.Plot import Ui_Plot
 from ui.TextMining import Ui_TextMining
 from ui.Dictionary import Ui_Dictionary
+
 
 # Main window
 
@@ -63,7 +65,6 @@ class MainWindow(QMainWindow):
         self.main.addTab(self.tab3, "텍스트 마이닝")
         self.main.addTab(self.tab2, "통계 분석")
 
-
     # ^ 탭 4: 사전
         tab4 = DictionaryTab()
         self.main.addTab(tab4, "텍스트 옵션")
@@ -97,8 +98,9 @@ class FileInputTab(QWidget):
         self.ui.setCols.clicked.connect(lambda: self.show_df(main.data.fdf))
         self.ui.setCols.clicked.connect(
             lambda: main.tab3.filter.init_ui(main.tab3.ui, main.data))
-        
-        self.ui.setCols.clicked.connect(lambda: main.tab2.reset_filter(main.data))
+
+        self.ui.setCols.clicked.connect(
+            lambda: main.tab2.reset_filter(main.data))
         self.ui.setCols.clicked.connect(main.tab2.reset_option)
 
     def selectFile(self, main):
@@ -157,16 +159,32 @@ class ChartTab(QWidget):
 
     def set_btn(self, data):
 
+        # ^ reset 버튼
         self.ui.resetFilter.clicked.connect(lambda: self.reset_filter(data))
         self.ui.resetOption.clicked.connect(self.reset_option)
 
+        # ^ 차트 생성 버튼
         self.ui.initTreemap.clicked.connect(lambda: self.set_treemap(data))
         self.ui.initPie.clicked.connect(lambda: self.set_pie(data))
         self.ui.initHbar.clicked.connect(lambda: self.set_Hbar(data))
         # self.ui.initLine.clicked.connect(lambda: self.set_Line(data))
         # self.ui.initBar.clicked.connect(lambda: self.set_Bar(data))
-        # self.ui.initSankey.clicked.connect(lambda: self.set_Sankey(data))
+        self.ui.initSankey.clicked.connect(lambda: self.set_Sankey(data))
         # self.ui.initStat.clicked.connect(lambda: self.set_Stat(data))
+
+        # ^ 이미지 저장 버튼
+        self.ui.saveTreemap.clicked.connect(
+            lambda: to_image(self.ui.qtTreemap, 'Treemap'))
+        self.ui.savePie.clicked.connect(lambda: to_image(self.ui.qtPie, 'Pie'))
+        self.ui.saveHbar.clicked.connect(
+            lambda: to_image(self.ui.qtHbar, 'Hbar'))
+        self.ui.saveLine.clicked.connect(
+            lambda: to_image(self.ui.qtLine, 'Line'))
+        self.ui.saveBar.clicked.connect(lambda: to_image(self.ui.qtBar, 'Bar'))
+        self.ui.saveSankey.clicked.connect(
+            lambda: to_image(self.ui.qtSankey, 'Sankey'))
+        self.ui.saveStat.clicked.connect(
+            lambda: to_image(self.ui.qtStat, 'Stat'))
 
     def reset_filter(self, data):
         if data.cols['date'] != '':
@@ -274,9 +292,14 @@ class ChartTab(QWidget):
         self.ui.qtPie.setUrl(html)
 
     def set_Hbar(self, data):
-        html = data.set_Hbar(filter=self.get_filter(),
-                            option=self.get_option())
+        html = data.set_hbar(filter=self.get_filter(),
+                             option=self.get_option())
         self.ui.qtHbar.setUrl(html)
+
+    def set_Sankey(self, data):
+        html = data.set_sankey(filter=self.get_filter(),
+                               option=self.get_option())
+        self.ui.qtSankey.setUrl(html)
 
 
 # & tab3 텍스트 마이닝 탭
@@ -531,6 +554,7 @@ class optionComponent(QWidget):
 # @ Main
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    warnings.filterwarnings("ignore", category=UserWarning)
     main_window = MainWindow()
     main_window.setWindowTitle("텍스트 분석 대시 보드")
     main_window.setWindowIcon(QIcon('./src/public/icon.ico'))

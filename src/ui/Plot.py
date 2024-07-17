@@ -336,16 +336,16 @@ class Ui_Plot(object):
 
         self.verticalLayout_4.addWidget(self.initTreemap)
 
-        self.saveWC = QPushButton(self.tab1)
-        self.saveWC.setObjectName(u"saveWC")
-        self.saveWC.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
+        self.saveTreemap = QPushButton(self.tab1)
+        self.saveTreemap.setObjectName(u"saveTreemap")
+        self.saveTreemap.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
 "height: 24px;\n"
 "border-radius: 0.5em;\n"
 "font-size: 13px;\n"
 "font-weight: bold;\n"
 "color: #ffffff;")
 
-        self.verticalLayout_4.addWidget(self.saveWC)
+        self.verticalLayout_4.addWidget(self.saveTreemap)
 
         self.tabWidget_2.addTab(self.tab1, "")
         self.tab2 = QWidget()
@@ -369,16 +369,16 @@ class Ui_Plot(object):
 
         self.verticalLayout_7.addWidget(self.initPie)
 
-        self.saveWC_2 = QPushButton(self.tab2)
-        self.saveWC_2.setObjectName(u"saveWC_2")
-        self.saveWC_2.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
+        self.savePie = QPushButton(self.tab2)
+        self.savePie.setObjectName(u"savePie")
+        self.savePie.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
 "height: 24px;\n"
 "border-radius: 0.5em;\n"
 "font-size: 13px;\n"
 "font-weight: bold;\n"
 "color: #ffffff;")
 
-        self.verticalLayout_7.addWidget(self.saveWC_2)
+        self.verticalLayout_7.addWidget(self.savePie)
 
         self.tabWidget_2.addTab(self.tab2, "")
         self.tab3 = QWidget()
@@ -402,16 +402,16 @@ class Ui_Plot(object):
 
         self.verticalLayout_8.addWidget(self.initHbar)
 
-        self.saveWC_3 = QPushButton(self.tab3)
-        self.saveWC_3.setObjectName(u"saveWC_3")
-        self.saveWC_3.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
+        self.saveHbar = QPushButton(self.tab3)
+        self.saveHbar.setObjectName(u"saveHbar")
+        self.saveHbar.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
 "height: 24px;\n"
 "border-radius: 0.5em;\n"
 "font-size: 13px;\n"
 "font-weight: bold;\n"
 "color: #ffffff;")
 
-        self.verticalLayout_8.addWidget(self.saveWC_3)
+        self.verticalLayout_8.addWidget(self.saveHbar)
 
         self.tabWidget_2.addTab(self.tab3, "")
         self.tab4 = QWidget()
@@ -435,16 +435,16 @@ class Ui_Plot(object):
 
         self.verticalLayout_9.addWidget(self.initLine)
 
-        self.saveWC_4 = QPushButton(self.tab4)
-        self.saveWC_4.setObjectName(u"saveWC_4")
-        self.saveWC_4.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
+        self.saveLine = QPushButton(self.tab4)
+        self.saveLine.setObjectName(u"saveLine")
+        self.saveLine.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
 "height: 24px;\n"
 "border-radius: 0.5em;\n"
 "font-size: 13px;\n"
 "font-weight: bold;\n"
 "color: #ffffff;")
 
-        self.verticalLayout_9.addWidget(self.saveWC_4)
+        self.verticalLayout_9.addWidget(self.saveLine)
 
         self.tabWidget_2.addTab(self.tab4, "")
         self.tab5 = QWidget()
@@ -468,16 +468,16 @@ class Ui_Plot(object):
 
         self.verticalLayout_11.addWidget(self.initBar)
 
-        self.saveWC_5 = QPushButton(self.tab5)
-        self.saveWC_5.setObjectName(u"saveWC_5")
-        self.saveWC_5.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
+        self.saveBar = QPushButton(self.tab5)
+        self.saveBar.setObjectName(u"saveBar")
+        self.saveBar.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
 "height: 24px;\n"
 "border-radius: 0.5em;\n"
 "font-size: 13px;\n"
 "font-weight: bold;\n"
 "color: #ffffff;")
 
-        self.verticalLayout_11.addWidget(self.saveWC_5)
+        self.verticalLayout_11.addWidget(self.saveBar)
 
         self.tabWidget_2.addTab(self.tab5, "")
         self.tab6 = QWidget()
@@ -501,16 +501,16 @@ class Ui_Plot(object):
 
         self.verticalLayout_12.addWidget(self.initSankey)
 
-        self.saveWC_6 = QPushButton(self.tab6)
-        self.saveWC_6.setObjectName(u"saveWC_6")
-        self.saveWC_6.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
+        self.saveSankey = QPushButton(self.tab6)
+        self.saveSankey.setObjectName(u"saveSankey")
+        self.saveSankey.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
 "height: 24px;\n"
 "border-radius: 0.5em;\n"
 "font-size: 13px;\n"
 "font-weight: bold;\n"
 "color: #ffffff;")
 
-        self.verticalLayout_12.addWidget(self.saveWC_6)
+        self.verticalLayout_12.addWidget(self.saveSankey)
 
         self.tabWidget_2.addTab(self.tab6, "")
         self.tab_stat = QWidget()
@@ -534,16 +534,16 @@ class Ui_Plot(object):
 
         self.verticalLayout_13.addWidget(self.initStat)
 
-        self.saveWC_7 = QPushButton(self.tab_stat)
-        self.saveWC_7.setObjectName(u"saveWC_7")
-        self.saveWC_7.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
+        self.saveStat = QPushButton(self.tab_stat)
+        self.saveStat.setObjectName(u"saveStat")
+        self.saveStat.setStyleSheet(u"background-color: rgb(249, 87, 0);\n"
 "height: 24px;\n"
 "border-radius: 0.5em;\n"
 "font-size: 13px;\n"
 "font-weight: bold;\n"
 "color: #ffffff;")
 
-        self.verticalLayout_13.addWidget(self.saveWC_7)
+        self.verticalLayout_13.addWidget(self.saveStat)
 
         self.tabWidget_2.addTab(self.tab_stat, "")
 
@@ -605,25 +605,25 @@ class Ui_Plot(object):
         self.resetOption.setText(QCoreApplication.translate("Plot", u"\uc635\uc158 \ucd08\uae30\ud654", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabWidgetPage2), QCoreApplication.translate("Plot", u"\ucc28\ud2b8 \uc635\uc158", None))
         self.initTreemap.setText(QCoreApplication.translate("Plot", u"\ucc28\ud2b8 \uc0dd\uc131\ud558\uae30", None))
-        self.saveWC.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
+        self.saveTreemap.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab1), QCoreApplication.translate("Plot", u"\ubd84\ud3ec_\ud2b8\ub9ac\ub9f5", None))
         self.initPie.setText(QCoreApplication.translate("Plot", u"\ucc28\ud2b8 \uc0dd\uc131\ud558\uae30", None))
-        self.saveWC_2.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
+        self.savePie.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab2), QCoreApplication.translate("Plot", u"\ubd84\ud3ec_\ud30c\uc774", None))
         self.initHbar.setText(QCoreApplication.translate("Plot", u"\ucc28\ud2b8 \uc0dd\uc131\ud558\uae30", None))
-        self.saveWC_3.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
+        self.saveHbar.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab3), QCoreApplication.translate("Plot", u"\ubd84\ud3ec_\ubc14", None))
         self.initLine.setText(QCoreApplication.translate("Plot", u"\ucc28\ud2b8 \uc0dd\uc131\ud558\uae30", None))
-        self.saveWC_4.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
+        self.saveLine.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab4), QCoreApplication.translate("Plot", u"\uc2dc\uacc4\uc5f4_\ub77c\uc778", None))
         self.initBar.setText(QCoreApplication.translate("Plot", u"\ucc28\ud2b8 \uc0dd\uc131\ud558\uae30", None))
-        self.saveWC_5.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
+        self.saveBar.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab5), QCoreApplication.translate("Plot", u"\uc2dc\uacc4\uc5f4_\ubc14", None))
         self.initSankey.setText(QCoreApplication.translate("Plot", u"\ucc28\ud2b8 \uc0dd\uc131\ud558\uae30", None))
-        self.saveWC_6.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
+        self.saveSankey.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab6), QCoreApplication.translate("Plot", u"\uc0dd\ud0a4", None))
         self.initStat.setText(QCoreApplication.translate("Plot", u"\ucc28\ud2b8 \uc0dd\uc131\ud558\uae30", None))
-        self.saveWC_7.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
+        self.saveStat.setText(QCoreApplication.translate("Plot", u"\uc774\ubbf8\uc9c0\ub85c \uc800\uc7a5\ud558\uae30", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_stat), QCoreApplication.translate("Plot", u"\ud1b5\uacc4", None))
     # retranslateUi
 

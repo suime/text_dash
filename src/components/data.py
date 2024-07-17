@@ -22,7 +22,7 @@ class data():
 
     def set_df(self, df, filename: str = ''):
         self.init_df()
-        self.df = pd.DataFrame(df)
+        self.df = pd.DataFrame(df).dropna(how='all')
         self.fileName = filename
         self.set_col_auto()
 
@@ -268,7 +268,7 @@ class data():
         return option
 
     def _clean_text_for_cp949(self, text):
-        return text.encode('cp949', errors='replace').decode('cp949')
+        return str(text).encode('cp949', errors='replace').decode('cp949')
 
     def _to_regex(self, text: str):
         text = text.strip()
@@ -278,6 +278,7 @@ class data():
         return pattern
 
     def apply_filter(self, config: dict):
+        """필터를 적용"""
         if hasattr(self, 'fdf'):
             df = self.fdf
         else:
@@ -296,18 +297,17 @@ class data():
             df = df[~df[cols['text']].str.contains(
                 self._to_regex(config['exText']), case=False, na=False)]
 
-        if config['category1'] != '' and config['category1'] != '전체':
-            df = df[df[cols['category1']] == config['category1']]
-        if config['category2'] != '' and config['category2'] != '전체':
-            df = df[df[cols['category2']] == config['category2']]
-        if config['category3'] != '' and config['category3'] != '전체':
-            df = df[df[cols['category3']] == config['category3']]
+        for i in range(1, 4):
+            category = config[f'category{i}']
+            if category not in ['', '전체', '--제외--']:
+                df = df[df[cols[f'category{i}']] == category]
 
-        if config['nlp']:
+        if config.get('nlp', False):  # Use get method for cleaner attribute check
             try:
                 df[cols['text']] = self.text_process(df[cols['text']])
             except Exception as e:
                 print(f'자연어 처리에서 오류가 발생했습니다.\n {e}')
+
         self.set_sdf(df)
         return self.sdf
 
@@ -348,7 +348,7 @@ class data():
         return text
 
     def set_treemap(self, filter: dict, option: dict):
-        df = self.get_sdf()
+        df = self.apply_filter(filter)
         cols = self.cols
 
         cat = [filter['category1'], filter['category2'], filter['category3']]
@@ -373,7 +373,7 @@ class data():
 
     def set_pie(self, filter: dict, option: dict):
         """분류가 하나일때는 파이차트, 두개 이상이면 선버스트 차트 만들기"""
-        df = self.get_sdf()
+        df = self.apply_filter(filter)
         cols = self.cols
 
         cat = [filter['category1'], filter['category2'], filter['category3']]
@@ -396,10 +396,10 @@ class data():
         html = set_plot(fig, "pie", title=option['title'], sub=option['sub'],
                         font=option['font'], min_size=option['min_size'])
         return html
-    
-    def set_Hbar(self, filter: dict, option: dict):
+
+    def set_hbar(self, filter: dict, option: dict):
         """분류가 하나일때는 파이차트, 두개 이상이면 선버스트 차트 만들기"""
-        df = self.get_sdf()
+        df = self.apply_filter(filter)
         cols = self.cols
 
         cat = [filter['category1'], filter['category2'], filter['category3']]
@@ -423,9 +423,39 @@ class data():
                         font=option['font'], min_size=option['min_size'])
         return html
 
+
     def set_Line(self, filter: dict, option: dict):
-        df = self.get_sdf()
+        #> 시계열 드가기 전에 먼저 그룹화를 해야되는데 
+        
+        df = self.apply_filter(filter)
         cols = self.cols
 
-        
+        if cols['date'] == '':
+            QMessageBox.warning(
+                None, '오류 발생', '일자열이 선택되지 않았습니다. 시계열 분석은 일자열이 설정되어야 합니다.')
+            return None
+
+        else:
+            fig = px.line(df, x=cols['date'], y=100)
+
+        html = set_plot(fig)
+        return html
+
+    def set_sankey(self, filter: dict, option: dict):
+        df = self.apply_filter(filter)
+        cols = self.cols
+        path = list()
+
+        cat = [filter['category1'], filter['category2'], filter['category3']]
+
+        for i, a in enumerate(cat):
+            if a != '--제외--':
+                path.append(cols[f'category{str(i + 1)}'])
+        if len(path) == 0:
+            QMessageBox.warning(None, "설정 오류", "하나 이상의 분석할 데이터를 선택하세요.")
+            return None
+
+        fig = px.parallel_categories(df, dimensions=path)
+        html = set_plot(fig, "sankey", title=option['title'], sub=option['sub'],
+                        font=option['font'], min_size=12)
         return html

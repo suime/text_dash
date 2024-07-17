@@ -42,14 +42,15 @@ python \src\main.py
 pyinstaller src/win.py -n "test_app" --noconsole --onefile --exclude PyQt5 --icon=src/public/icon.ico
 
 pyinstaller test_app.spec
+pyinstaller TextD.spec --noconfirm
 ```
 
 ### 6. ui 파일 빌드하기 
 ```sh
 pyside6-designer
-pyside6-uic src/ui/FileInput.ui -o src/ui/FileInput.py `
-pyside6-uic src/ui/TextMining.ui -o src/ui/TextMining.py ` 
-pyside6-uic src/ui/Plot.ui -o src/ui/Plot.py `
+pyside6-uic src/ui/FileInput.ui -o src/ui/FileInput.py
+pyside6-uic src/ui/TextMining.ui -o src/ui/TextMining.py 
+pyside6-uic src/ui/Plot.ui -o src/ui/Plot.py
 pyside6-uic src/ui/Dictionary.ui -o src/ui/Dictionary.py
 ```
 

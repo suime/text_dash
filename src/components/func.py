@@ -18,15 +18,10 @@ import plotly.offline as plt
 def app_start():
     chart_dir = "dash_chart"
     config_file = os.path.join(chart_dir, "config.json")
-    network_dir = os.path.join(chart_dir, ".network")
-    network_template = os.path.join(network_dir, "template.html")
 
     # Create directory if it doesn't exist
     if not os.path.exists(chart_dir):
         os.makedirs(chart_dir)
-
-    if not os.path.exists(network_dir):
-        os.makedirs(network_dir)
 
     # Create default config file if it doesn't exist
     if not os.path.exists(config_file):
@@ -37,18 +32,6 @@ def app_start():
         }
         with open(config_file, 'w', encoding='utf-8') as f:
             json.dump(default_config, f, ensure_ascii=False, indent=4)
-
-    if not os.path.exists(network_template):
-        template_content = func_network._get_network_template()
-        with open(network_template, 'w', encoding='utf-8') as f:
-            f.write(template_content)
-
-    # Copy contents of public folder to network_dir if network_dir is empty
-    lib_dir = os.path.join(network_dir, "lib")
-
-    if not os.path.exists(lib_dir):
-        os.makedirs(lib_dir)
-
     # Read the config file
     with open(config_file, 'r', encoding='utf-8') as f:
         config = json.load(f)
@@ -130,7 +113,8 @@ def set_plot(fig: go.Figure,
                       title=dict(font_size=20, x=0, xref='paper',
                                  yref='container', y=0.95,
                                  text=_title),
-                      uniformtext=dict(minsize=min_size, mode='hide'))
+                    #   uniformtext=dict(minsize=min_size, mode='hide')
+                      )
 
     if not os.path.exists(r"dash_chart"):
         os.makedirs(r"dash_chart")
