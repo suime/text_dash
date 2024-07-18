@@ -58,6 +58,9 @@
      <property name="documentMode">
       <bool>false</bool>
      </property>
+     <property name="movable">
+      <bool>false</bool>
+     </property>
      <widget class="QWidget" name="tabWidgetPage1">
       <attribute name="title">
        <string>데이터 필터</string>
@@ -131,7 +134,7 @@
                <date>
                 <year>9994</year>
                 <month>1</month>
-                <day>11</day>
+                <day>12</day>
                </date>
               </property>
               <property name="calendarPopup">
@@ -902,28 +905,38 @@ color: #ffffff;</string>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>topnCount</tabstop>
-  <tabstop>ngram_0</tabstop>
-  <tabstop>ngram_1</tabstop>
-  <tabstop>stopwordsEdit</tabstop>
-  <tabstop>resetOption</tabstop>
-  <tabstop>initTable</tabstop>
-  <tabstop>saveStat</tabstop>
+  <tabstop>startDate</tabstop>
+  <tabstop>endDate</tabstop>
+  <tabstop>inText</tabstop>
+  <tabstop>exText</tabstop>
+  <tabstop>category1</tabstop>
+  <tabstop>category2</tabstop>
   <tabstop>category3</tabstop>
+  <tabstop>saveStat</tabstop>
   <tabstop>resetFilter</tabstop>
   <tabstop>Main</tabstop>
-  <tabstop>startDate</tabstop>
-  <tabstop>category2</tabstop>
+  <tabstop>topnCount</tabstop>
+  <tabstop>initTable</tabstop>
   <tabstop>initTF</tabstop>
   <tabstop>initWC</tabstop>
   <tabstop>saveWC</tabstop>
   <tabstop>initNetwork</tabstop>
   <tabstop>saveTf</tabstop>
   <tabstop>saveNetwork</tabstop>
-  <tabstop>endDate</tabstop>
-  <tabstop>category1</tabstop>
-  <tabstop>inText</tabstop>
-  <tabstop>exText</tabstop>
+  <tabstop>ngram_0</tabstop>
+  <tabstop>resetOption</tabstop>
+  <tabstop>ngram_1</tabstop>
+  <tabstop>stopwordsEdit</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>NLPcheck</tabstop>
+  <tabstop>bgcolorPicker</tabstop>
+  <tabstop>colorPicker</tabstop>
+  <tabstop>ChangeFont</tabstop>
+  <tabstop>initDf</tabstop>
+  <tabstop>saveData</tabstop>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>pushButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

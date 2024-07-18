@@ -50,7 +50,7 @@
       <enum>QTabWidget::TabShape::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="documentMode">
       <bool>false</bool>
@@ -94,30 +94,36 @@
              </widget>
             </item>
             <item row="5" column="1">
-             <widget class="QRadioButton" name="radioButton_2">
+             <widget class="QRadioButton" name="chk_2">
               <property name="text">
                <string>주</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
             <item row="5" column="0">
-             <widget class="QRadioButton" name="radioButton">
+             <widget class="QRadioButton" name="chk_1">
               <property name="text">
                <string>일</string>
               </property>
              </widget>
             </item>
             <item row="7" column="1">
-             <widget class="QRadioButton" name="radioButton_4">
+             <widget class="QRadioButton" name="chk_4">
               <property name="text">
                <string>연</string>
               </property>
              </widget>
             </item>
             <item row="7" column="0">
-             <widget class="QRadioButton" name="radioButton_3">
+             <widget class="QRadioButton" name="chk_3">
               <property name="text">
                <string>월</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -173,7 +179,7 @@
                <date>
                 <year>9994</year>
                 <month>1</month>
-                <day>11</day>
+                <day>12</day>
                </date>
               </property>
               <property name="calendarPopup">
@@ -458,7 +464,7 @@ height: 20px;</string>
           <item row="4" column="0">
            <widget class="QLabel" name="bg">
             <property name="text">
-             <string>차트 배경 색상 :</string>
+             <string>배경 색상 :</string>
             </property>
            </widget>
           </item>
@@ -506,7 +512,7 @@ border-color: rgb(117, 117, 117);</string>
           <item row="5" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>최소 글자크기</string>
+             <string>글자크기</string>
             </property>
            </widget>
           </item>

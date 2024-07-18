@@ -78,74 +78,13 @@ class MainWindow(QMainWindow):
 
 
 # ui 불러오기
-
-# & tab1 파일 입력 탭
-
-class FileInputTab(QWidget):
-    def __init__(self, main: QMainWindow) -> None:
-        super().__init__()
-        self.ui = Ui_FileInput()
-        self.ui.setupUi(self)
-
-        # ^ 파일 입력 버튼
-        self.ui.fileBtn.clicked.connect(lambda: self.selectFile(main))
-
-        # ^ 설정하기 버튼
-        # * 누르면 데이터프레임 열에 맞게 타입 캐스트 하고, 중복 등 간단한 처리 하기
-        self.ui.setCols.clicked.connect(
-            lambda: main.data.set_col_manual(self.get_options()))
-        self.ui.setCols.clicked.connect(main.set_status)
-        self.ui.setCols.clicked.connect(lambda: self.show_df(main.data.fdf))
-        self.ui.setCols.clicked.connect(
-            lambda: main.tab3.filter.init_ui(main.tab3.ui, main.data))
-
-        self.ui.setCols.clicked.connect(
-            lambda: main.tab2.reset_filter(main.data))
-        self.ui.setCols.clicked.connect(main.tab2.reset_option)
-
-    def selectFile(self, main):
-        file, _ = QFileDialog.getOpenFileName(self, "텍스트 파일 열기",
-                                              "data/", "엑셀 파일 (*.xlsx *.xls *.csv);;텍스트 파일 (*.csv *.txt);;데이터프레임(*.parquet);")
-        if file:
-            df = read_df(file)
-
-            if df is not None:
-                main.data.set_df(df, file)
-                main.set_status()
-                self.set_cols(main)
-                self.show_df(main.data.df)
-                QMessageBox.information(self, "파일 열기", "파일이 성공적으로 열렸습니다.")
-            else:
-                QMessageBox.warning(self, "파일 열기", "파일을 읽을 수 없습니다.")
-
-    def get_options(self):
-        column = {'date': self.ui.DateCol.currentText(),
-                  'text': self.ui.TextCol.currentText(),
-                  'category1': self.ui.category1ComboBox.currentText(),
-                  'category2': self.ui.category2ComboBox.currentText(),
-                  'category3': self.ui.category3ComboBox.currentText()}
-        na = self.ui.removeNanCheckBox.isChecked()
-        dp = self.ui.removeDupCheckBox.isChecked()
-        return {"column_config": column, "rm_na": na, "rm_duplicate": dp}
-
-    def set_cols(self, main):
-        col_list = main.data.get_col()
-        for combo_box, col in zip([self.ui.DateCol, self.ui.TextCol,
-                                   self.ui.category1ComboBox,
-                                   self.ui.category2ComboBox,
-                                   self.ui.category3ComboBox],
-                                  ['date', 'text', 'category1', 'category2', 'category3']):
-            combo_box.clear()
-            combo_box.addItems(col_list)
-            combo_box.setCurrentText(main.data.cols[col])
-
-    def show_df(self, df):
-        self.ui.tableView.setModel(elements.PandasModel(df))
-
-# & tab2 통계 차트 탭
-
-
 class ChartTab(QWidget):
+    """
+    # 통계 차트탭
+    > - 차트 테마 만들기
+    > - 바 그룹 연결하기 
+    """
+
     def __init__(self, data) -> None:
         super().__init__()
         self.ui = Ui_Plot()
@@ -167,24 +106,24 @@ class ChartTab(QWidget):
         self.ui.initTreemap.clicked.connect(lambda: self.set_treemap(data))
         self.ui.initPie.clicked.connect(lambda: self.set_pie(data))
         self.ui.initHbar.clicked.connect(lambda: self.set_Hbar(data))
-        # self.ui.initLine.clicked.connect(lambda: self.set_Line(data))
-        # self.ui.initBar.clicked.connect(lambda: self.set_Bar(data))
+        self.ui.initLine.clicked.connect(lambda: self.set_Line(data))
+        self.ui.initBar.clicked.connect(lambda: self.set_Bar(data))
         self.ui.initSankey.clicked.connect(lambda: self.set_Sankey(data))
         # self.ui.initStat.clicked.connect(lambda: self.set_Stat(data))
 
         # ^ 이미지 저장 버튼
         self.ui.saveTreemap.clicked.connect(
-            lambda: to_image(self.ui.qtTreemap, 'Treemap'))
-        self.ui.savePie.clicked.connect(lambda: to_image(self.ui.qtPie, 'Pie'))
+            lambda: to_img(self.ui.qtTreemap, 'Treemap'))
+        self.ui.savePie.clicked.connect(lambda: to_img(self.ui.qtPie, 'Pie'))
         self.ui.saveHbar.clicked.connect(
-            lambda: to_image(self.ui.qtHbar, 'Hbar'))
+            lambda: to_img(self.ui.qtHbar, 'Hbar'))
         self.ui.saveLine.clicked.connect(
-            lambda: to_image(self.ui.qtLine, 'Line'))
-        self.ui.saveBar.clicked.connect(lambda: to_image(self.ui.qtBar, 'Bar'))
+            lambda: to_img(self.ui.qtLine, 'Line'))
+        self.ui.saveBar.clicked.connect(lambda: to_img(self.ui.qtBar, 'Bar'))
         self.ui.saveSankey.clicked.connect(
-            lambda: to_image(self.ui.qtSankey, 'Sankey'))
+            lambda: to_img(self.ui.qtSankey, 'Sankey'))
         self.ui.saveStat.clicked.connect(
-            lambda: to_image(self.ui.qtStat, 'Stat'))
+            lambda: to_img(self.ui.qtStat, 'Stat'))
 
     def reset_filter(self, data):
         if data.cols['date'] != '':
@@ -251,15 +190,25 @@ class ChartTab(QWidget):
         except Exception:
             inText, exText = "", ""
 
+        if self.ui.chk_1.isChecked():
+            group = 'd'
+        elif self.ui.chk_2.isChecked():
+            group = 'w'
+        elif self.ui.chk_3.isChecked():
+            group = 'm'
+        elif self.ui.chk_4.isChecked():
+            group = 'y'
+
         category1 = self.ui.category1.currentText()
         category2 = self.ui.category2.currentText()
         category3 = self.ui.category3.currentText()
 
-        result = dict(startDate=startDate, endDate=endDate,
+        result = dict(startDate=startDate, endDate=endDate, group=group,
                       inText=inText, exText=exText,
                       category1=category1,
                       category2=category2,
-                      category3=category3)
+                      category3=category3,
+                      )
         print(result)
         return result
 
@@ -281,26 +230,99 @@ class ChartTab(QWidget):
         print(result)
         return result
 
+    def set_chart(self, chart_type, data, ui_element):
+        """
+        차트를 생성하고 UI 요소에 설정하는 함수
+        """
+        html = getattr(data, f"set_{chart_type}")(
+            filter=self.get_filter(), option=self.get_option())
+        ui_element.setUrl(html)
+
     def set_treemap(self, data):
-        html = data.set_treemap(filter=self.get_filter(),
-                                option=self.get_option())
-        self.ui.qtTreemap.setUrl(html)
+        self.set_chart("treemap", data, self.ui.qtTreemap)
 
     def set_pie(self, data):
-        html = data.set_pie(filter=self.get_filter(),
-                            option=self.get_option())
-        self.ui.qtPie.setUrl(html)
+        self.set_chart("pie", data, self.ui.qtPie)
 
     def set_Hbar(self, data):
-        html = data.set_hbar(filter=self.get_filter(),
-                             option=self.get_option())
-        self.ui.qtHbar.setUrl(html)
+        self.set_chart("hbar", data, self.ui.qtHbar)
 
     def set_Sankey(self, data):
-        html = data.set_sankey(filter=self.get_filter(),
-                               option=self.get_option())
-        self.ui.qtSankey.setUrl(html)
+        self.set_chart("sankey", data, self.ui.qtSankey)
 
+    def set_Line(self, data):
+        self.set_chart("line", data, self.ui.qtLine)
+
+    def set_Bar(self, data):
+        self.set_chart("bar", data, self.ui.qtBar)
+
+
+class FileInputTab(QWidget):
+    """
+    # 파일 입력 탭
+    > - 입력 했을때 몇행 불러오는지 
+    > - 드래그 앤 드랍 구현하기
+    """
+
+    def __init__(self, main: QMainWindow) -> None:
+        super().__init__()
+        self.ui = Ui_FileInput()
+        self.ui.setupUi(self)
+
+        # ^ 파일 입력 버튼
+        self.ui.fileBtn.clicked.connect(lambda: self.selectFile(main))
+
+        # ^ 설정하기 버튼
+        # * 누르면 데이터프레임 열에 맞게 타입 캐스트 하고, 중복 등 간단한 처리 하기
+        self.ui.setCols.clicked.connect(
+            lambda: main.data.set_col_manual(self.get_options()))
+        self.ui.setCols.clicked.connect(main.set_status)
+        self.ui.setCols.clicked.connect(lambda: self.show_df(main.data.fdf))
+        self.ui.setCols.clicked.connect(
+            lambda: main.tab3.filter.init_ui(main.tab3.ui, main.data))
+
+        self.ui.setCols.clicked.connect(
+            lambda: main.tab2.reset_filter(main.data))
+        self.ui.setCols.clicked.connect(main.tab2.reset_option)
+
+    def selectFile(self, main):
+        file, _ = QFileDialog.getOpenFileName(self, "텍스트 파일 열기",
+                                              "data/", "엑셀 파일 (*.xlsx *.xls *.csv);;텍스트 파일 (*.csv *.txt);;데이터프레임(*.parquet);")
+        if file:
+            df = read_df(file)
+
+            if df is not None:
+                main.data.set_df(df, file)
+                main.set_status()
+                self.set_cols(main)
+                self.show_df(main.data.df)
+                QMessageBox.information(self, "파일 열기", "파일이 성공적으로 열렸습니다.")
+            else:
+                QMessageBox.warning(self, "파일 열기", "파일을 읽을 수 없습니다.")
+
+    def get_options(self):
+        column = {'date': self.ui.DateCol.currentText(),
+                  'text': self.ui.TextCol.currentText(),
+                  'category1': self.ui.category1ComboBox.currentText(),
+                  'category2': self.ui.category2ComboBox.currentText(),
+                  'category3': self.ui.category3ComboBox.currentText()}
+        na = self.ui.removeNanCheckBox.isChecked()
+        dp = self.ui.removeDupCheckBox.isChecked()
+        return {"column_config": column, "rm_na": na, "rm_duplicate": dp}
+
+    def set_cols(self, main):
+        col_list = main.data.get_col()
+        for combo_box, col in zip([self.ui.DateCol, self.ui.TextCol,
+                                   self.ui.category1ComboBox,
+                                   self.ui.category2ComboBox,
+                                   self.ui.category3ComboBox],
+                                  ['date', 'text', 'category1', 'category2', 'category3']):
+            combo_box.clear()
+            combo_box.addItems(col_list)
+            combo_box.setCurrentText(main.data.cols[col])
+
+    def show_df(self, df):
+        self.ui.tableView.setModel(elements.PandasModel(df))
 
 # & tab3 텍스트 마이닝 탭
 
@@ -311,6 +333,7 @@ class TextMiningTab(QWidget):
         super().__init__()
         self.ui = Ui_TextMining()
         self.ui.setupUi(self)
+
         self.figure = Figure(figsize=(6, 5), dpi=300)
         self.canvas = FigureCanvas(self.figure)
         self.ui.WClayout.addWidget(self.canvas)
@@ -331,12 +354,11 @@ class TextMiningTab(QWidget):
 
         # ^ wc 생성
         self.ui.initWC.clicked.connect(lambda: self.init_WC(data))
-        self.ui.saveWC.clicked.connect(lambda: to_image(self.canvas))
+        self.ui.saveWC.clicked.connect(lambda: to_img(self.canvas))
 
         # ^ network 생성
-        self.ui.initNetwork.clicked.connect(lambda: self.init_network(data))
-        self.ui.saveNetwork.clicked.connect(
-            lambda: to_image(self.ui.networkPlot))
+        self.ui.initNetwork.clicked.connect(lambda: self.set_Network(data))
+        self.ui.saveNetwork.clicked.connect(lambda: to_img(self.ui.networkPlot))
 
         self.filter = filterComponent(self.ui, data)
         self.option = optionComponent(self.ui, data)
@@ -386,7 +408,7 @@ class TextMiningTab(QWidget):
         self.figure.tight_layout()
         self.canvas.draw()
 
-    def init_network(self, data):
+    def set_Network(self, data):
         self.filter.apply_filter(self.ui, data)
         option = self.option.get_option(self.ui)
         view = self.ui.networkPlot

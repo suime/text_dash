@@ -132,7 +132,7 @@ def set_plot(fig: go.Figure,
     return html_path
 
 
-def to_image(QWidget: QWidget, dir: str = ''):
+def to_img(QWidget: QWidget, dir: str = ''):
     # 차트 위젯의 내용을 QPixmap으로 캡처
     pixmap = QWidget.grab()
     # 이미지 저장

@@ -250,7 +250,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -265,86 +265,60 @@
           </widget>
          </item>
          <item>
-          <widget class="QTableWidget" name="tableWidget">
+          <widget class="QListWidget" name="listWidget">
            <property name="dragEnabled">
             <bool>true</bool>
            </property>
            <property name="alternatingRowColors">
             <bool>true</bool>
            </property>
-           <property name="gridStyle">
-            <enum>Qt::PenStyle::SolidLine</enum>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
+           </property>
+           <property name="viewMode">
+            <enum>QListView::ViewMode::ListMode</enum>
            </property>
            <property name="sortingEnabled">
             <bool>true</bool>
            </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-           <property name="rowCount">
-            <number>6</number>
-           </property>
-           <property name="columnCount">
-            <number>2</number>
-           </property>
-           <attribute name="horizontalHeaderCascadingSectionResizes">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="horizontalHeaderDefaultSectionSize">
-            <number>100</number>
-           </attribute>
-           <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-            <bool>true</bool>
-           </attribute>
-           <attribute name="horizontalHeaderStretchLastSection">
-            <bool>true</bool>
-           </attribute>
-           <attribute name="verticalHeaderVisible">
-            <bool>true</bool>
-           </attribute>
-           <attribute name="verticalHeaderMinimumSectionSize">
-            <number>50</number>
-           </attribute>
-           <attribute name="verticalHeaderStretchLastSection">
-            <bool>false</bool>
-           </attribute>
-           <row/>
-           <row/>
-           <row/>
-           <row/>
-           <row/>
-           <row/>
-           <column>
+           <item>
             <property name="text">
-             <string>설명</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>불용어</string>
-            </property>
-           </column>
-           <item row="0" column="0">
-            <property name="text">
-             <string>국민신문고 유입</string>
+             <string>국민신문고</string>
             </property>
            </item>
-           <item row="0" column="1">
-            <property name="text">
-             <string>.*민원 유입 경로]</string>
-            </property>
-           </item>
-           <item row="1" column="0">
+           <item>
             <property name="text">
              <string>안전신문고</string>
             </property>
            </item>
-           <item row="1" column="1">
+           <item>
             <property name="text">
-             <string>안전신문고 신고파일.*</string>
+             <string>영어</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>한글</string>
             </property>
            </item>
           </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
+           <property name="bottomMargin">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_3"/>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="text">
+              <string>추가하기</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -370,7 +344,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
           </widget>
          </item>
          <item>
-          <widget class="QTableWidget" name="tableWidget_2"/>
+          <widget class="QListWidget" name="listWidget_2"/>
          </item>
         </layout>
        </widget>

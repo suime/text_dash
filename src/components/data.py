@@ -302,7 +302,7 @@ class data():
             if category not in ['', '전체', '--제외--']:
                 df = df[df[cols[f'category{i}']] == category]
 
-        if config.get('nlp', False):  # Use get method for cleaner attribute check
+        if config.get('nlp', False):  
             try:
                 df[cols['text']] = self.text_process(df[cols['text']])
             except Exception as e:
@@ -423,24 +423,6 @@ class data():
                         font=option['font'], min_size=option['min_size'])
         return html
 
-
-    def set_Line(self, filter: dict, option: dict):
-        #> 시계열 드가기 전에 먼저 그룹화를 해야되는데 
-        
-        df = self.apply_filter(filter)
-        cols = self.cols
-
-        if cols['date'] == '':
-            QMessageBox.warning(
-                None, '오류 발생', '일자열이 선택되지 않았습니다. 시계열 분석은 일자열이 설정되어야 합니다.')
-            return None
-
-        else:
-            fig = px.line(df, x=cols['date'], y=100)
-
-        html = set_plot(fig)
-        return html
-
     def set_sankey(self, filter: dict, option: dict):
         df = self.apply_filter(filter)
         cols = self.cols
@@ -458,4 +440,49 @@ class data():
         fig = px.parallel_categories(df, dimensions=path)
         html = set_plot(fig, "sankey", title=option['title'], sub=option['sub'],
                         font=option['font'], min_size=12)
+        return html
+
+    def _set_ts(self, filter: dict):
+        df = self.apply_filter(filter)
+        date = self.cols['date']
+
+        if date == '':
+            QMessageBox.warning(
+                None, '오류 발생', '일자열이 선택되지 않았습니다. 시계열 분석은 일자열이 설정되어야 합니다.')
+            return None
+
+        if filter['group'] == 'd':
+            grouped_df = df.groupby(
+                df[date].dt.date).size().reset_index(name='건수')
+        elif filter['group'] == 'w':
+            grouped_df = df.groupby(pd.Grouper(key=date, freq='W')).size().reset_index(name='건수')
+        elif filter['group'] == 'm':
+            grouped_df = df.groupby(pd.Grouper(key=date, freq='M')).size().reset_index(name='건수')
+        elif filter['group'] == 'y':
+            grouped_df = df.groupby(pd.Grouper(key=date, freq='Y')).size().reset_index(name='건수')
+        else:
+            grouped_df = df
+
+        return grouped_df
+
+    def set_line(self, filter: dict, option: dict):
+        df = self._set_ts(filter)
+        cols = self.cols
+        fig = px.line(df, x=cols['date'], y='건수')
+        html = set_plot(fig, "line", title=option['title'], sub=option['sub'],
+                        font=option['font'], min_size=12)
+        return html
+    
+    def set_bar(self, filter: dict, option: dict):
+        df = self._set_ts(filter)
+        cols = self.cols
+        fig = px.bar(df, x=cols['date'], y='건수')
+        html = set_plot(fig, "line", title=option['title'], sub=option['sub'],
+                        font=option['font'], min_size=12)
+        return html
+
+    def set_stat(self, filter, option):
+        df = self.apply_filter(filter)
+        
+        html = set_plot(fig, 'stats',)
         return html

@@ -19,14 +19,14 @@ from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtWidgets import (QApplication, QComboBox, QDateEdit, QFontComboBox,
     QFormLayout, QFrame, QGridLayout, QGroupBox,
     QHBoxLayout, QLabel, QLineEdit, QPlainTextEdit,
-    QPushButton, QSizePolicy, QSpinBox, QTabWidget,
-    QVBoxLayout, QWidget)
+    QPushButton, QRadioButton, QSizePolicy, QSpinBox,
+    QTabWidget, QVBoxLayout, QWidget)
 
 class Ui_Plot(object):
     def setupUi(self, Plot):
         if not Plot.objectName():
             Plot.setObjectName(u"Plot")
-        Plot.resize(988, 612)
+        Plot.resize(942, 612)
         self.horizontalLayout = QHBoxLayout(Plot)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(3, 3, 3, 3)
@@ -48,41 +48,44 @@ class Ui_Plot(object):
         self.groupBox_4 = QGroupBox(self.tabWidgetPage1)
         self.groupBox_4.setObjectName(u"groupBox_4")
         self.groupBox_4.setMaximumSize(QSize(300, 16777215))
-        self.verticalLayout_10 = QVBoxLayout(self.groupBox_4)
-        self.verticalLayout_10.setSpacing(0)
-        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.verticalLayout_10.setContentsMargins(-1, 3, -1, -1)
-        self.formLayout_4 = QFormLayout()
-        self.formLayout_4.setObjectName(u"formLayout_4")
-        self.formLayout_4.setRowWrapPolicy(QFormLayout.RowWrapPolicy.DontWrapRows)
-        self.formLayout_4.setHorizontalSpacing(4)
-        self.formLayout_4.setVerticalSpacing(4)
+        self.gridLayout = QGridLayout(self.groupBox_4)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setContentsMargins(-1, 3, -1, -1)
+        self.gridLayout_3 = QGridLayout()
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.gridLayout_3.setHorizontalSpacing(0)
+        self.gridLayout_3.setVerticalSpacing(4)
         self.label = QLabel(self.groupBox_4)
         self.label.setObjectName(u"label")
         self.label.setEnabled(True)
 
-        self.formLayout_4.setWidget(0, QFormLayout.SpanningRole, self.label)
+        self.gridLayout_3.addWidget(self.label, 0, 0, 1, 2)
+
+        self.chk_2 = QRadioButton(self.groupBox_4)
+        self.chk_2.setObjectName(u"chk_2")
+
+        self.gridLayout_3.addWidget(self.chk_2, 5, 1, 1, 1)
+
+        self.chk_1 = QRadioButton(self.groupBox_4)
+        self.chk_1.setObjectName(u"chk_1")
+
+        self.gridLayout_3.addWidget(self.chk_1, 5, 0, 1, 1)
+
+        self.chk_4 = QRadioButton(self.groupBox_4)
+        self.chk_4.setObjectName(u"chk_4")
+
+        self.gridLayout_3.addWidget(self.chk_4, 7, 1, 1, 1)
+
+        self.chk_3 = QRadioButton(self.groupBox_4)
+        self.chk_3.setObjectName(u"chk_3")
+        self.chk_3.setChecked(True)
+
+        self.gridLayout_3.addWidget(self.chk_3, 7, 0, 1, 1)
 
         self.Label_8 = QLabel(self.groupBox_4)
         self.Label_8.setObjectName(u"Label_8")
 
-        self.formLayout_4.setWidget(1, QFormLayout.LabelRole, self.Label_8)
-
-        self.startDate = QDateEdit(self.groupBox_4)
-        self.startDate.setObjectName(u"startDate")
-        self.startDate.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-        self.startDate.setProperty("showGroupSeparator", True)
-        self.startDate.setDateTime(QDateTime(QDate(2024, 7, 1), QTime(9, 0, 0)))
-        self.startDate.setMaximumDate(QDate(9994, 1, 11))
-        self.startDate.setCalendarPopup(True)
-        self.startDate.setTimeSpec(Qt.TimeSpec.LocalTime)
-
-        self.formLayout_4.setWidget(1, QFormLayout.FieldRole, self.startDate)
-
-        self.Label = QLabel(self.groupBox_4)
-        self.Label.setObjectName(u"Label")
-
-        self.formLayout_4.setWidget(2, QFormLayout.LabelRole, self.Label)
+        self.gridLayout_3.addWidget(self.Label_8, 1, 0, 1, 1)
 
         self.endDate = QDateEdit(self.groupBox_4)
         self.endDate.setObjectName(u"endDate")
@@ -91,10 +94,31 @@ class Ui_Plot(object):
         self.endDate.setCalendarPopup(True)
         self.endDate.setTimeSpec(Qt.TimeSpec.LocalTime)
 
-        self.formLayout_4.setWidget(2, QFormLayout.FieldRole, self.endDate)
+        self.gridLayout_3.addWidget(self.endDate, 2, 1, 1, 1)
+
+        self.startDate = QDateEdit(self.groupBox_4)
+        self.startDate.setObjectName(u"startDate")
+        self.startDate.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.startDate.setProperty("showGroupSeparator", True)
+        self.startDate.setDateTime(QDateTime(QDate(2024, 7, 1), QTime(9, 0, 0)))
+        self.startDate.setMaximumDate(QDate(9994, 1, 12))
+        self.startDate.setCalendarPopup(True)
+        self.startDate.setTimeSpec(Qt.TimeSpec.LocalTime)
+
+        self.gridLayout_3.addWidget(self.startDate, 1, 1, 1, 1)
+
+        self.Label = QLabel(self.groupBox_4)
+        self.Label.setObjectName(u"Label")
+
+        self.gridLayout_3.addWidget(self.Label, 2, 0, 1, 1)
+
+        self.label_8 = QLabel(self.groupBox_4)
+        self.label_8.setObjectName(u"label_8")
+
+        self.gridLayout_3.addWidget(self.label_8, 4, 0, 1, 1)
 
 
-        self.verticalLayout_10.addLayout(self.formLayout_4)
+        self.gridLayout.addLayout(self.gridLayout_3, 0, 0, 1, 1)
 
 
         self.verticalLayout_3.addWidget(self.groupBox_4)
@@ -567,8 +591,13 @@ class Ui_Plot(object):
         Plot.setWindowTitle(QCoreApplication.translate("Plot", u"Form", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("Plot", u"\uae30\uac04 \ud544\ud130", None))
         self.label.setText(QCoreApplication.translate("Plot", u"\ub370\uc774\ud130 \ubc94\uc704 \uc124\uc815", None))
+        self.chk_2.setText(QCoreApplication.translate("Plot", u"\uc8fc", None))
+        self.chk_1.setText(QCoreApplication.translate("Plot", u"\uc77c", None))
+        self.chk_4.setText(QCoreApplication.translate("Plot", u"\uc5f0", None))
+        self.chk_3.setText(QCoreApplication.translate("Plot", u"\uc6d4", None))
         self.Label_8.setText(QCoreApplication.translate("Plot", u"\uc2dc\uc791\uc77c :", None))
         self.Label.setText(QCoreApplication.translate("Plot", u"\uc885\ub8cc\uc77c :", None))
+        self.label_8.setText(QCoreApplication.translate("Plot", u"\uadf8\ub8f9 \uae30\uc900", None))
         self.groupBox_6.setTitle(QCoreApplication.translate("Plot", u"\ud14d\uc2a4\ud2b8 \ud544\ud130", None))
         self.Label_9.setText(QCoreApplication.translate("Plot", u"\ud3ec\ud568\ud560 \ub2e8\uc5b4", None))
         self.inText.setPlaceholderText("")
