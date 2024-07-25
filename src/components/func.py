@@ -15,6 +15,7 @@ import plotly.express as px
 import plotly.offline as plt
 
 
+
 def app_start():
     chart_dir = "dash_chart"
     config_file = os.path.join(chart_dir, "config.json")
@@ -95,7 +96,7 @@ def get_table_plot(df: pd.DataFrame, text_col_name: str = '내용'):
 def set_plot(fig: go.Figure,
              name: str = 'temp',
              bgcolor='rgba(0,0,0,0)',
-             color='#000',
+             color='#fff',
              font='맑은 고딕',
              title='',
              sub='',

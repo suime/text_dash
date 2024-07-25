@@ -8,6 +8,8 @@ from wordcloud import WordCloud
 
 from .func import *
 
+EX_COL = "--제외--"
+
 
 class data():
     def __init__(self) -> None:
@@ -135,7 +137,7 @@ class data():
                 topn=topn, ngram=ngram)
             df = self.get_sdf().copy()
             col = self.cols['text']
-            df = df[col]
+            df = df[col].dropna()
             X = vectorizer.fit_transform(df)
             term_freq_df = pd.DataFrame({
                 '단어': vectorizer.get_feature_names_out(),
@@ -299,10 +301,10 @@ class data():
 
         for i in range(1, 4):
             category = config[f'category{i}']
-            if category not in ['', '전체', '--제외--']:
+            if category not in ['', '전체', EX_COL]:
                 df = df[df[cols[f'category{i}']] == category]
 
-        if config.get('nlp', False):  
+        if config.get('nlp', False):
             try:
                 df[cols['text']] = self.text_process(df[cols['text']])
             except Exception as e:
@@ -311,39 +313,34 @@ class data():
         self.set_sdf(df)
         return self.sdf
 
-    def text_process(self, text: pd.Series, stopwords=''):
-        # kiwi = Kiwi(load_default_dict=True)
-
-        # ^ 신문고 삭제
-
-        def _del_sinmungo(text):
-            patterns = [
-                '.*국민신문고 알림.*[민원 유입 경로]',
-                '.*제30조(벌칙)',
-                '안전신문고 신고파일.*',
-                '제\d*조',
-                '별표\s?\d*',
-                r'접기펴기 - 현재 축소됨',
-                r'시행령',
-                r'비밀보장',
-                r'아래 동영상 링크.*',
-                r'사진|동영상|촬영|파일|철저',
-                r'\[.*?\]',
-                r'[^\w\s]'
-            ]
-            for pattern in patterns:
-                text = re.sub(pattern, '', text)
-            return text
-        text = text.apply(_del_sinmungo)
-
+    def text_process(self, text: pd.Series, config: dict, stopwords=''):
+        """텍스트 전처리 하는 함수"""
         from mecab import MeCab
         mecab = MeCab()
 
+        def _del_sinmungo(text):
+            # ^ 신문고 삭제
+            pattern = re.compile(
+                r'.*국민신문고 알림.*[민원 유입 경로]|.*제30조\(벌칙\)|안전신문고 신고파일.*|제\d*조|별표\s?\d*|접기펴기 - 현재 축소됨|시행령|비밀보장|아래 동영상 링크.*|사진|동영상|촬영|파일|철저|\[.*?\]|[^\w\s]'
+            )
+            return pattern.sub('', text)
+        text = text.apply(_del_sinmungo)
+
         def _extract_noun(text, stopwords=stopwords, model=mecab):
-            rl = model.nouns(text)
-            return " ".join(rl)
+            return " ".join(model.nouns(text))
 
         text = text.apply(_extract_noun, stopwords=stopwords, model=mecab)
+
+        # ^ 영어, 한자 제거
+        # ^ 개인정보 제거
+        # ^ 국민신문고 제거
+
+        # ^ 숫자 제거
+        if config['num']:
+            text = text.apply(lambda x: re.sub(r'\d*', '', x))
+        # ^ 특수문자 제거
+        if config['special']:
+            text = text.apply(lambda x: re.sub(r'[\W\S]', '', x))
 
         return text
 
@@ -355,7 +352,7 @@ class data():
 
         path = list()
         for i, a in enumerate(cat):
-            if a != '--제외--':
+            if a != EX_COL:
                 path.append(cols[f'category{str(i + 1)}'])
         if len(path) == 0:
             QMessageBox.warning(None, "설정 오류", "하나 이상의 분석할 데이터를 선택하세요.")
@@ -365,7 +362,10 @@ class data():
 
         fig.update_traces(textinfo="label+text+value+percent root",
                           texttemplate="%{label}<br>%{value:,.0f}건<br>%{percentRoot}",
-                          marker=dict(line=dict(color='rgba(0,0,0,0)', width=1)))
+                          marker=dict(
+                              line=dict(color='rgba(0,0,0,0)', width=1)),
+                          textfont=dict(color='white'))  # 폰트 색상을 흰색으로 설정
+        
         html = set_plot(
             fig, "treemap", title=option['title'], sub=option['sub'], font=option['font'],
             min_size=option['min_size'])
@@ -380,7 +380,7 @@ class data():
 
         path = list()
         for i, a in enumerate(cat):
-            if a != '--제외--':
+            if a != EX_COL:
                 path.append(cols[f'category{str(i + 1)}'])
         if len(path) == 0:
             QMessageBox.warning(None, "설정 오류", "하나 이상의 분석할 데이터를 선택하세요.")
@@ -406,7 +406,7 @@ class data():
 
         path = list()
         for i, a in enumerate(cat):
-            if a != '--제외--':
+            if a != EX_COL:
                 path.append(cols[f'category{str(i + 1)}'])
         if len(path) == 0:
             QMessageBox.warning(None, "설정 오류", "하나 이상의 분석할 데이터를 선택하세요.")
@@ -431,7 +431,7 @@ class data():
         cat = [filter['category1'], filter['category2'], filter['category3']]
 
         for i, a in enumerate(cat):
-            if a != '--제외--':
+            if a != EX_COL:
                 path.append(cols[f'category{str(i + 1)}'])
         if len(path) == 0:
             QMessageBox.warning(None, "설정 오류", "하나 이상의 분석할 데이터를 선택하세요.")
@@ -455,11 +455,14 @@ class data():
             grouped_df = df.groupby(
                 df[date].dt.date).size().reset_index(name='건수')
         elif filter['group'] == 'w':
-            grouped_df = df.groupby(pd.Grouper(key=date, freq='W')).size().reset_index(name='건수')
+            grouped_df = df.groupby(pd.Grouper(
+                key=date, freq='W')).size().reset_index(name='건수')
         elif filter['group'] == 'm':
-            grouped_df = df.groupby(pd.Grouper(key=date, freq='M')).size().reset_index(name='건수')
+            grouped_df = df.groupby(pd.Grouper(
+                key=date, freq='M')).size().reset_index(name='건수')
         elif filter['group'] == 'y':
-            grouped_df = df.groupby(pd.Grouper(key=date, freq='Y')).size().reset_index(name='건수')
+            grouped_df = df.groupby(pd.Grouper(
+                key=date, freq='Y')).size().reset_index(name='건수')
         else:
             grouped_df = df
 
@@ -472,7 +475,7 @@ class data():
         html = set_plot(fig, "line", title=option['title'], sub=option['sub'],
                         font=option['font'], min_size=12)
         return html
-    
+
     def set_bar(self, filter: dict, option: dict):
         df = self._set_ts(filter)
         cols = self.cols
@@ -483,6 +486,6 @@ class data():
 
     def set_stat(self, filter, option):
         df = self.apply_filter(filter)
-        
+
         html = set_plot(fig, 'stats',)
         return html

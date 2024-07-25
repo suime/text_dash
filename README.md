@@ -201,4 +201,4 @@ pyside6-uic src/ui/Dictionary.ui -o src/ui/Dictionary.py
         - 단어사전
     - 메인 
 
-### 
+### 내용 
