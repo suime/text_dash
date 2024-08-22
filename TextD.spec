@@ -8,7 +8,7 @@ a = Analysis(
     datas=[('./src/public/*', './src/public'),
            ('./win_env/Lib/site-packages/pyvis', './pyvis')
            ],
-    hiddenimports=['numpy', 'pandas', 'numpy.core._methods', 'numpy.lib.format', 'datetime', 'dateutil', 'dateutil.zoneinfo'],
+    hiddenimports=['numpy', 'pandas', 'numpy.core._methods', 'numpy.lib.format', 'datetime', 'dateutil'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

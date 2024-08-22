@@ -1,10 +1,9 @@
 import sys
-import os
-from time import sleep
 
 from PySide6.QtCore import QDate
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import (QApplication, QColorDialog, QWidget, QMainWindow, QStatusBar, QTabWidget,
+from PySide6.QtWidgets import (QApplication, QColorDialog, QWidget,
+                               QMainWindow, QStatusBar, QTabWidget,
                                QFileDialog, QMessageBox)
 
 import pandas as pd
@@ -358,7 +357,8 @@ class TextMiningTab(QWidget):
 
         # ^ network 생성
         self.ui.initNetwork.clicked.connect(lambda: self.set_Network(data))
-        self.ui.saveNetwork.clicked.connect(lambda: to_img(self.ui.networkPlot))
+        self.ui.saveNetwork.clicked.connect(
+            lambda: to_img(self.ui.networkPlot))
 
         self.filter = filterComponent(self.ui, data)
         self.option = optionComponent(self.ui, data)
